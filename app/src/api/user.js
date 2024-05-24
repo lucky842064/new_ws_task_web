@@ -1,6 +1,6 @@
 import Post from "../http/index";
 import axios from '../http/axios'
-import client from "../http/aliyun-oss";
+// import client from "../http/aliyun-oss";
 import Helper from "../utils/helper";
 //登
 // const OSS = require('ali-oss');
@@ -235,7 +235,7 @@ export const oss_upload = (fileName, file, res) => {
   //     region: "oss-cn-hongkong.aliyuncs.com/",
   //     bucket: "aite-hk"
   // });
-  return client.multipartUpload(fileUrl, file)
+  // return client.multipartUpload(fileUrl, file)
 }
 export const withdraw_list = (params) => {
   return ajax.get('/member/withdraw/list', params);
