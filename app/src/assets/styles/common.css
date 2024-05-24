@@ -1,0 +1,424 @@
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /* -webkit-overflow-scrolling: touch; */
+}
+.font28 {
+  font-size: 28px;
+}
+.color_4a {
+  color: #4A4A4A;
+}
+.color_99 {
+  color: #999999;
+}
+.color_2f {
+  color: #2F86FF;
+}
+.flex-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.no-pxtorem-s{
+  padding-bottom: 50px;
+}
+.no-pxtorem-border1px{
+  border-width: 1px !important;
+}
+.no-pxtorem-border-bottom{
+  position: relative;
+}
+.no-pxtorem-border-bottom:after{
+  position: absolute;
+  box-sizing: border-box;
+  content: ' ';
+  pointer-events: none;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-bottom: 1px solid #ebedf0;
+  -webkit-transform: scaleY(.5);
+  transform: scaleY(.5);
+}
+.van-dialog{
+  border-radius: 5px !important;
+}
+/* 弹窗 */
+.task_popup{
+  width: 616px;
+  height: 100%;
+  border-top-left-radius: 20px !important;
+  border-bottom-left-radius: 20px !important;
+  /* border-radius: 10px !important; */
+  background-color: #f2f2f2;
+}
+/* .van-popup--right.van-popup--round{
+  border-radius: 10px;
+} */
+.task_head{
+  width: 100%;
+  height: 77px;
+  color: #000;
+  font-size: 24px;
+  padding-left: 30px;
+  line-height: 80px;
+  border-bottom: 1px solid #e3e3e3;
+}
+.serach_btn, .order_submit_btn{
+  width: 416px;
+  height: 72px;
+  display: table;
+  text-align: center;
+  line-height: 72px;
+  padding: 0;
+  border-radius: 35px;
+  margin: 0 auto;
+  margin-top: 74px;
+}
+.order_time .item {
+  display: inline-block;
+  width: 40px;
+  margin-right: 5px;
+  color: #fff;
+  font-size: 24px;
+  text-align: center;
+  background-color: red;
+  border-radius: 2px;
+}
+.order_submit_btn{
+  width: 690px;
+  border-radius: 8px;
+}
+.rulse_text .van-cell{
+  border: none;
+}
+.rulse_text .van-cell:nth-child(1){
+  font-size: 0.36rem;
+  color: #000;
+  margin: 10px 0 0 0;
+}
+.task_text .van-cell{
+  color: #5a5a5a;
+  padding: 0 16px;
+}
+.rulse_text .van-cell:nth-child(2), .rulse_text .van-cell:nth-child(3), .rulse_text .van-cell:nth-child(4), .rulse_text .van-cell:nth-child(5){
+  padding: 0 0 0 16px;
+}
+.copay_phone, .group_examine, .copay_code{
+  width: 110px;
+  height: 46px;
+  color: #679ce8;
+  padding: 0;
+  margin-left: 32px;
+  border-radius: 47px;
+  text-align: center;
+  line-height: 60px;
+  border: 1px solid #679ce8;
+}
+.copay_code{
+  border: none;
+  color: #fff;
+  margin-top: 35px;
+  background: linear-gradient(to bottom, #000000 0%,#4d473b 100%);
+}
+.group_examine{
+  width: 180px;
+  height: 52px;
+  color: #fff;
+  margin-left: 0;
+  line-height: 62px;
+  background-color: #2870de;
+}
+.join_group{
+  height: 0px;
+  padding: 26px 0 24px 0;
+  color: #fff;
+  margin-left: 0;
+  border: none;
+  border-radius: 32px;
+}
+.user_p .van-progress{
+  height: 5px;
+  margin-top: -3px;
+}
+/* .trem_list .van-cell{
+  border-bottom: 1px solid #e1e1e1;
+} */
+.screen_list .van-dropdown-menu__bar{
+  height: 32px;
+}
+.head_query .van-dropdown-menu .van-dropdown-menu__bar, .head_query .van-dropdown-menu .van-cell{
+  width: 50%;
+  float: left;
+}
+.head_query .van-dropdown-menu .van-dropdown-menu__bar{
+  height: 38px;
+}
+.van-picker__toolbar{
+  border-bottom: 1px solid #f2f2f2;
+}
+.rotate_arrow_up{
+  transform:rotate(180deg);
+  transition: all .5 linear;
+}
+.divider_online{
+  width: 10px;
+  height: 27px;
+  float: left;
+  margin-top: 7px;
+  border-radius: 50px;
+  margin-right: 16px;
+  background-color: #fe8c00;
+}
+.van-swipe__indicator--active{
+  width: 16px !important;
+  height: 5px;
+  background-color: #fff;
+  border-radius: 16px;
+  transition: all .3s;
+} 
+/* 弹创按钮 */
+.task_content .mask_bg{
+  background-color: inherit;
+} 
+.task_content .van-overlay{
+  background-color: rgba(0, 0, 0, 0.1);
+} 
+/* 首页广告 */
+.adver_cover{
+  z-index: 106;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.adver_content .header_title, .text_content .header_title{
+  width: 100%;
+  height: 80px;
+  padding: 0 45px;
+  float: left;
+  text-align: center;
+  line-height: 80px;
+  background-color: #fff;
+  font-size: 0.32rem;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
+
+.adver_cover .adver_content, .adver_cover .text_content{
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 6.8rem;
+  height: 8.6rem;
+  overflow: hidden;
+  border-radius: 10px;
+}
+.adver_cover .text_content{
+  height: 3.69rem;
+  float: left;
+  overflow-y: scroll;
+  font-size: 0.28rem;
+}
+.adver_cover .content_model{
+  width: 100%;
+  float: left;
+  line-height: 40px;
+  padding: 0 30px;
+  height: 2rem;
+  word-wrap:break-word;
+  font-size: 0.26rem;
+  background-color: #fff;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+.adver_content .van-icon{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.adver_content img{
+  display: block;
+  width: 100%;
+  height: 7rem;
+}
+.adver_content .van-button, .text_content .van-button{
+  width: 100%;
+  float: left;
+  border-radius: 0;
+  border: 0px solid transparent;
+  border-top: 1px solid #efefef;
+}
+.adver_content .van-icon-close{
+  color: #2c3e50;
+  font-weight: initial;
+  font-size: 0.46rem;
+}
+.profit_phone input::-webkit-input-placeholder {
+    color: #2c3e50;
+    font-size: 24px;
+    text-align: left;
+}
+.mobile_class .van-icon-search{
+  color: #000;
+  margin-right: -6px;
+  font-size: 0.52rem !important;
+}
+
+/* 滚动条样式 */
+.notice_temp .van-icon{
+  color: #000;
+}
+.notice_temp .van-notice-bar__wrap{
+  color: #000;
+}
+
+/* 下拉弹窗样式 */
+.screen_down ul li{
+  width: 45% !important;
+  padding: 20px 0;
+  /* height: 80px; */
+  font-size: 0.26rem;
+  /* line-height: 80px; */
+  float: left;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 19px;
+  background-color: #f2f2f2;
+}
+.screen_down .checkActive, .singular_down .checkActive{
+  color: #ff5414;
+  background-color: #fedbbf;
+}
+.singular_down .checkActive{
+  background-color: transparent;
+}
+.screen_down ul li:nth-child(even){
+  margin-left: 26px;
+  float: right;
+}
+/* 上传图片 */
+.uploaup_file .van-uploader__upload, .uploaup_file .van-uploader__preview-image{
+  width: 110px;
+  height: 110px;
+}
+.uploaup_file .van-uploader__upload .van-icon{
+  font-size: 32px;
+}
+.uploaup_file .van-uploader__preview-delete{
+  width: 18px;
+  height: 18px;
+}
+.uploaup_file .van-uploader__preview-delete .van-icon{
+  font-size: 20px;
+}
+.doge {
+  width: 140px;
+  height: 72px;
+  margin-top: 8px;
+  border-radius: 4px;
+}
+.empoty_collaps{
+  width: 100%;
+  height: 20px;
+  float: left;
+  background-color: #f2f2f2;
+}
+/* 异常原因 */
+.singular_down{
+  width: 2.6rem;
+  margin-left: 2.85rem;
+  margin-top: 12px;
+  box-sizing: border-box;
+  background-color: #f2f2f2;
+  /* border: 1px solid #e1e1e1; */
+  /* border-radius: 8px; */
+}
+.singular_down ul li{
+    display: block;
+    width: 100%;
+    font-size: 0.26rem;
+    padding: 14px 0 14px 12px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e1e1e1;
+}
+.singular_down ul li:last-child{
+  border-bottom: 0px solid transparent;
+}
+.van-tab--active{
+  color: #F52C2C !important;
+}
+.van-tabs__line{
+  width: 84px;
+  background-color: #F52C2C;
+}
+/* 新增标签lable样式 */
+.cuesome_lable .van-field__label{
+  width: 60px;
+  margin-right: 8px;
+}
+.cuesome_lable .van-hairline--top-bottom::after, .cuesome_lable .van-hairline-unset--top-bottom::after{
+  border-width:0;
+}
+.cuesome_lable .van-button{
+  border-color: #ff6422;
+  background-color: #ff6422;
+}
+.cuesome_lable .van-cell__value{
+  width: 100px !important;
+  background-color: #f2f2f2;
+}
+.cuesome_lable .van-field__body{
+}
+.cuesome_lable .van-field__control{
+  padding-left: 10px;
+}
+.cuesome_lable .van-field__button{
+  /* margin-right: -30px; */
+}
+/* 加粉任务 */
+/* .group_head .van-radio-group{
+  margin-left: 25px;
+} */
+.group_head .van-radio__icon .van-icon{
+  width: 16px;
+  height: 16px;
+  line-height: 14px;
+  font-size: 0.24rem;
+  border-color: #fd6526;
+  background-color: #FFF;
+}
+.group_head .van-radio__icon--checked .van-icon{
+   color: #fd6526 !important;
+}
+.group_head .van-radio__label{
+  margin-left: 4px;
+  margin-top: -4px;
+}
+.group_head .van-radio__label--disabled{
+  color: #323233;
+}
+
+.head_bg{
+  position: absolute;width: 100%;height: 288px;left:0;top:0;
+  background: #006BFF;z-index: 0;
+  border-bottom-left-radius: 30%;
+  border-bottom-right-radius: 30%;
+
+  max-width: 1000px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#tcaptcha_iframe{
+	position: fixed !important;
+	top: 50% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) !important;
+  /* z-index: 9999 !important; */
+}

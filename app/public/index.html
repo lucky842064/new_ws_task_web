@@ -1,0 +1,107 @@
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name ="viewport" content ="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+      <meta name="full-screen" content="yes">
+      <meta name="renderer" content="webkit">
+      <meta name="HandheldFriendly" content="true">
+      <meta name="MobileOptimized" content="320">
+      <meta name="screen-orientation" content="portrait">
+      <meta name="x5-orientation" content="portrait">
+      <meta name="full-screen" content="yes">
+      <meta name="x5-fullscreen" content="true">
+      <meta name="browsermode" content="application">
+      <meta name="x5-page-mode" content="app">
+      <meta name="msapplication-tap-highlight" content="no">
+      <meta name="mobile-web-app-capable" content="yes">
+      <link rel="icon" href="<%= BASE_URL %>images/<%= VUE_APP_FLAG %>.ico">
+      <link rel="stylesheet" href="<%= BASE_URL %>npm/t/font_1560324_mwyt9bt6py9.css">
+      <link rel="stylesheet" href="<%= BASE_URL %>npm/vant@2.10/lib/index.css"/>
+      
+      <script src="<%= BASE_URL %>npm/vue@2.6.10/dist/vue.min.js"></script>
+      <script src="<%= BASE_URL %>npm/vuex@3.1.2/dist/vuex.min.js"></script>
+      <script src="<%= BASE_URL %>npm/vue-router@3.0.7/dist/vue-router.min.js"></script>
+      <script src="<%= BASE_URL %>npm/axios@0.19.0/dist/axios.min.js"></script>
+      <script src="<%= BASE_URL %>npm/vant@2.10/lib/vant.min.js"></script>
+      <script src="<%= BASE_URL %>npm/js-md5@0.7.3/src/md5.min.js"></script>
+      <script src="<%= BASE_URL %>npm/vue-clipboard2@0.3.1/dist/vue-clipboard.min.js"></script>
+      <script src="<%= BASE_URL %>npm/moment@2.28.0/moment.min.js"></script>
+      <script src="<%= BASE_URL %>npm/js-cookie@2.2.1/js.cookie.min.js"></script>
+      <script src="<%= BASE_URL %>npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
+      <script src="<%= BASE_URL %>npm/better-scroll@2.0.5/dist/better-scroll.min.js"></script>
+      <script src="<%= BASE_URL %>npm/js-base64@3.6.0/base64.min.js"></script>
+      <script src="<%= BASE_URL %>npm/vue-video-player@5.0.2/dist/vue-video-player.min.js"></script>
+      <script src="<%= BASE_URL %>npm/spark-md5@3.0.1/spark-md5.min.js"></script>
+      <script src="<%= BASE_URL %>npm/crypto-js@4.0.0/crypto-js.js"></script>
+      <script src="<%= BASE_URL %>npm/mobile-detect@1.4.4/mobile-detect.min.js"></script>
+      <script type="text/javascript" src="https://cstaticdun.126.net/load.min.js?v=202004246"></script>
+      <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+      <!-- <script src="./TCaptcha.js"></script> -->
+      <title><%= VUE_APP_NAME %></title>
+      <style>
+        html{
+          font-size:13.33333333vw;
+        }
+      </style>
+      <script>
+        'use strict';
+        (function(){
+          var envInfo = {
+            http:["<%= VUE_APP_APIURL %>","<%= VUE_APP_APIURL2 %>"],
+            testappInfo:{
+              home_url:["<%= VUE_APP_APIURL %>"],
+              app_url:["<%= VUE_APP_APIURL %>", "<%= VUE_APP_APIURL2 %>"]
+            },
+            releaseappInfo:{
+              home_url:["<%= VUE_APP_HOMEURL %>","<%= VUE_APP_HOMERESURL %>"],
+              app_url:["<%= VUE_APP_APIURL %>","<%= VUE_APP_APIURL2 %>"]
+            }
+          };
+          window.envInfo = envInfo;}())
+      </script>
+    </head>
+    <body>
+    <noscript>
+      <strong>We're sorry but USDB doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <!-- <button id="TencentCaptcha" data-appid="2004381688" data-cbfn="callbackName" data-biz-state="data-biz-state"
+        type="button">验证</button> -->
+      <div id="app"></div>
+      <!-- built files will be auto injected -->
+      <script>
+        document.addEventListener('plusready', function() {
+          var webview = plus.webview.currentWebview();
+          sessionStorage.setItem('plus_ready','1')
+          var first = null;
+          plus.key.addEventListener('backbutton', function() {
+            //首次按键，提示‘再按一次退出应用’
+            if (!first) {
+              first = new Date().getTime();
+              webview.back();
+              setTimeout(function() {
+                first = null;
+              }, 1000);
+            } else {
+              if (new Date().getTime() - first < 1000) {
+                plus.runtime.quit();
+              }
+            }
+          }, false);
+        });
+      </script>
+    </body>
+
+    <style>
+      #launcher{
+        position: fixed!important;
+        width: 0!important;;
+        height: 0!important;;
+        display: none!important;;
+        top: 0!important;
+        left: 0!important;
+      }
+  
+    </style>
+  </html>
