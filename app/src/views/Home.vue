@@ -1,6 +1,11 @@
 <template>
     <div class="home-content">
         <div class="home_content">
+            <van-swipe class="my_swipe" :autoplay="3000" indicator-color="white">
+                <van-swipe-item v-for="(item,idx) in list" :key="idx">
+                    <img :src="item" alt="">
+                </van-swipe-item>
+            </van-swipe>
             <!-- <NoticeBar :isScroll= true :list="noticeCont" :from="true" /> -->
             <div class="task_settl">
                 <van-notice-bar speed='20' :left-icon="require('../assets/images/home/horn_icon.png')" scrollable text="中午12点到晚上6点执行任务，期间挂机享受收益，请保持在线！" />
@@ -161,6 +166,11 @@ export default {
                     wx_no:"自动人生2022",
                     wx_state:1,
                 }
+            ],
+            list:[
+                "https://img0.baidu.com/it/u=132095580,3308868527&fm=253&fmt=auto&app=138&f=JPG?w=592&h=296",
+                "https://img0.baidu.com/it/u=1709064170,207840351&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=278",
+                "https://img.tuguaishou.com/ips_templ_preview/53/2e/fa/lg_4426904_1634807148_61712d6ccc0a7.jpg!w1024_w?auth_key=2286544142-0-0-0408fba029f3f735dad77672222c8957",
             ],
             provinceColumns:["北京","上海","天津","安徽","福建","甘肃","广东","广西","贵州","海南","河北","河南","黑龙江","湖北","湖南","吉林","江苏","江西","辽宁","内蒙古","宁夏","青海","山东","山西","陕西","四川","西藏","新疆","云南","浙江"]
 		};
@@ -395,6 +405,15 @@ export default {
             float: left;
             padding: 24px 32px;
             box-sizing: border-box;
+            .my_swipe{
+                width: 100%;
+                height: 280px;
+                margin-bottom: 30px;
+                img{
+                    width: 100%;
+                    height: 100%;
+                }
+            }
             .task-pro{
                 width: 100%;
                 display: flex;
