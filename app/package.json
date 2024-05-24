@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve --mode local",
     "serve:test": "vue-cli-service serve --mode test",
     "serve:prod": "vue-cli-service serve --mode production",
-    "build": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
+    "build": "vue-cli-service build",
     "build:prod": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint"
   },
