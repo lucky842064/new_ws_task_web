@@ -113,15 +113,18 @@ export default {
 		},
 	},
 	actions: {
-		userLogin({ commit }, params) {
+		userLogin({ commit }, params ,callback) {
 			commit('clearUserInfo');
+			// const res = await login(params);
+			// callback && callback(res);
 			return new Promise((resolve, reject) => {
-				login(params).then(res => {
+				login(params).then (res => {
 					if(res.token){
 						res.autologin = params.autologin;
 						commit('login', res);
-						resolve()
+						resolve(res)
 					}
+					resolve(res)
 				}).catch(error => {
 					reject(error);
 				});

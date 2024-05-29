@@ -1,32 +1,36 @@
 <template>
 	<div class="login">
-		<div class="LanguageSwitcher" @click="$Helper.toOutLink(kefu,1)">
+		<!-- <div class="LanguageSwitcher" @click="$Helper.toOutLink(kefu,1)">
             <img src="../../assets/images/sign/login-kf.png" alt="register" />
-        </div>
+        </div> -->
 		<!-- <div class="head_bg"></div> -->
 		<div class="body">
 			<div class="sign_login sign_login1" v-if="is_login">
-				<div class="logo_img">
+				<!-- <div class="logo_img">
 					<img src='../../assets/images/lanniao.png'>
-				</div>
+				</div> -->
+				<div class="" style="display: flex; align-items: center; justify-content: center; margin: 20% 0 10% 0;">远航兼职</div>
 				<div class="uilist">
 					<div class="uilist_div account">
-						<img src="../../assets/images/sign/phone.png" alt />
-						<input v-model="username" :placeholder="$t('login_004')" :maxlength="11" name="pattern" type="text" />
+						<img src="../../assets/images/sign/icon_ren.png" alt />
+						<input v-model="username" :placeholder="$t('login_004')" :maxlength="11" name="pattern" type="text" autocomplete="off" />
 					</div>
 					<div class="uilist_div pwd">
-						<img src="../../assets/images/sign/lock.png" alt />
+						<img src="../../assets/images/sign/icon_suo.png" alt />
 						<input v-model="password" :placeholder="$t('login_008')" :maxlength="20" name="pattern" :type="regEye ? 'password' : 'text'" />
 						<i :class="[regEye ? 'icon_biyan' : 'icon_zhenyan']" @click="eyeBol()"></i>
+						<span class="forget_text" @click="forgetFunc">忘记密码</span>
 					</div>
 				</div>
-				<p class="login_btn">
-					<a @click="onSubmit">{{ $t('login_001') }}</a>
-				</p>
-				<p class="register_btn">
+				<div class="login_btn">
+					<van-button type="danger" :loading="isLoading" @click="handleLogin" loading-text="登录中...">登录</van-button>
+					<van-button @click="isLoginFunc" >{{ $t('login_002') }}</van-button>
+					<!-- <a @click="handleLogin">{{ $t('login_001') }}</a> -->
+				</div>
+				<!-- <p class="register_btn">
 					<a @click="isLoginFunc">{{ $t('login_002') }}</a><span></span>
 					<a @click="forgetFunc">{{ $t('login_021') }}</a>
-				</p>
+				</p> -->
 			</div>
 			<div class="sign_login sign_login2" v-else>
 				<div class="uilist">
@@ -70,8 +74,9 @@
 					</div>
 				</div>
 				<!-- 注册 -->
-				<p class="btn">
-					<a @click="Subregister()">{{ $t('login_002') }}</a>
+				<p class="login_btn">
+					<van-button type="danger" :loading="isLoading" @click="Subregister()" loading-text="注册中...">{{ $t('login_002') }}</van-button>
+					<!-- <a @click="Subregister()">{{ $t('login_002') }}</a> -->
 				</p>
 				<p class="register_btn">
 					已有账号？<a @click="() => is_login = !is_login" class="register_text">{{ $t('login_015') }}>></a>
@@ -98,14 +103,15 @@ export default {
 			msg: '',
 			wk_name: '',
 			stateSetp:0,
+			isLoading: false,
 			isDialong: false,
 			sendState:false,
 			logoImg: require('../../assets/images/' + process.env.VUE_APP_FLAG + '.png'),
 			code_location: false,
 			pattern: /\d{6}/,
 			is_login: true,
-			username: '',
-			password: '',
+			username: '13849236603',
+			password: 'aini0319',
 			isValidate: true,
 			isAndroid: false,
 			isIOS: false,
@@ -326,7 +332,7 @@ export default {
 			this.is_login = true;
 		},
 		//登录
-		onSubmit() {
+		handleLogin() {
 			let reg = new RegExp(/^1[3456789]\d{9}$/);
 			if (!this.username /*|| !reg.test(this.username)*/) {
 				// return this.$toast(this.$t('login_007'));
@@ -341,33 +347,43 @@ export default {
 				mobile: this.username,
 				pwd: md5(this.password),
 				autologin: this.autologin,
-				lang: '17691235264',
+				lang: 'zh',
 				device: this.device,
 				mac: this.mac
 			};
-			const Toast = this.$toast.loading({
-				duration: 3000,
-				message: this.$t('login_013'),
-				forbidClick: true,
-				loadingType: 'spinner',
-			});
-			this.$store.dispatch('User/userLogin', params).then(respon => {
-				// this.checkChange();
-				Toast.clear();
-				try {
-					if (this.$Helper.isAndroid()) {
-						JSInterface.onLoginin();
-					} else if (this.$Helper.isIos()) {
-						let params = { method: 'onLoginin' };
-						window.webkit.messageHandlers.jsCallNativeMethod.postMessage(params);
-					}
-				} catch (e) {}
+			// const Toast = this.$toast.loading({
+			// 	duration: 3000,
+			// 	message: this.$t('login_013'),
+			// 	forbidClick: true,
+			// 	loadingType: 'spinner',
+			// });
+			this.isLoading= true;
+			// this.$store.dispatch('User/userLogin',params, function(res) {
+			// 	console.log(res);
+			// });
+			this.$store.dispatch('User/userLogin', params).then(res => {
+				console.log(res);
+				setTimeout(()=>{this.isLoading= false},2000)
+				if(!res.token) return;
 				this.$router.push('/home');
+				this.isLoading= false
+				// this.checkChange();
+				// Toast.clear();
+				// try {
+				// 	if (this.$Helper.isAndroid()) {
+				// 		JSInterface.onLoginin();
+				// 	} else if (this.$Helper.isIos()) {
+				// 		let params = { method: 'onLoginin' };
+				// 		window.webkit.messageHandlers.jsCallNativeMethod.postMessage(params);
+				// 	}
+				// } catch (e) {}
 			}).catch(error => {
+			console.log("8888");
+				this.isLoading= false
 				if (window.location.host == 'fcwk.dpqcblzs.com' || window.location.host == 'fcwk.hnjsjzdl.com' || window.location.host == 'www.mifengxj.com') {
 					this.qrcodeImg.show = true;
 				}
-				Toast.clear();
+				// Toast.clear();
 			});
 		},
 		locacionData() {
@@ -462,7 +478,7 @@ export default {
 				this.autologin = true;
 				this.username = storage['loginphone'];
 				this.password = storage['loginpwd'];
-				this.onSubmit();
+				this.handleLogin();
 			} else {
 				this.autologin = false;
 				this.username = storage['loginphone'];
@@ -660,6 +676,7 @@ export default {
 			.uilist {
 				overflow: hidden;
 				.uilist_div, .verfy_code, .visit_code{
+					position: relative;
 					// border-bottom: 1px solid #E7E7E7;
 					display: flex;
 					border-radius: 12px;
@@ -673,6 +690,13 @@ export default {
 					&:nth-last-child(1){
 						border-bottom: transparent;
 						margin-bottom: 56px;
+					}
+					.forget_text{
+						color: #323aa2;
+						font-size: 28px;
+						position: absolute;
+						right: 0;
+						bottom: -50px;
 					}
 				}
 				.verfy_code, .visit_code{
@@ -752,35 +776,44 @@ export default {
 			}
 			.tip{font-size: 12px;margin-top: .8rem;text-align: center;}
 		}
-		// .sign_login2{
-		// 	.uilist{
-		// 		margin-bottom: 86px;
-		// 	}
-		// }
-		.btn,
-		.login_btn,
-		.login_btn,
-		.tourist_btn {
-			margin-bottom: 45px;
-			// height: 0.89rem;
-			a {
-				display: inline-block;
+		.login_btn{
+			width: 100%;
+			display: flex;
+			margin-top: 20px;
+			flex-direction: column;
+			.van-button{
 				width: 100%;
-				line-height: 88px;
-				border-radius: 50px;
-				height: 88px;
-				font-size: 34px;
-				color: #FFFFFF;
-				text-align: center;
-				background: $home-bind-button;
+				border: none;
+				border-radius: 6px;
+				margin-bottom: 20px;
 			}
-			a:nth-child(2) {
-				background: #fff;
-				margin-top: 0.6rem;
-				border: 1px solid #1073b8;
-				color: #1073b8;
+			.van-button:nth-child(2){
+				color: #323aa2;
+				background: #e9edfe;
 			}
 		}
+		// .btn,
+		// .login_btn,
+		// .tourist_btn {
+		// 	margin-bottom: 45px;
+		// 	a {
+		// 		display: inline-block;
+		// 		width: 100%;
+		// 		line-height: 88px;
+		// 		border-radius: 50px;
+		// 		height: 88px;
+		// 		font-size: 34px;
+		// 		color: #FFFFFF;
+		// 		text-align: center;
+		// 		background: $home-bind-button;
+		// 	}
+		// 	a:nth-child(2) {
+		// 		background: #fff;
+		// 		margin-top: 0.6rem;
+		// 		border: 1px solid #1073b8;
+		// 		color: #1073b8;
+		// 	}
+		// }
 		.register_btn{
 			text-align: center;display:flex;align-items:center;justify-content:center;
 			font-size: 24px;font-weight:bold;
@@ -813,6 +846,20 @@ export default {
 			background-color: #fff !important;
 		}
 	}
+}
+.icon_biyan {
+	height: 0.17rem;
+	width: 0.33rem;
+	right: 0.38rem;
+	background: url("../../assets/images/sign/icon_biyan.png") no-repeat;
+	background-size: 100% 100% !important;
+}
+.icon_zhenyan {
+	height: 0.2rem;
+	width: 0.4rem;
+	right: 0.35rem;
+	background: url("../../assets/images/sign/icon_zhenyan.png") no-repeat;
+	background-size: 100% 100% !important;
 }
 
 ::-webkit-input-placeholder {
@@ -967,4 +1014,9 @@ export default {
 		background: url('../../assets/images/new/wen.jpg') left top no-repeat;background-size: contain;
 	}
 }
+// input:-internal-autofill-selected{
+// 	background-image: none !important;
+// 	background-color: -internal-light-dark(rgb(232,240,254),rgba(70,90,126,.4)) !important;
+// 	color: fieldtext !important;
+// }
 </style>

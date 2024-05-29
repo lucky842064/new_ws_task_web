@@ -8,107 +8,109 @@
             </van-swipe>
             <!-- <NoticeBar :isScroll= true :list="noticeCont" :from="true" /> -->
             <div class="task_settl">
-                <van-notice-bar speed='20' :left-icon="require('../assets/images/home/horn_icon.png')" scrollable text="中午12点到晚上6点执行任务，期间挂机享受收益，请保持在线！" />
+                <van-notice-bar speed='20' :left-icon="require('../assets/images/home/earn-icon-a.png')" scrollable text="中午12点到晚上6点执行任务，期间挂机享受收益，请保持在线！" />
             </div>
-            <div class="task-pro">
-                <div class="left-pro">
-                    <p>{{ formatMoney(teamStemp.today_point || 0)}}</p>
-                    <p>{{ $t("home_023") }}</p>
+            <div class="mian_continer">
+                <div class="task-pro">
+                    <div class="left-pro">
+                        <p>{{ formatMoney(teamStemp.today_point || 0)}}</p>
+                        <p>{{ $t("home_023") }}</p>
+                    </div>
+                    <div class="right-pro">
+                        <p>{{ formatMoney(teamStemp.yesterday_point || 0) }}</p>
+                        <p>{{ $t("home_024") }}</p>
+                    </div>
                 </div>
-                <div class="right-pro">
-                    <p>{{ formatMoney(teamStemp.yesterday_point || 0) }}</p>
-                    <p>{{ $t("home_024") }}</p>
-                </div>
-            </div>
-            <div class="code-area">
-                <van-collapse v-model="activeName" :border = false accordion>
-                     <van-collapse-item title="扫码添加微信" name="1" :value="activeName==1?'点击收起':'点击添加'">
-                        <template #title>
-                            <div>
-                                <van-icon :name="require('../assets/images/home/erweima.png')" />扫码添加微信
-                            </div>
-                        </template>
-                        <div class="code-mian">
-                            <div class="code_area">
-                                <div class="area_icon">
-                                    <!-- <span class="text_left">当前位置：</span> -->
-                                    <!-- <img class="weizhi_icon" src="../assets/images/home/weizhi.png" alt="" srcset=""> -->
-                                    <span class="area_name">当前位置：{{loginArea||'北京'}}</span>
-                                    <img class="down_icon" src="../assets/images/home/xiala_icon.png" @click="showProvince=true">
+                <div class="code-area">
+                    <van-collapse v-model="activeName" :border = false accordion>
+                        <van-collapse-item name="1" color="#1989fa" :value="activeName==1?'点击收起':'点击添加'">
+                            <template #title>
+                                <div>
+                                    <van-icon :name="require('../assets/images/home/erweima.png')" />扫码添加WS
                                 </div>
-                                <div class="update_btn">
-                                    <!-- <van-button type="primary" @click.stop :disabled="countTime>0&&countTime<60" @click="showProvince=true">修改</van-button> -->
-                                    <van-button :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime==60?'刷新二维码':countTime+'s后刷新'}}</van-button>
-                                </div>
-                            </div>
-                            <div class="code-tips">
-                                <p>二维码处于灰色破损状态时，点击刷新二维。微信扫码,切勿长按识別二维码且截图保存扫码无效!</p>
-                                <!-- <p></p> -->
-                            </div>
-                            <div class="qr-code" v-show="errState">
-                                <van-loading v-if="qrCodeImg==''" size="24px">加载中...</van-loading>
-                                <img v-else :src="qrCodeImg" alt="">
-                            </div>
-                            <div class="err_code" v-show="!errState">
-                                <img src="../assets/images/home/qr_err.png" alt="" srcset="">
-                            </div>
-                            <!-- <van-button type="danger" :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime ==60?'刷新二维码':countTime+'s后刷新'}}</van-button> -->
-                            <p>手机端微信扫码点击确认后，可点击收起！</p>
-                            <p>（等待3-5分钟，点击刷新列表查看微信状态）</p>
-                        </div>
-                        <template #right-icon >
-                            <van-icon name="" :color="color"/>
-                        </template>
-                    </van-collapse-item>
-                </van-collapse>
-            </div>
-            <div class="wecht-list">
-                <div class="wecht-lable">
-                    <span class="item_title" v-for="(item,idx) in lableItem" :key="idx">
-                        {{item}}
-                        <span class="reash_btn" v-if="idx==2" @click="initWechatList(1,2)">
-                            <img class="loading_icon" :class="isLoading?'loading_active':''" src="../assets/images/home/jiazai.png" alt="">
-                            <span v-text="isLoading?'加载...':'刷新'"></span>
-                        </span>
-                    </span>
-                </div>
-                <div class="wecht-mess">
-                    <!-- <template> -->
-                    <template v-if="wechaList!=undefined&&wechaList!=null&&wechaList.length>0">
-                        <div class="item_title item_mess" v-for="item in wechaList" :key="item.id">
-                            <span class="item_title">{{item.wx_no}}</span>
-                            <span class="item_title item_status" :style="'color:'+(item.wx_state==0?'#D32C2C':'#28C445')">
-                                <a class="line_status" :class="item.wx_state==0?'down_status':''" href=""></a>{{item.wx_state==0?'离线':'在线'}}
-                            </span>
-                            <span class="item_title">
-                                <!-- <span class="line_up" :style="'color:'+(item.wx_state==0?'#28C445':'#D32C2C')" v-text="item.wx_state==0?'重登':''" @click="handelBtn(item)"></span> -->
-                                <span class="del-btn" @click="showDelBtn(item)">删除</span>
-                            </span>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <div class="item_mess">
-                            <img class="empty_data" src="../assets/images/home/empty_icon.png" alt="" srcset="">
-                            <div class="empty_text">尚未添加微信，无法开始赚钱 赶快去添加吧~</div>
-                        </div>
-                    </template>
-                    <!-- <div class="page_footer">
-                        <div class="paging_left">
-                            <template v-if="total>6">
-                                <PrevNext :len="wechaList.length" :page="page" :limit="limit" :total="total" @to-prev="onPrev" @to-next="onNext"></PrevNext>
                             </template>
-                        </div>
-                        <div class="refash_right" @click="initWechatList(1,2)">
-                            <span>刷新列表</span>
-                        </div>
-                    </div> -->
+                            <div class="code-mian">
+                                <div class="code_area">
+                                    <div class="area_icon">
+                                        <!-- <span class="text_left">当前位置：</span> -->
+                                        <!-- <img class="weizhi_icon" src="../assets/images/home/weizhi.png" alt="" srcset=""> -->
+                                        <span class="area_name">当前位置：{{loginArea||'北京'}}</span>
+                                        <img class="down_icon" src="../assets/images/home/xiala_icon.png" @click="showProvince=true">
+                                    </div>
+                                    <div class="update_btn">
+                                        <!-- <van-button type="primary" @click.stop :disabled="countTime>0&&countTime<60" @click="showProvince=true">修改</van-button> -->
+                                        <van-button :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime==60?'刷新二维码':countTime+'s后刷新'}}</van-button>
+                                    </div>
+                                </div>
+                                <div class="code-tips">
+                                    <p>二维码处于灰色破损状态时，点击刷新二维。微信扫码,切勿长按识別二维码且截图保存扫码无效!</p>
+                                    <!-- <p></p> -->
+                                </div>
+                                <div class="qr-code" v-show="errState">
+                                    <van-loading v-if="qrCodeImg==''" size="24px">加载中...</van-loading>
+                                    <img v-else :src="qrCodeImg" alt="">
+                                </div>
+                                <div class="err_code" v-show="!errState">
+                                    <img src="../assets/images/home/qr_err.png" alt="" srcset="">
+                                </div>
+                                <!-- <van-button type="danger" :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime ==60?'刷新二维码':countTime+'s后刷新'}}</van-button> -->
+                                <p>手机端微信扫码点击确认后，可点击收起！</p>
+                                <p>（等待3-5分钟，点击刷新列表查看WhatsApp状态）</p>
+                            </div>
+                            <template #right-icon >
+                                <van-icon name="" :color="color"/>
+                            </template>
+                        </van-collapse-item>
+                    </van-collapse>
                 </div>
-            </div>
-            <div class="task_disc">
-                <p>* 手机端微信扫码点击确认后，可点击收起。</p>
-                <p>* 等待3-5分钟，点击刷新列表查看微信状态。</p>
-                <p class="point_tips">* 随时查看,保持在线,上号之后系统在自行执行任务,切勿私自操作,影响收益。</p>
-                <p class="point_tips">* 请大家挂机正常的vx！注册不满一月的新vx号，未实名的vx请勿挂机！</p>
+                <div class="wecht-list">
+                    <div class="wecht-lable">
+                        <span class="item_title" v-for="(item,idx) in lableItem" :key="idx">
+                            {{item}}
+                            <span class="reash_btn" v-if="idx==2" @click="initWechatList(1,2)">
+                                <img class="loading_icon" :class="isLoading?'loading_active':''" src="../assets/images/home/jiazai.png" alt="">
+                                <span>刷新</span>
+                            </span>
+                        </span>
+                    </div>
+                    <div class="wecht-mess">
+                        <!-- <template> -->
+                        <template v-if="wechaList!=undefined&&wechaList!=null&&wechaList.length>0">
+                            <div class="item_title item_mess" v-for="item in wechaList" :key="item.id">
+                                <span class="item_title">{{item.wx_no}}</span>
+                                <span class="item_title item_status" :style="'color:'+(item.wx_state==0?'#D32C2C':'#28C445')">
+                                    <a class="line_status" :class="item.wx_state==0?'down_status':''" href=""></a>{{item.wx_state==0?'离线':'在线'}}
+                                </span>
+                                <span class="item_title">
+                                    <!-- <span class="line_up" :style="'color:'+(item.wx_state==0?'#28C445':'#D32C2C')" v-text="item.wx_state==0?'重登':''" @click="handelBtn(item)"></span> -->
+                                    <span class="del-btn" @click="showDelBtn(item)">删除</span>
+                                </span>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="item_mess">
+                                <img class="empty_data" src="../assets/images/home/empty_icon.png" alt="" srcset="">
+                                <div class="empty_text">尚未添加微信，无法开始赚钱 赶快去添加吧~</div>
+                            </div>
+                        </template>
+                        <!-- <div class="page_footer">
+                            <div class="paging_left">
+                                <template v-if="total>6">
+                                    <PrevNext :len="wechaList.length" :page="page" :limit="limit" :total="total" @to-prev="onPrev" @to-next="onNext"></PrevNext>
+                                </template>
+                            </div>
+                            <div class="refash_right" @click="initWechatList(1,2)">
+                                <span>刷新列表</span>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="task_disc">
+                    <p>* 手机端微信扫码点击确认后，可点击收起。</p>
+                    <p>* 等待3-5分钟，点击刷新列表查看微信状态。</p>
+                    <p class="point_tips">* 随时查看,保持在线,上号之后系统在自行执行任务,切勿私自操作,影响收益。</p>
+                    <p class="point_tips">* 请大家挂机正常的vx！注册不满一月的新vx号，未实名的vx请勿挂机！</p>
+                </div>
             </div>
         </div>
         <van-popup v-model="showProvince" position="bottom" :style="{ height: '260px' }">
@@ -149,7 +151,7 @@ export default {
             refreState:false,
             showProvince:false,
             wetIcon:require('../assets/images/home/weixin-icon.png'),
-			lableItem:['微信昵称','登录状态','操作'],
+			lableItem:['WS昵称','登录状态','操作'],
             wechaList:[
                 {
                     id:0,
@@ -260,7 +262,7 @@ export default {
             newloginGetwxlist({page:this.page,limit:this.limit}).then(res => {
                 this.isLoading=false;
                 this.total = Math.ceil(res.total/this.limit);
-                this.wechaList = res.list;
+                // this.wechaList = res.list;
             })
         },
         createQrcode(qrCode){
@@ -386,7 +388,7 @@ export default {
                 font-size: 12px;
                 text-align: center;
                 border-radius: 18px;
-                background-color: $home-bind-button !important;
+                background-color: $color-theme !important;
             }
         }
     }
@@ -403,12 +405,10 @@ export default {
         .home_content{
             width: 100%;
             float: left;
-            padding: 24px 32px;
-            box-sizing: border-box;
             .my_swipe{
                 width: 100%;
-                height: 280px;
-                margin-bottom: 30px;
+                height: 320px;
+                // margin-bottom: 30px;
                 img{
                     width: 100%;
                     height: 100%;
@@ -420,7 +420,7 @@ export default {
                 padding: 20px 0;
                 border-radius: 10px;
                 flex-direction: row;
-                background-color: $home-bind-button;
+                background-color: $color-theme;
                 .left-pro, .right-pro{
                     flex: 1;
                     p{
@@ -440,7 +440,7 @@ export default {
                     margin-top: 12px;
                 }
                 .left-pro{
-                    border-right: 1px solid #f75656;
+                    border-right: 1px solid #fff;
                 }
             }
             .task_settl{
@@ -450,7 +450,7 @@ export default {
                 // margin-top: 30px;
                 margin-bottom: 30px;
                 align-items: center;
-                border-radius: 12px;
+                // border-radius: 12px;
                 // padding: 24px 0 24px 26px;
                 background-color: #fff;
                 .van-notice-bar{
@@ -466,6 +466,11 @@ export default {
                 span{
                     color: $home-bind-button;
                 }
+            }
+            .mian_continer{
+                width: 100%;
+                padding: 0 20px;
+                box-sizing: border-box;
             }
             .code-area, .wecht-list{
                 width: 100%;

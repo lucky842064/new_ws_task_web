@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="btn">
-                <van-button type="danger" @click="jumpDraw">提现</van-button>
+                <van-button @click="jumpDraw">提现</van-button>
             </div>
         </div>
         <div class="home_content">
@@ -70,12 +70,12 @@
                     </div>
                 </div>
             </div>
-            <div class="share_box share_first">
+            <div class="share_box share_first share_top">
                 <div class="share_link">
                     <p>邀请码：{{userInfo.user_code||'...'}}</p>
                 </div>
                 <div class="share_btn">
-                    <van-button type="danger" v-clipboard:copy="userInfo.user_code" v-clipboard:success="copySuccess">复制邀请码</van-button>
+                    <van-button v-clipboard:copy="userInfo.user_code" v-clipboard:success="copySuccess">复制邀请码</van-button>
                 </div>
             </div>
             <div class="share_box share_first">
@@ -83,7 +83,7 @@
                     <p>链接：{{userInfo.share_url+"?r="+userInfo.user_code||'...'}}</p>
                 </div>
                 <div class="share_btn">
-                    <van-button type="danger" v-clipboard:copy="userInfo.share_url+'?r='+userInfo.user_code" v-clipboard:success="copySuccess">复制链接</van-button>
+                    <van-button v-clipboard:copy="userInfo.share_url+'?r='+userInfo.user_code" v-clipboard:success="copySuccess">复制链接</van-button>
                 </div>
             </div>
             <div class="share_box share_last">
@@ -375,9 +375,11 @@ export default {
                 display: flex;
                 align-items: center;
                 .van-button{
+                    color: $font-color-pale;
                     height: 34px;
                     width: 65px;
                     border-radius: 34px;
+                    background-color: $color-theme;
                 }
             }
         }
@@ -389,7 +391,7 @@ export default {
             .task-pro{
                 width: 100%;
                 border-radius: 10px;
-                background-color: $home-bind-button;
+                background-color: $color-theme;
                 .task-item{
                     width: 100%;
                     display: flex;
@@ -398,7 +400,7 @@ export default {
                     .left-pro, .right-pro{
                         padding: 20px 0;
                         flex: 1;
-                        border-bottom: 1px solid #f75656;
+                        border-bottom: 1px solid #fff;
                         p{
                             width: 100%;
                             display: flex;
@@ -416,7 +418,7 @@ export default {
                         margin-top: 12px;
                     }
                     .left-pro{
-                        border-right: 1px solid #f75656;
+                        border-right: 1px solid #fff;
                     }
                 }
             }
@@ -449,7 +451,7 @@ export default {
                         width: 362px;
                         flex-grow: 1;
                         text-decoration: none;
-                        color: $home-bind-button;
+                        color: $home-month-value;
                     }
                     .left-pro p:nth-child(1), .right-pro p:nth-child(1){
                         font-size: 24px;
@@ -469,7 +471,7 @@ export default {
                 text-align: center;
                 font-size: 24px;
                 font-weight: 400;
-                color: #FCC0C0;
+                color: #07c160;
                 line-height: 72px;
                 text-decoration: underline;
             }
@@ -577,7 +579,7 @@ export default {
                 // margin-bottom: 20px;
                 padding: 20px 32px;
                 box-sizing: border-box;
-                background: #FFE9E9;
+                background: #8283e0;
                 // border-radius: 12px;
                 .share_link, .share_btn{
                     flex-grow: 1;
@@ -591,6 +593,8 @@ export default {
                         height: 32px;
                         font-size: 12px;
                         border-radius: 36px;
+                        border: none;
+                        background-color: $color-theme;
                     }
                 }
                 .share_btn{
@@ -605,16 +609,18 @@ export default {
                         font-size: 24px;
                         font-weight: 400;
                         margin-bottom: 6px;
-                        color: #666666;
+                        color: #fff;
                     }
                     p:nth-child(2){
                         color: #F52C2C;
                     }
                 }
             }
-            .share_first{
+            .share_top{
                 border-top-left-radius: 12px;
                 border-top-right-radius: 12px;
+            }
+            .share_first{
                 border-bottom: 1px solid #E3E3E3;
             }
             .share_last{
@@ -631,7 +637,7 @@ export default {
                 color: #999999;
                 border-color: #fff;
                 background-color: #fff;
-                border-radius: 44px;
+                border-radius: 12px;
             }
         }
     }
