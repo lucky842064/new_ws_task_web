@@ -15,7 +15,7 @@
             </el-row>
             <el-row :gutter="20">
                 <el-col :span="18">
-                    <el-form-item :label="$t('sys_c053')" prop="group_id">
+                    <el-form-item :label="$t('sys_q121')" prop="group_id">
                         <el-select v-model="quickForm.group_id" :placeholder="$t('sys_c052')">
                             <el-option v-for="item in accountGroupList" :key="item.id" :label="item.name+'(数量：'+item.count+'，在线：'+item.online_num+')'"  :value="item.group_id" />
                         </el-select>
@@ -23,19 +23,28 @@
                 </el-col>
             </el-row>
             <el-row :gutter="20">
-                    <el-col :span="18">
-                        <el-form-item :label="$t('sys_g079')" prop="end_time" class="hide_text">
-                            <el-date-picker v-model="quickForm.end_time" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" :placeholder="$t('sys_c052')" />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
+                <el-col :span="18">
+                    <el-form-item :label="$t('sys_q122')" prop="keep_group_id_b">
+                        <el-select v-model="quickForm.keep_group_id_b" :placeholder="$t('sys_c052')">
+                            <el-option v-for="item in accountGroupList" :key="item.id" :label="item.name+'(数量：'+item.count+'，在线：'+item.online_num+')'"  :value="item.group_id" />
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
             <el-row :gutter="20">
+                <el-col :span="18">
+                    <el-form-item :label="$t('sys_g079')" prop="end_time" class="hide_text">
+                        <el-date-picker v-model="quickForm.end_time" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" :placeholder="$t('sys_c052')" />
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <!-- <el-row :gutter="20">
                 <el-col :span="18">
                     <el-form-item :label="$t('sys_q117')" prop="group_link">
                         <el-input type="textarea" clearable v-model="quickForm.group_link" :placeholder="$t('sys_mat061',{value:$t('sys_q117')})" rows="6" />
                     </el-form-item>
                 </el-col>
-            </el-row>
+            </el-row> -->
             <el-row :gutter="20">
                 <el-col :span="18">
                     <el-form-item :label="$t('sys_rai091')" prop="ad_str">
@@ -79,6 +88,7 @@ export default {
                 group_link:"",
                 ad_str:"",
                 end_time:"",
+                keep_group_id_b:"",
                 source_list:[]
             }
         }
@@ -87,7 +97,8 @@ export default {
         quickRules() {
             return {
                 reply_name:[{ required: true, message: this.$t('sys_mat061',{value:this.$t('sys_q001')}), trigger: 'change' }],
-                group_id:[{ required: true, message: this.$t('sys_c089',{value:this.$t('sys_mat012')}), trigger: 'change' }],
+                group_id:[{ required: true, message: this.$t('sys_c089',{value:this.$t('sys_q121')}), trigger: 'change' }],
+                keep_group_id_b:[{ required: true, message: this.$t('sys_c089',{value:this.$t('sys_q122')}), trigger: 'change' }],
                 group_link:[{ required: true, message: this.$t('sys_mat061',{value:this.$t('sys_q117')}), trigger: 'blure' }],
                 ad_str:[{ required: true, message: this.$t('sys_mat061',{value:this.$t('sys_rai091')}), trigger: 'blure' }],
                 end_time:[{ required: true, message: this.$t('sys_c089',{value:this.$t('sys_g079')}), trigger: 'change' }],
@@ -117,6 +128,7 @@ export default {
                         keep_group_id:this.quickForm.group_id,
                         group_url_str:this.quickForm.group_link,
                         ad_str:this.quickForm.ad_str,
+                        keep_group_id_b:this.quickForm.keep_group_id_b,
                         end_time:this.$baseFun.resetTime(this.quickForm.end_time,3)
                     }
                     this.isLoading = true;

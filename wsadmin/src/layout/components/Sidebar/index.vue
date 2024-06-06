@@ -16,9 +16,9 @@
         <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
-    <div class="menu_open" @click="toggleSideBar">
+    <!-- <div class="menu_open" @click="toggleSideBar">
       <i :class="sidebar.opened?'el-icon-d-arrow-left':'el-icon-d-arrow-right'"></i>
-    </div>
+    </div> -->
   </div>
 </template>
 

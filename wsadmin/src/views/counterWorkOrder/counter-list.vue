@@ -37,7 +37,8 @@
         <div v-html="$t('sys_mat007',{value:checkIdArry.length})"></div>
     </div>
     <el-table :data="detailDataList" border height="660" ref="serveTable" v-loading="loading" element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(255, 255, 255,1)" style="width: 100%;" :header-cell-style="{ color: '#909399', textAlign: 'center' }" :cell-style="{ textAlign: 'center' }" @selection-change="handleSelectionChange" @row-click="rowSelectChange">
+      element-loading-background="rgba(255, 255, 255,1)" style="width: 100%;" :header-cell-style="{ color: '#909399', textAlign: 'center' }"
+      :cell-style="{ textAlign: 'center' }" @selection-change="handleSelectionChange" @row-click="rowSelectChange">
       <el-table-column type="selection" width="55" />
       <el-table-column type="index" :label="$t('sys_g020')" width="60" />
       <!-- <el-table-column prop="id" :label="$t('sys_g074')" minWidth="230" /> -->
@@ -249,8 +250,9 @@
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
               </el-input>
             </div>
-            <el-table ref="multipleTable" :data="staffData" border height="460" row-key="account" @selection-change="handleStaffChange"
-              style="width: 100;margin-top: 10px;" v-loading="bindLoading" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255,1)">
+            <el-table ref="multipleTable" v-if="changeModel" :data="staffData" border height="460" row-key="account" @selection-change="handleStaffChange"
+              style="width: 100;margin-top: 10px;" v-loading="bindLoading" element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255,1)" @row-click="rowWorkChange">
               <el-table-column type="selection" width="55" :reserve-selection="true" :selectable="checkSelectable" />
               <el-table-column prop="date" :label="$t('sys_c134')">
                 <template slot="header">
@@ -525,8 +527,22 @@ export default {
       let refsElTable = this.$refs.serveTable;
       let findRow = this.checkIdArry.find(item => item == row.id);
       if (findRow) {
-          refsElTable.toggleRowSelection(row, false);
-          return;
+        refsElTable.toggleRowSelection(row, false);
+        return;
+      }
+      refsElTable.toggleRowSelection(row,true);
+    },
+    rowWorkChange(row, column, event) {
+      let findRow;
+      let refsElTable = this.$refs.multipleTable;
+      if (this.workForm.work_type==1) {
+        findRow = this.checkItem.filter(item => item.customer_uid == row.uid);
+      }else{
+        findRow = this.checkItem.filter(item => item.account == row.account);
+      }
+      if (findRow.length>0) {
+        refsElTable.toggleRowSelection(row, false);
+        return;
       }
       refsElTable.toggleRowSelection(row,true);
     },

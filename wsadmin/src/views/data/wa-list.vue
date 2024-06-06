@@ -177,52 +177,17 @@
                 </template>
             </el-form>
         </el-dialog>
-
-        <!-- 设置IP -->
-        <!-- <el-dialog :title="setIpName" center :visible.sync="setIpModel" :close-on-click-modal="false" width="450px">
-            <el-form ref="ipForm" size="small" :model="ipForm" label-width="100px" :rules="ipRules">
-                <el-form-item v-if="setIpType == 0" :label="$t('sys_c055') + ':'" prop="expire_time">
-                    <el-date-picker v-model="ipForm.expire_time" type="datetime" :placeholder="$t('sys_c052')" />
-                </el-form-item>
-                <template v-if="setIpType == 1">
-                    <el-form-item :label="$t('sys_l051') + ':'" prop="allot_num" label-width="140px">
-                        <div style="display: flex;font-size: 12px; line-height: 20px;align-items: center;">
-                            <span>单个ip最多登录</span>
-                            <el-input v-model="ipForm.allot_num" size="small" style="width: 120px;margin: 0 4px;"
-                                show-word-limit placeholder="请输入" />
-                            <span>个账号</span>
-                        </div>
-                    </el-form-item>
-                    <el-form-item label-width="0">
-                        <div style="display: flex;font-size: 12px;align-items: center;justify-content: center;">
-                            如果IP已分配给X个账号正在使用，修改数值要≥X，否则无法生效！</div>
-                    </el-form-item>
-                </template>
-                <template v-if="setIpType == 2">
-                    <el-form-item :label="$t('sys_mat012') + ':'" prop="group_id">
-                        <el-select v-model="ipForm.group_id" :placeholder="$t('sys_c052')">
-                            <el-option v-for="item in ipGroupList" :key="item.id" :label="item.name" :value="item.id" />
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label-width="0">
-                        <div
-                            style="display: flex;font-size: 12px;align-items: center;justify-content: center; color:#f56c6c;">
-                            一个账号只能存在于一个分组中！</div>
-                    </el-form-item>
-                </template>
-
-                <el-form-item v-if="setIpType == 10" :label="$t('sys_c054') + ':'" prop="country">
-                    <el-select v-model="ipForm.country" :placeholder="$t('sys_c052')">
-                        <el-option v-for="(item, idx) in countryList" :key="idx" :label="item" :value="item" />
-                    </el-select>
+        <el-dialog :title="$t('sys_q125')" center :visible.sync="downModel" :close-on-click-modal="false" width="450px">
+            <el-form ref="dataForm" size="small" :model="dataForm" label-width="100px" :rules="dataRules">
+                <el-form-item :label="$t('sys_q126') + ':'" prop="ver_pwd">
+                    <el-input v-model="dataForm.ver_pwd" :placeholder="$t('sys_mat061',{value:$t('sys_q126')})" style="width: 100%;" clearable />
                 </el-form-item>
                 <el-form-item label-width="0" style="text-align:center;" class="el-item-bottom">
-                    <el-button @click="setIpModel = false">{{ $t('sys_c023') }}</el-button>
-                    <el-button :loading="isLoading" type="primary" @click="submitSetBtn('ipForm')">{{
-                        $t('sys_c024') }}</el-button>
+                    <el-button @click="downModel = false">{{ $t('sys_c023') }}</el-button>
+                    <el-button :loading="dataForm.downLoading" type="primary" @click="submitDownBtn('dataForm')">{{$t('sys_c024') }}</el-button>
                 </el-form-item>
             </el-form>
-        </el-dialog> -->
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -245,6 +210,7 @@ export default {
             ipModelType: "",
             ipModelWidth: "",
             dataList: [],
+            downModel: false,
             loading: false,
             ipModel: false,
             isLoading: false,
@@ -271,6 +237,12 @@ export default {
                 limit: 10,
                 total: 0
             },
+            dataForm:{
+                ver_pwd:"",
+                data_id:"",
+                data_type:null,
+                downLoading:false,
+            },
             timer:null,
             isTime:null,
             isLoading:false,
@@ -282,6 +254,11 @@ export default {
             return {
                 data_way: [{ required: true, message: this.$t('sys_c052'), trigger: 'change' }],
                 file_name: [{ required: true, message: this.$t('sys_mat024'), trigger: 'blur' }]
+            }
+        },
+        dataRules() {
+            return {
+                ver_pwd: [{ required: true, message: this.$t('sys_mat061',{value:this.$t('sys_q126')}), trigger: 'blur' }]
             }
         },
         dataOption(){
@@ -510,10 +487,28 @@ export default {
             })
         },
         handleCommand(row,idx){
-            dooutputdata({type:idx,id:row.id}).then(res=>{
-                if (res.code !=0)return;
-                window.location.href = res.data.url;
+            this.dataForm.data_type=idx;
+            this.dataForm.data_id=row.id;
+            this.downModel = true;
+            this.$nextTick(()=>{
+                this.$refs.dataForm.resetFields();
             })
+        },
+        submitDownBtn(formName){
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.dataForm.downLoading = true;
+                    dooutputdata({type:this.dataForm.data_type,id:this.dataForm.data_id,pwd_str:this.dataForm.ver_pwd}).then(res=>{
+                        this.dataForm.downLoading = false;
+                        if (res.code !=0)return;
+                        this.downModel = false;
+                        window.location.href = res.data.url;
+                    })
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
         }
     },
     destroyed () {

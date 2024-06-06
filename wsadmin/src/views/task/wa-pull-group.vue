@@ -87,6 +87,19 @@
           </div>
           <!-- <el-pagination :total="model1.total" style="display: none;" /> -->
         </div>
+        <el-dialog :title="$t('sys_rai098')" :visible.sync="dialogVisible" width="560px" center>
+          <el-form :model="taskForm" size="small" :rules="taskRules" ref="taskForm" label-width="100px" class="demo-ruleForm">
+            <el-form-item :label="$t('sys_rai104')+'：'" prop="relpy_text">
+              <el-input type="textarea" clearable v-model="taskForm.relpy_text" :placeholder="$t('sys_g129')" rows="8" />
+            </el-form-item>
+            <el-form-item>
+              <div class="el-item-right">
+                <el-button @click="dialogVisible=false">{{ $t('sys_c023') }}</el-button>
+                <el-button type="primary" :loading="isLoading" @click="submitForm('taskForm')">{{ $t('sys_c024') }}</el-button>
+              </div>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
     </div>
   </template>
   <script>
@@ -102,14 +115,26 @@
           status:"",
           task_name: "",
         },
+        taskForm:{
+          relpy_type:"",
+          relpy_id:"",
+          relpy_text:"",
+        },
         loading:false,
+        isLoading:false,
         auto_scamper:false,
         checkIdArry:[],
         taskDataList:[],
-        showNum:[10]
+        showNum:[10],
+        dialogVisible:false
       }
     },
     computed: {
+      taskRules() {
+        return {
+          relpy_text: [{ required: true, message: this.$t('sys_mat021'), trigger: 'blure' },{ max: 2000, message: '最多可输入2000个字符', trigger: 'blur' }],
+        }
+      },
       groupRules() {
         return {
           group_id: [{ required: true, message: this.$t('sys_c052'), trigger: 'change' }],
@@ -140,6 +165,12 @@
         handleNewwork(status) {
           this.model1.status = status;
           this.getPullTaskList(1);
+        },
+        scamperBtn(row,type){
+          this.taskForm.relpy_type=type;
+          this.taskForm.relpy_id=row.id;
+          this.taskForm.relpy_text=row.ad;
+          this.dialogVisible=true;
         },
         getPullTaskList(num){
           this.loading=true;
@@ -198,30 +229,49 @@
         goTaskDetail(row){
           this.$router.push({path:'/wa-group-detail',query:{params:row,task_id:row.id}});
         },
-        scamperBtn(row){
-          let that = this;
-          that.$confirm(that.$t('sys_rai046',{value:that.$t('sys_rai098')}), that.$t('sys_l013'), {
-              type: 'warning',
-              confirmButtonText: that.$t('sys_c024'),
-              cancelButtonText: that.$t('sys_c023'),
-              beforeClose: function (action, instance, done) {
-                  if (action === 'confirm') {
-                    instance.confirmButtonLoading = true;
-                    groupsendmsg({ids:[row.id]}).then(res=>{
-                      instance.confirmButtonLoading = false;
-                      if (res.code != 0) return;
-                        that.getPullTaskList(1);
-                        successTips(that)
-                        done();
-                      })
-                  } else {
-                    done();
-                  }
-              }
-          }).catch(() => {
-            that.$message({ type: 'info', message: that.$t('sys_c048') });
-          })
-        },
+        submitForm(formName){
+          this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.isLoading=true;
+            let ids = this.taskForm.relpy_type==1?this.checkIdArry:[this.taskForm.relpy_id];
+            console.log(ids);
+            groupsendmsg({ids:ids,ad:this.taskForm.relpy_text}).then(res=>{
+              this.isLoading=false;
+              if (res.code !=0 ) return;
+              successTips(this)
+              this.getPullTaskList(1);
+              this.dialogVisible=false;
+            })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        })
+      },
+        // scamperBtn(row){
+        //   let that = this;
+        //   that.$confirm(that.$t('sys_rai046',{value:that.$t('sys_rai098')}), that.$t('sys_l013'), {
+        //       type: 'warning',
+        //       confirmButtonText: that.$t('sys_c024'),
+        //       cancelButtonText: that.$t('sys_c023'),
+        //       beforeClose: function (action, instance, done) {
+        //           if (action === 'confirm') {
+        //             instance.confirmButtonLoading = true;
+        //             groupsendmsg({ids:[row.id]}).then(res=>{
+        //               instance.confirmButtonLoading = false;
+        //               if (res.code != 0) return;
+        //                 that.getPullTaskList(1);
+        //                 successTips(that)
+        //                 done();
+        //               })
+        //           } else {
+        //             done();
+        //           }
+        //       }
+        //   }).catch(() => {
+        //     that.$message({ type: 'info', message: that.$t('sys_c048') });
+        //   })
+        // },
         handleSelectionChange(row) {
           this.checkIdArry = row.map(item => { return item.id })
         },

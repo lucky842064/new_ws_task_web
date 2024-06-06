@@ -1,34 +1,22 @@
 <template>
   <div class="login-container">
-    <!-- <div class="change_lang" @click="changeLang">
-      <img :src="require(`@/assets/login/${langValue||'zh'}.png`)" alt="" srcset="">
-      <span>{{ langValue||'zh' }}</span>
-    </div> -->
-    <div class="radius_left"></div>
-    <div class="radius_top"></div>
     <div class="login-box">
-      <div class="login-left">
-        <img src="@/assets/login/side-logo.png">
-      </div>
       <div class="login-form">
         <div class="login-title">
           <img class="icon" src="../../assets/login/avatar.png" alt="logo">
-          <!-- <h2 class="title">{{ $t('sys_l002') }}</h2> -->
-          <!-- <h2 class="title">iMX</h2> -->
-          <h2 class="title">Bees SCRM</h2>
+          <h2 class="title">三花任务管理系统</h2>
         </div>
-        <div class="account_type">
+        <!-- <div class="account_type">
           <span class="left_text">{{$t('sys_l057')}}</span>
           <el-radio-group v-model="loginForm.seatName" @change="changeAccount">
-            <el-radio border v-for="(item, idx) in accountOption" v-show="item != ''" :key="idx" :label="idx">{{ item }}</el-radio>
+            <el-radio v-for="(item, idx) in accountOption" v-show="item != ''" :key="idx" :label="idx">{{ item }}</el-radio>
           </el-radio-group>
-        </div>
+        </div> -->
         <el-form ref="loginForm" :model="loginForm" :rules="loginRules">
           <el-form-item label="" prop="username">
             <el-input v-model="loginForm.username" :placeholder="$t('sys_l006')" auto-complete="on">
               <template #prefix>
                 <img src="../../assets/login/zhanghao.png">
-                <!-- <i class="el-icon-user" /> -->
               </template>
             </el-input>
           </el-form-item>
@@ -38,7 +26,6 @@
               :type="showEye ? 'password' : ''">
               <template #prefix>
                 <img src="../../assets/login/mima.png">
-                <!-- <i class="el-icon-lock" /> -->
               </template>
               <template #suffix>
                 <!-- <div class="show-pwd" @click="showPwd"> -->
@@ -57,14 +44,14 @@
                 <a href="javascript:;" @click="viewXieyi(1)">《隐私政策》</a>
               </span>
             </el-checkbox>
-            <div class="service_tg" @click="jumpServeTg">
+            <!-- <div class="service_tg" @click="jumpServeTg">
               <span class="icon_img">
                 <img src="../../assets/tg_icon.png" alt="" srcset=""> 
               </span>
               <span>
                 {{ $t('sys_l107') }}
               </span>
-            </div>
+            </div> -->
           </el-form-item>
         </el-form>
       </div>

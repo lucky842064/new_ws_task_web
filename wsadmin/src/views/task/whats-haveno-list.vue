@@ -69,7 +69,8 @@
                   {{ scope.row.sucess_num }}/{{ scope.row.send_num }}
                 </template>
             </el-table-column> -->
-            <el-table-column prop="keep_group_name" :label="$t('sys_q118')" minWidth="160" />
+            <el-table-column prop="keep_group_name" :label="$t('sys_q121')" minWidth="160" />
+            <el-table-column prop="keep_group_b_name" :label="$t('sys_q122')" minWidth="160" />
             <el-table-column prop="status" :label="$t('sys_l059')" minWidth="160">
               <template slot="header">
                 <el-dropdown trigger="click" size="medium " @command="(command) => handleNewwork(command)">

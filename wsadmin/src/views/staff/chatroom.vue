@@ -274,8 +274,10 @@
                     <el-checkbox v-model="item.check" v-if="isShowBetch" @change="checkFriend(item, 1)"></el-checkbox>
                     <div :class="['friend_info_item', friendAccount == item.friend_account && frienxIdx == idx ? 'friend_active' : '']"
                       @click.stop="changeFriend(item, idx)">
-                      <el-avatar shape="square" :size="40"
-                        :src="item.avatar || 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"></el-avatar>
+                      <el-avatar shape="square" :size="40" :src="item.avatar || 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'" />
+                      <el-tooltip class="item" effect="dark" :content="$t('sys_q123')" placement="top-end">
+                        <el-badge v-if="item.is_repeat!=0" class="repeat_text" value="重" type="warning" />
+                      </el-tooltip>
                       <div class="friend_top">
                         <div class="friend_info">
                           <span class="friend_nums" v-text="item.friend_name ? item.friend_name + ' (' + handleFilterHide(item.friend_account) + ')' : handleFilterHide(item.friend_account)"></span>
@@ -319,9 +321,8 @@
                   {{ $t('sys_q040') }} <i class="el-icon-loading" />
                 </div>
                 <div class="more_tips" v-if="newsNoMore">{{ $t('sys_mat014') }}</div>
-                <template v-if="newsDataList.length > 0">
-                  <div class="new_window" v-for="(item, idx) in newsDataList" :key="idx"
-                    @contextmenu.prevent="openRightMenu($event, item)">
+                <template v-if="isHideNew&&newsDataList.length > 0">
+                  <div class="new_window" v-for="(item, idx) in newsDataList" :key="idx" @contextmenu.prevent="openRightMenu($event, item)">
                     <div class="user_area" v-if="item.send_category == 2">
                       <div class="self_info">
                         <div class="user_new">
@@ -1106,6 +1107,7 @@ export default {
       copayImgUrl: "",
       fileImgUrl: "",
       isQuickMenu: true,
+      isHideNew: false,
       upLoading: false,
       sourceModel: false,
       quickLoading: false,
@@ -1534,7 +1536,7 @@ export default {
         this.socketStatus = 1;
         return
       }
-      //  console.log(backNews);
+      // console.log(backNews);
       // send_category 1-推广号消息 2-好友消息
       if (backNews.send_category == 2 && backNews.receive_account == this.friendInfo.account && backNews.send_account == this.friendInfo.friend_account) {
         backNews.avatar = this.friendInfo.avatar || "";
@@ -1542,7 +1544,6 @@ export default {
       }
       let filterTop = this.friendList.filter(item => { return item.is_top == 2 }).length;
       let filterItem = this.friendList.filter(item => { return item.friend_account == backNews.send_account });
-      console.log(this.staffAccount);
       if (filterItem.length == 0 && backNews.send_category == 2 && backNews.receive_account == this.staffAccount && this.groupIdx==="") {
         backNews.un_read_num = 0;
         backNews.account = backNews.receive_account;
@@ -1731,14 +1732,13 @@ export default {
       }
       if (this.serviceIdx != '0') {
         params.account = this.staffAccount,
-          params.group_id = this.changeGroupId
+        params.group_id = this.changeGroupId
       }
       localStorage.removeItem("currentFriendIdx");
       localStorage.removeItem("currentFriendAccount");
       this.query_text ? delete params.account : "";
       let reqApi = this.serviceIdx == '0' ? getcustomerunreadlist : getcustomerfriendlist;
       let res = await reqApi(params);
-      this.friendLoading = false;
       if (res.code != 0) return;
       this.friendList = res.data.list || [];
       this.friend_news = res.data.un_read_num || 0;
@@ -1748,12 +1748,10 @@ export default {
         this.friendInfo = this.friendAccount ? this.friendList.filter(item => { return item.friend_account == this.friendAccount })[0] : "";
         this.friendAccount != 'undefined' && this.friendAccount ? this.initNewsList() : "";
       }
-      // if (this.serviceIdx != '0') {
       getcustomerunreadlist({ staff_no: this.staff_no }).then(res => {
         this.friendLoading = false;
         this.un_read_num = res.data.un_read_num || 0;
       })
-      // }
     },
     async initNewsList() {
       this.f_page = 1;
@@ -1998,18 +1996,20 @@ export default {
       setTimeout(() => { this.initSocket() })
     },
     async changeServe(row, idx) {
+      this.newsDataList = [];
       this.groupIdx = "";
       this.friendInfo = "";
       this.query_text = "";
       this.staffInfo = "";
       this.staffAccount = "";
       this.changeGroupId = "";
-      this.newsDataList = [];
+      this.isHideNew = false;
+      this.newsLoading = false;
       localStorage.removeItem("currentGroupId");
       localStorage.removeItem("currentFriendIdx");
       localStorage.removeItem("currentSeatAccount");
       localStorage.removeItem("currentFriendAccount");
-      if (idx == 0) {
+      if (idx === 0) {
         this.serviceIdx = idx;
         clearInterval(this.groupTimeTsak);// 清除定时器
         localStorage.setItem("currentServiceIdx", idx);
@@ -2039,6 +2039,7 @@ export default {
       if (row.friend_account == this.friendAccount && this.frienxIdx === idx) return;
       this.newsNoMore = false;
       this.infoLoading = true;
+      this.isHideNew = true;
       this.isShowBetch = false;
       this.initloading = true;
       this.frienxIdx = idx;
@@ -2266,7 +2267,7 @@ export default {
     },
     async handleScrolStop() {
       const scrollTop = this.$refs.newsScroll;
-      if (this.f_page > this.page_total) {
+      if (this.f_page >= this.page_total) {
         this.newsNoMore = true;
         return;
       }
@@ -3210,7 +3211,6 @@ export default {
         delete newObj.msg_type;
         this.startPercent();
         const { data:{list} } = await quicklysendmsg(newObj);
-        // console.log(list);
         for (let k = 0; k < list.length; k++) {
           const item = list[k];
           newObj = {

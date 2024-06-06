@@ -452,7 +452,7 @@
         </el-dialog>
 
         <!-- 设置IP -->
-        <el-dialog :title="is_staff==1?setStaffName:setIpName" center :visible.sync="changeModel" :close-on-click-modal="false" width="760px">
+        <el-dialog :title="is_staff==1?setStaffName:setIpName" center :visible.sync="changeModel" :close-on-click-modal="false" width="800px">
             <el-form ref="ipForm" size="small" :model="ipForm" label-width="100px" :rules="ipRules">
                 <div style="display: flex;justify-content: space-between;">
                     <div>
@@ -480,8 +480,9 @@
                             <el-button size="small" type="primary" icon="el-icon-search" @click="getStaffList(1)">{{ $t('sys_c002') }}</el-button>
                         </div>
                         <div style="max-height:450px;overflow-y:auto;margin-top:10px;" v-if="changeModel">
-                            <u-table ref="tableName" :data="staffData" row-key="id" @selection-change="handleStaffChange" border style="width: 100%;"
-                            v-loading="staffLoading" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255,1)">
+                            <u-table ref="tableName" :data="staffData" row-key="uid" @selection-change="handleStaffChange" border style="width: 100%;"
+                            v-loading="staffLoading" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255,1)"
+                            @row-click="rowStaffChange">
                                 <u-table-column type="selection" width="55" :reserve-selection="true" />
                                 <u-table-column prop="date" :label="$t('sys_c134')">
                                     <template slot="header">
@@ -494,8 +495,9 @@
                             </u-table>
                         </div>
                         <div style="margin-top: 10px;">
-                            <el-pagination :current-page.sync="seatPage" :page-size="seatLimit" :page-sizes="pageOption" 
-                            layout="total, sizes, prev, pager, next" :total="seatTotal" @size-change="seatSizeChange" @current-change="seatChangePage" />
+                            <el-pagination :current-page.sync="seatPage" :pager-count="5" :page-size="seatLimit" :page-sizes="pageOption" 
+                            layout="total, sizes, prev, pager, next" :total="seatTotal" @size-change="seatSizeChange"
+                             @current-change="seatChangePage" />
                         </div>
                     </div>
                 </div>
@@ -926,6 +928,14 @@ export default {
         rowSelectChange(row) {
             let tableCell = this.$refs.serveTable;
             if (this.checkIdArry.includes(row.id)) {
+                tableCell.toggleRowSelection([{row:row,selected:false}]);
+                return;
+            }
+            tableCell.toggleRowSelection([{row:row,selected:true}]);
+        },
+        rowStaffChange(row){
+            let tableCell = this.$refs.tableName;
+            if (this.checkItem.includes(row.account)) {
                 tableCell.toggleRowSelection([{row:row,selected:false}]);
                 return;
             }

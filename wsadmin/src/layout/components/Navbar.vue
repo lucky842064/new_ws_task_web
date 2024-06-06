@@ -1,17 +1,16 @@
 <template>
   <div class="navbar">
-    <!-- <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" /> -->
-
+    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
     <!-- <breadcrumb id="breadcrumb-container" class="breadcrumb-container" /> -->
     <div class="right-menu">
-      <div class="serveic_img" @click="jumpServeTg">
+      <!-- <div class="serveic_img" @click="jumpServeTg">
         <span class="icon_img">
           <img src="../../assets/tg_icon.png" alt="" srcset=""> 
         </span>
         <span>
           {{ $t('sys_l107') }}
         </span>
-      </div>
+      </div> -->
       <div class="sys_use_time">
         {{ $t('sys_l019') }}：
         <span :class="{'expire_tips':expireTime}">
@@ -21,11 +20,11 @@
       <!-- <template v-if="device!=='mobile'"> -->
       <!-- <search id="header-search" class="right-menu-item" /> -->
       <error-log class="errLog-container right-menu-item hover-effect" />
-      <!-- <screenfull id="screenfull" class="right-menu-item hover-effect" /> -->
+      <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
       <!-- <el-tooltip content="Global Size" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip> -->
+        <size-select id="size-select" class="right-menu-item hover-effect" />
+      </el-tooltip> -->
 
       <!-- </template> -->
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
@@ -100,6 +99,9 @@ export default {
     },
     jumpServeTg(){
       window.open(process.env.VUE_APP_TG,'_blank');
+    },
+    toggleSideBar() {
+      this.$store.dispatch('app/toggleSideBar')
     }
   }
 }
