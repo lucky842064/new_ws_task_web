@@ -291,7 +291,7 @@ export const asyncRoutes = [
         component: () => import('@/views/task/wa-pull-group'),
         name: 'wa-pull-group',
         meta: {
-          title: i18n.t('sys_m037'),
+          title:i18n.t('sys_m037')+i18n.t('sys_q128')
         }
       },
       {
@@ -334,6 +334,23 @@ export const asyncRoutes = [
         path: '/ws-group-detail',
         component: () => import('@/views/task/ws-group-detail'),
         name: 'ws-group-detail',
+        meta: {
+          title:i18n.t('sys_m035')
+        }
+      },
+      {
+        path: '/pullGroup',
+        component: () => import('@/views/task/pullGroup'),
+        name: 'pullGroup',
+        meta: {
+          title:i18n.t('sys_m037')+i18n.t('sys_q129')
+        }
+      },
+      {
+        hidden: true,
+        path: '/ws-creat-group',
+        component: () => import('@/views/task/ws-add-b-group'),
+        name: 'ws-creat-group',
         meta: {
           title:i18n.t('sys_m035')
         }

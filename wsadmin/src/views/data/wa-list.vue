@@ -498,7 +498,7 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.dataForm.downLoading = true;
-                    dooutputdata({type:this.dataForm.data_type,id:this.dataForm.data_id,pwd_str:this.dataForm.ver_pwd}).then(res=>{
+                    dooutputdata({type:this.dataForm.data_type,id:this.dataForm.data_id,two_pwd:this.dataForm.ver_pwd}).then(res=>{
                         this.dataForm.downLoading = false;
                         if (res.code !=0)return;
                         this.downModel = false;

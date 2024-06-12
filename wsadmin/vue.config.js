@@ -36,7 +36,7 @@ module.exports = {
       '/api': {
         // target: 'https://fanyi-api.baidu.com',  // 设置代理的目标URL
         // target: 'https://api.niutrans.com',  // 设置代理的目标URL
-        target: 'http://54.255.54.247:9000',  // 设置代理的目标URL
+        target: 'http://13.229.25.219:8099',  // 设置代理的目标URL
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''  // 将请求中的/api路径替换为空

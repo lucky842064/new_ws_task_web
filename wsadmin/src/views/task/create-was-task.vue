@@ -383,12 +383,11 @@
             })
         },
         getChildren(msg){
-            console.log(msg);
             this.showSource=false;
             if (this.source_id) {
                 for (let k = 0; k < this.taskForm.materialData.length; k++) {
                     if (this.taskForm.materialData[k].id == this.source_id) {
-                        this.taskForm.materialData[k] = JSON.parse(msg)
+                        this.$set(this.taskForm.materialData,k,JSON.parse(msg))
                     }
                 }
             }else{

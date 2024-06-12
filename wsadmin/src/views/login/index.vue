@@ -1,9 +1,20 @@
 <template>
   <div class="login-container">
+    <!-- <div class="change_lang" @click="changeLang">
+      <img :src="require(`@/assets/login/${langValue||'zh'}.png`)" alt="" srcset="">
+      <span>{{ langValue||'zh' }}</span>
+    </div> -->
+    <!-- <div class="radius_left"></div>
+    <div class="radius_top"></div> -->
     <div class="login-box">
+      <!-- <div class="login-left">
+        <img src="@/assets/login/side-logo.png">
+      </div> -->
       <div class="login-form">
         <div class="login-title">
           <img class="icon" src="../../assets/login/avatar.png" alt="logo">
+          <!-- <h2 class="title">{{ $t('sys_l002') }}</h2> -->
+          <!-- <h2 class="title">iMX</h2> -->
           <h2 class="title">三花任务管理系统</h2>
         </div>
         <!-- <div class="account_type">
@@ -17,6 +28,7 @@
             <el-input v-model="loginForm.username" :placeholder="$t('sys_l006')" auto-complete="on">
               <template #prefix>
                 <img src="../../assets/login/zhanghao.png">
+                <!-- <i class="el-icon-user" /> -->
               </template>
             </el-input>
           </el-form-item>
@@ -26,6 +38,7 @@
               :type="showEye ? 'password' : ''">
               <template #prefix>
                 <img src="../../assets/login/mima.png">
+                <!-- <i class="el-icon-lock" /> -->
               </template>
               <template #suffix>
                 <!-- <div class="show-pwd" @click="showPwd"> -->
@@ -36,14 +49,14 @@
           </el-form-item>
 
           <el-form-item style="width: 100%">
-            <el-button :loading="loading" :disabled="!checked" class="login-btn" type="primary" @click="submitForm('loginForm')">{{$t('sys_l001') }}</el-button>
-            <el-checkbox v-model="checked">
+            <el-button :loading="loading" class="login-btn" type="primary" @click="submitForm('loginForm')">{{$t('sys_l001') }}</el-button>
+            <!-- <el-checkbox v-model="checked">
               <span class="el-checkbox__label">
                 <span style="color: rgb(51, 51, 51);">我已阅读并同意</span>
                 <a href="javascript:;" @click="viewXieyi(0)">《用户协议》</a>
                 <a href="javascript:;" @click="viewXieyi(1)">《隐私政策》</a>
               </span>
-            </el-checkbox>
+            </el-checkbox> -->
             <!-- <div class="service_tg" @click="jumpServeTg">
               <span class="icon_img">
                 <img src="../../assets/tg_icon.png" alt="" srcset=""> 

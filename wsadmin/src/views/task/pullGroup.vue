@@ -4,7 +4,7 @@
         <el-form-item>
           <el-button type="primary" @click="jumpCreatTask(0,0)">{{ $t('sys_m038') }}</el-button>
         </el-form-item>
-        <el-form-item>
+        <!-- <el-form-item>
           <el-button type="warning" :disabled="checkIdArry.length==0" @click="handleGroupBtn(1)">{{ $t('sys_rai081') }}</el-button>
         </el-form-item>
         <el-form-item>
@@ -12,7 +12,10 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" :disabled="checkIdArry.length==0" @click="handleGroupBtn(4)">{{ $t('sys_q111') }}</el-button>
-        </el-form-item>
+        </el-form-item> -->
+        <el-form-item>
+        <el-button type="primary" :disabled="checkIdArry.length==0" @click="handleGroupBtn(4)">{{ $t('sys_q111') }}</el-button>
+      </el-form-item>
         <el-form-item>
           <el-button type="danger" :disabled="checkIdArry.length==0" @click="handleGroupBtn(2)">{{ $t('sys_rai082') }}</el-button>
         </el-form-item>
@@ -37,7 +40,6 @@
         <!-- <el-table @sort-change="sorthandle" :summary-method="getSummaries" show-summary :data="taskDataList" row-key="id" use-virtual border height="750" v-loading="loading" ref="serveTable"
           element-loading-spinner="el-icon-loading" style="width: 100%;" showBodyOverflow="title" :total="model1.total" :page-sizes="pageOption" 
           :page-size="model1.limit" :current-page="model1.page" :pagination-show="true" @selection-change="handleSelectionChange" @row-click="rowSelectChange" @handlePageSize="pageHandle">    -->
-        
           <el-table :summary-method="getSummaries" show-summary :data="taskDataList" row-key="id" use-virtual
             border height="700" v-loading="loading" ref="serveTable" element-loading-spinner="el-icon-loading" style="width: 100%;"
             @selection-change="handleSelectionChange" @row-click="rowSelectChange">  
@@ -50,20 +52,43 @@
                   </el-tooltip>
                 </template>
             </el-table-column>
-            <el-table-column prop="pull_group_name" :label="$t('sys_rai088')" minWidth="120" />
-            <el-table-column prop="ad_group_name" :label="$t('sys_rai089')" minWidth="120" />
-            <el-table-column prop="data_pack_name" :label="$t('sys_rai090')" width="120" />
-            <!-- <el-table-column prop="ad" show-overflow-tooltip :label="$t('sys_rai091')" minWidth="120" /> -->
-            <el-table-column prop="zq_num" :label="$t('sys_rai095')" minWidth="100" />
-            <el-table-column prop="is_announcement" :label="$t('sys_q131')" minWidth="100">
-              <template slot-scope="scope">
-                <el-button class="jump_un_link"type="text" :disabled="!scope.row.material_list" @click.stop="scamperBtn(scope.row,1)">{{ scope.row.material_list==null?0:scope.row.material_list.length }}</el-button>
+            <!-- <el-table-column prop="qremark" label="群描述" minWidth="120">
+              <template slot-scope="scope" >
+                <el-tooltip class="item" effect="dark" :content="scope.row.qremark||'-'" placement="top-start">
+                  <span style="width: 100px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{scope.row.qremark||'-'}}</span>
+                </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column prop="qnum" :label="$t('sys_rai092')" width="120" />
-            <el-table-column prop="pull_num" :label="$t('sys_rai093')" width="120" />
-            <el-table-column prop="avg_num" :label="$t('sys_rai099')" width="120" />
-            <el-table-column prop="success_num" :label="$t('sys_rai094')" width="120" />
+            <el-table-column prop="qavatar" label="群头像" width="120">
+                <template slot-scope="scope">
+                  <el-avatar shape="square" :size="40" :src="scope.row.qavatar || 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'" />
+                </template>
+            </el-table-column> -->
+            <el-table-column prop="invite_link" label="邀请链接" minWidth="120">
+                <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark" :content="scope.row.invite_link" placement="top">
+                    <div style="width: 100px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{ scope.row.invite_link||"-" }}</div>
+                  </el-tooltip>
+                </template>
+            </el-table-column>
+            <el-table-column prop="admin_account" label="管理员" minWidth="120" />
+            <el-table-column prop="pull_group_name" label="拉群分组" minWidth="100" />
+            <el-table-column prop="ad_account" label="营销账号" width="100">
+                <template slot-scope="scope">{{ scope.row.ad_account||"-" }}</template>
+            </el-table-column>
+            <!-- <el-table-column prop="ad" :label="$t('sys_rai091')" minWidth="120">
+                <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark" :content="scope.row.ad" placement="top">
+                    <div style="width: 120px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{ scope.row.ad||"-" }}</div>
+                  </el-tooltip>
+                </template>
+            </el-table-column> -->
+            <el-table-column prop="match_num" :label="$t('sys_q131')" width="100">
+              <template slot-scope="scope">
+                <el-button class="jump_un_link"type="text" :disabled="!scope.row.material_list" @click.stop="scamperBtn(scope.row,1)">{{ scope.row.material_list==null?0:scope.row.material_list.length }}</el-button>
+                <!-- <div class="jump_un_link" @click.stop="scamperBtn(scope.row,1)"></div> -->
+              </template>
+            </el-table-column>
             <el-table-column prop="status" :label="$t('sys_rai001')" width="100">
               <template slot="header">
                 <el-dropdown trigger="click" size="medium " @command="(command) => handleNewwork(command)">
@@ -71,25 +96,66 @@
                       <i class="el-icon-arrow-down el-icon--right" />
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item :class="{'dropdown_selected':idx==model1.status}" v-for="(item,idx) in statusOptions" :key="idx" :command="idx">{{ item==''?$t('sys_l053'):item }}</el-dropdown-item>
+                    <el-dropdown-item :class="{'dropdown_selected':idx==model1.status}" v-for="(item,idx) in statusOptions" :key="idx" :command="idx">{{ item==''?$t('sys_l053'):item }}</el-dropdown-item>
                   </el-dropdown-menu>
-                  </el-dropdown>
+                </el-dropdown>
               </template>
               <template slot-scope="scope">
-                <el-tag size="small" :type="scope.row.status==1?'info':scope.row.status==2?'warning':scope.row.status==5?'success':'danger'"> {{ statusOptions[scope.row.status]||"-" }}</el-tag>
+                <el-tag size="small" :type="scope.row.status==0||scope.row.status==1?'info':scope.row.status==2?'warning':scope.row.status==5?'success':'danger'"> {{ statusOptions[scope.row.status]||"-" }}</el-tag>
               </template>
+            </el-table-column>
+            <el-table-column prop="zq_num" label="炸群次数" width="100" />
+            <el-table-column prop="match_num" label="拉手数量" width="100">
+              <template slot-scope="scope">
+                <div class="jump_un_link" @click.stop="showMatch(scope.row)">{{ scope.row.match_num||0 }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="pull_num" label="单次拉人数" minWidth="120" />
+            <el-table-column prop="end_num" label="截止人数" width="100" />
+            <el-table-column prop="target_num" label="目标人数" width="100" />
+            <el-table-column prop="reason" label="原因" minWidth="120">
+                <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark" :content="scope.row.reason" placement="top">
+                    <div style="width: 100px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{ scope.row.reason||"-" }}</div>
+                  </el-tooltip>
+                </template>
             </el-table-column>
             <el-table-column prop="itime" :label="$t('sys_c008')" minWidth="160">
                 <template slot-scope="scope">
                   <div>{{scope.row.itime>0?$baseFun.resetTime(scope.row.itime*1000):"-" }}</div>
                 </template>
             </el-table-column>
-            <el-table-column fixed="right" :label="$t('sys_c010')" width="260">
+            <!-- <el-table-column fixed="right" :label="$t('sys_c010')" width="120">
+              <template slot-scope="scope">
+                <el-button @click.stop type="text" size="mini">
+                  <el-dropdown @command="(command)=>{handleGroupBtn(scope.row,command)}" trigger="click">
+                    <span class="el-dropdown-link">
+                      <el-button type="success" plain size="mini" :disabled="checkIdArry.length>0">
+                        <i class="el-icon-setting"></i>
+                        {{ $t('sys_c079') }}
+                        <i class="el-icon-arrow-down el-icon--right"></i>
+                      </el-button>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item v-for="(item,idx) in moreOption" :key="idx" :command="{item,idx}" v-show="idx!=0">
+                        {{ item }}
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </el-button>
+              </template>
+            </el-table-column> -->
+            <el-table-column fixed="right" :label="$t('sys_c010')" minWidth="260">
                 <template slot-scope="scope">
-                  <!-- <el-button :disabled="checkIdArry.length>0" type="primary" size="mini" @click.stop="exportText(scope.row)">{{ $t('sys_rai079') }}</el-button> -->
                   <el-button :disabled="checkIdArry.length>0" type="primary" plain size="mini" @click.stop="beforeOneBtn(scope.row)">{{ $t('sys_rai098') }}</el-button>
                   <el-button :disabled="checkIdArry.length>0" type="primary" plain size="mini" @click.stop="scamperBtn(scope.row,2)">{{ $t('sys_q132') }}</el-button>
+                  <el-button v-if="scope.row.status==1" :disabled="checkIdArry.length>0" :type="scope.row.status==1?'primary':'danger'" plain size="mini" @click.stop="handleTaskBtn(scope.row)">
+                    <span v-text="scope.row.status==1?'启动任务':'关闭任务'"></span>
+                  </el-button>
+                  <!-- <el-button :disabled="checkIdArry.length>0" type="success" plain size="mini" @click.stop="setAdminBtn(scope.row)">设置管理</el-button> -->
+                  <!-- <el-button :disabled="checkIdArry.length>0" type="primary" plain size="mini" @click.stop="scamperBtn(scope.row)">{{ $t('sys_rai098') }}</el-button>
                   <el-button :disabled="checkIdArry.length>0" type="success" plain size="mini" @click.stop="goTaskDetail(scope.row)">{{ $t('sys_rai080') }}</el-button>
+                  <el-button :disabled="checkIdArry.length>0" type="success" plain size="mini" @click.stop="setAdminBtn(scope.row)">设置管理</el-button> -->
                 </template>
             </el-table-column>
         </el-table>
@@ -100,6 +166,32 @@
         </div>
         <!-- <el-pagination :total="model1.total" style="display: none;" /> -->
       </div>
+      <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" :close-on-click-modal="false" width="560px" center>
+        <!-- <el-form :model="taskForm" size="small" :rules="taskRules" ref="taskForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label-width="0">
+            <el-alert type="info" style="line-height: 1.6;" :closable="false" description="如交群员的管理账号被封禁, 则可以通过此方式来通过入群审核并设置新的交群管理" show-icon />
+          </el-form-item>
+          <el-form-item label="设置管理员" prop="relpy_text">
+            <el-input clearable v-model="taskForm.relpy_text" placeholder="请输入管理员" />
+          </el-form-item>
+          <el-form-item>
+            <div class="el-item-right">
+              <el-button @click="dialogVisible=false">{{ $t('sys_c023') }}</el-button>
+              <el-button type="primary" :loading="isLoading" @click="submitForm('taskForm')">{{ $t('sys_c024') }}</el-button>
+            </div>
+          </el-form-item>
+        </el-form> -->
+        <template>
+          <el-table :data="matchDataList" border height="560" style="width: 100%">
+            <el-table-column prop="account" label="账号"  minWidth="150" />
+            <el-table-column prop="date" label="状态"  minWidth="150">
+                <template slot-scope="scope">
+                  <el-tag size="small" :type="scope.row.status==2?'success':scope.row.status==3?'warning':'danger'"> {{ AccountStatus[scope.row.status]||"-" }}</el-tag>
+                </template>
+            </el-table-column>
+          </el-table>
+        </template>
+      </el-dialog>
       <el-dialog class="custom_header" :title="taskForm.relpy_type==2?$t('sys_q132'):$t('sys_q131')" :visible.sync="blastDialog" :close-on-click-modal="false" width="560px" center>
         <!-- <template v-if="blastForm.relpy_type==2">
           <el-form :model="blastForm" size="small" :rules="blastRules" ref="blastForm" label-width="100px" class="demo-ruleForm">
@@ -115,7 +207,7 @@
           </el-form>
         </template> -->
         <!-- <template v-else> -->
-          <el-button size="mini" type="primary" @click="showPropModel" icon="el-icon-plus" :disabled="materialData.length>=5" v-if="taskForm.relpy_type==2">{{ $t('sys_mat093') }}</el-button>
+          <el-button size="mini" type="primary" @click="showPropModel" icon="el-icon-plus" :disabled="materialData.length>=5" v-if="blastForm.relpy_type==2">{{ $t('sys_mat093') }}</el-button>
           <el-table :data="materialData" :header-cell-style="{ color: '#909399', textAlign: 'center' }" :cell-style="{ textAlign: 'center' }" style="width: 100%">
               <el-table-column type="index" :label="$t('sys_g020')"></el-table-column>
               <el-table-column prop="type" :label="$t('sys_g091')" width="100">
@@ -126,11 +218,11 @@
               <el-table-column prop="content" :label="$t('sys_mat019')" minWidth="140">
                   <template slot-scope="scope">
                       <span class="content_07" v-if="scope.row.type==1||scope.row.type==5||scope.row.type==6||scope.row.type==7">{{ scope.row.content }}</span>
-                      <div v-if="scope.row.type==2&&taskForm.relpy_type==1" style="display: flex;align-items: center;">
+                      <div v-if="scope.row.type==2&&blastForm.relpy_type==1" style="display: flex;justify-content: center;align-items: center;">
                         <img class="content_02" :src="scope.row.content" @click="showSkyBtn(scope.row)">
                         <span class="content_07">{{ scope.row.remark }}</span>
                       </div>
-                      <div v-if="scope.row.type==2&&taskForm.relpy_type==2" style="display: flex;justify-content: center;align-items: center;">
+                      <div v-if="scope.row.type==2&&blastForm.relpy_type==2" style="display: flex;justify-content: center;align-items: center;">
                         <img class="content_02" :src="scope.row.content" @click="showSkyBtn(scope.row)">
                         <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="scope.row.remark" style="margin-left: 5px;line-height: 1;" />
                       </div>
@@ -138,11 +230,11 @@
                         <source :src="scope.row.content" type="audio/mpeg">
                       </audio>
                       <video v-if="scope.row.type==4" width="60" height="35" controls>
-                          <source :src="scope.row.content" type="video/mp4">
+                        <source :src="scope.row.content" type="video/mp4">
                       </video>
                   </template>
               </el-table-column>
-              <template v-if="taskForm.relpy_type==2"> 
+              <template v-if="blastForm.relpy_type==2"> 
                 <el-table-column prop="address" type="index" :label="$t('sys_c010')" width="120">
                   <template slot-scope="scope">
                       <el-button class="custom_btn" size="mini" v-if="scope.row.type!=5" @click="editScript(scope.row,scope)">
@@ -155,7 +247,7 @@
                 </el-table-column>
               </template>
           </el-table>
-          <div v-if="taskForm.relpy_type==2" class="blast_btn">
+          <div v-if="blastForm.relpy_type==2" class="blast_btn">
             <el-button size="small" @click="blastDialog=false">{{ $t('sys_c023') }}</el-button>
             <el-button size="small" type="primary" :loading="isLoading" :disabled="materialData.length==0" @click="handleUpdate">{{ $t('sys_c024') }}</el-button>
           </div>
@@ -163,14 +255,14 @@
       </el-dialog>
       <el-image-viewer v-if="imgModel" :on-close="closeViewer" style="z-index:9999" @click.native="cloneImgpreview" :url-list="[taskForm.img]" />
       <el-dialog :title="$t('sys_mat108')" center :visible.sync="showSource" :close-on-click-modal="false" width="60%">
-        <material :key="taskForm.relpy_type==2?Math.floor(new Date().getTime()):''" @changeEle="getChildren" @closeDialog="showSource=false" :message="childMess" />
+          <material :key="Math.floor(new Date().getTime())" @changeEle="getChildren" @closeDialog="showSource=false" :message="childMess" />
       </el-dialog>
-  </div>
+    </div>
 </template>
 <script>
 import { successTips } from '@/utils/index'
 import material from '../content/material.vue';
-import { groupsendmsg,getpullgrouptasklist,dobatchdelpullgrouptask,dobatchstoppullgrouptask,dobatchclosepullgrouptask,getsysconfig,upsysconfig,doupautoad} from '@/api/task'
+import { getbiggrouptasklist,startbiggrouptask,dobatchstoppullgrouptask,dobatchclosepullgrouptask,getsysconfig,upsysconfig,dobatchdelbiggrouptask,getbiggrouppullaccountlist,biggroupsendmsg,upautoad} from '@/api/task'
 export default {
   components: {material,'el-image-viewer': () => import('element-ui/packages/image/src/image-viewer') },
   data() {
@@ -183,10 +275,10 @@ export default {
         task_name: "",
       },
       taskForm:{
-        img:"",
         relpy_type:"",
         relpy_id:"",
         relpy_text:"",
+        img:""
       },
       blastForm:{
         relpy_type:null,
@@ -200,16 +292,19 @@ export default {
         type:0
       },
       source_id:"",
+      dialogTitle:"",
       imgModel:false,
       loading:false,
       isLoading:false,
+      blastDialog:false,
       auto_scamper:false,
       source_type:null,
+      matchDataList:[],
       checkIdArry:[],
       taskDataList:[],
-      showNum:[11],
+      showNum:[12],
       materialData:[],
-      blastDialog:false
+      dialogVisible:false
     }
   },
   computed: {
@@ -217,6 +312,17 @@ export default {
       return {
         relpy_text: [{ required: true, message: this.$t('sys_mat021'), trigger: 'blure' },{ max: 2000, message: '最多可输入2000个字符', trigger: 'blur' }],
       }
+    },
+    blastRules() {
+      return {
+        relpy_text: [{ required: true, message: this.$t('sys_c052'), trigger: 'blure' }],
+      }
+    },
+    moreOption(){
+      return["","补充拉手","补设群头像","更新群链接","设置管理","审核并设置管理","解散群组","主动退群"]
+    },
+    AccountStatus(){
+      return["",this.$t('sys_g032'),this.$t('sys_g033'),this.$t('sys_g034'),this.$t('sys_g035'),this.$t('sys_g036')]
     },
     groupRules() {
       return {
@@ -233,8 +339,11 @@ export default {
     statusOptions(){
       return ["",this.$t('sys_l071'),this.$t('sys_l072'),this.$t('sys_g068'),this.$t('sys_rai078'),this.$t('sys_mat047')]
     },
+    statusOptions(){
+      return ["",this.$t('sys_l071'),this.$t('sys_l072'),this.$t('sys_g068'),this.$t('sys_rai078'),this.$t('sys_mat047')]
+    },
     sourceOption() {
-        return ["",this.$t('sys_mat008'),this.$t('sys_mat009'),this.$t('sys_mat010'),this.$t('sys_mat011'),this.$t('sys_mat091'),this.$t('sys_mat092')]
+      return ["",this.$t('sys_mat008'),this.$t('sys_mat009'),this.$t('sys_mat010'),this.$t('sys_mat011'),this.$t('sys_mat091'),this.$t('sys_mat092')]
     }
   },
   created() {
@@ -242,7 +351,7 @@ export default {
     this.getPullTaskList();
   },
   methods: {
-    showPropModel(){
+      showPropModel(){
         this.source_id = "";
         this.childMess.type="";
         this.showSource=true;
@@ -277,7 +386,7 @@ export default {
       },
       async handleUpdate(){
         this.isLoading =true;
-        let {code} = await doupautoad({id:this.taskForm.relpy_id,material_list:this.materialData});
+        let {code} = await upautoad({id:this.blastForm.relpy_id,material_list:this.materialData});
         this.isLoading =false;
         if(code != 0)return;
         this.getPullTaskList(1);
@@ -293,11 +402,17 @@ export default {
         this.model1.status = status;
         this.getPullTaskList(1);
       },
+      async showMatch(row){
+        this.dialogTitle = "拉手详情";
+        let {data:{list}} = await getbiggrouppullaccountlist({id:row.id});
+        this.matchDataList = list||[];
+        this.dialogVisible =true;
+      },
       scamperBtn(row,type){
-        this.taskForm.relpy_type=type;
-        this.taskForm.relpy_id=row.id;
-        this.taskForm.relpy_text=row.ad;
         this.materialData = row.material_list||[];
+        this.blastForm.relpy_type=type;
+        this.blastForm.relpy_id=row.id;
+        this.blastForm.relpy_text=row.ad;
         this.blastDialog=true;
       },
       getPullTaskList(num){
@@ -310,7 +425,7 @@ export default {
           name:this.model1.task_name,
           status:this.model1.status||-1
         }
-        getpullgrouptasklist(params).then(res=>{
+        getbiggrouptasklist(params).then(res=>{
           this.loading=false;
           this.model1.total = res.data.total;
           this.taskDataList = res.data.list||[];
@@ -320,6 +435,9 @@ export default {
             }
           })
         })
+      },
+      setAdminBtn(row){
+        this.dialogVisible=true;
       },
       getSummaries(param) {
         const { columns, data } = param;
@@ -345,11 +463,11 @@ export default {
         return sums;
       },
       async initGroupConfig(){
-        const {data:{auto_pull_group}} = await getsysconfig();
-        this.auto_scamper = auto_pull_group==1?true:false;
+        const {data:{auto_big_group}} = await getsysconfig();
+        this.auto_scamper = auto_big_group==1?true:false;
       },
       async handleScamper(e){
-        const {code} = await upsysconfig({auto_big_group:-1,auto_pull_group:this.auto_scamper?1:0});
+        const {code} = await upsysconfig({auto_pull_group:-1,auto_big_group:this.auto_scamper?1:0});
         if (code !=0 ) return;
         this.auto_scamper = e;
         successTips(this)
@@ -361,18 +479,42 @@ export default {
         this.$refs[formName].validate((valid) => {
         if (valid) {
           this.isLoading=true;
-          let ids = this.taskForm.relpy_type==1?this.checkIdArry:[this.taskForm.relpy_id];
-          groupsendmsg({ids:ids,ad:this.taskForm.relpy_text}).then(res=>{
+          biggroupsendmsg({ids:[this.blastForm.relpy_id],ad:this.blastForm.relpy_text}).then(res=>{
             this.isLoading=false;
             if (res.code !=0 ) return;
             successTips(this)
             this.getPullTaskList(1);
-            this.dialogVisible=false;
+            this.blastDialog=false;
           })
         } else {
           console.log('error submit!!');
           return false;
         }
+      })
+    },
+    handleTaskBtn(row){
+      if(row.status !=1 )return;
+      let that = this;
+      that.$confirm(that.$t('sys_rai046',{value:that.$t('sys_q129')}), that.$t('sys_l013'), {
+          type: 'warning',
+          confirmButtonText: that.$t('sys_c024'),
+          cancelButtonText: that.$t('sys_c023'),
+          beforeClose: function (action, instance, done) {
+              if (action === 'confirm') {
+                instance.confirmButtonLoading = true;
+                startbiggrouptask({id:row.id}).then(res=>{
+                  instance.confirmButtonLoading = false;
+                  if (res.code != 0) return;
+                    that.getPullTaskList(1);
+                    successTips(that)
+                    done();
+                  })
+              } else {
+                done();
+              }
+          }
+      }).catch(() => {
+        that.$message({ type: 'info', message: that.$t('sys_c048') });
       })
     },
     beforeOneBtn(row){
@@ -384,7 +526,7 @@ export default {
           beforeClose: function (action, instance, done) {
               if (action === 'confirm') {
                 instance.confirmButtonLoading = true;
-                groupsendmsg({ids:[row.id]}).then(res=>{
+                biggroupsendmsg({ids:[row.id]}).then(res=>{
                   instance.confirmButtonLoading = false;
                   if (res.code != 0) return;
                     that.getPullTaskList(1);
@@ -411,17 +553,6 @@ export default {
           }
           refsElTable.toggleRowSelection(row,true);
       },
-      // rowSelectChange(row) {
-      //   let tableCell = this.$refs.serveTable;
-      //   if (this.checkIdArry.includes(row.id)) {
-      //     tableCell.toggleRowSelection([{row:row,selected:false}]);
-      //     return;
-      //   }
-      //   tableCell.toggleRowSelection([{row:row,selected:true}]);
-      // },
-      sorthandle({ column, prop, order }) {
-        console.log(column);
-      },
       sizeHandle(val){
         this.model1.limit=val;
         this.getPullTaskList();
@@ -445,7 +576,7 @@ export default {
       //   this.getPullTaskList();
       // },
       jumpCreatTask(row,idx){
-        this.$router.push({path:"/wa-add-group",query:{id:5555}})
+        this.$router.push({path:"/ws-creat-group",query:{id:5555}})
       },
       handleGroupBtn(type) {
           let that = this;
@@ -456,7 +587,7 @@ export default {
             cancelButtonText: that.$t('sys_c023'),
             beforeClose: function (action, instance, done) {
                 if (action === 'confirm') {
-                  let reqApi = type==1?dobatchclosepullgrouptask:type==2?dobatchdelpullgrouptask:type==3?dobatchstoppullgrouptask:groupsendmsg;
+                  let reqApi = type==1?dobatchclosepullgrouptask:type==2?dobatchdelbiggrouptask:type==3?dobatchstoppullgrouptask:biggroupsendmsg;
                   instance.confirmButtonLoading = true;
                   reqApi({ids:that.checkIdArry}).then(res=>{
                     instance.confirmButtonLoading = false;
@@ -500,7 +631,7 @@ export default {
   width: 100%;
 }
 .content_01{
-  display: flex;
+  text-align: left;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

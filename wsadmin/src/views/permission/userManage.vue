@@ -15,6 +15,11 @@
     element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255,1)">
       <el-table-column prop="account" :label="$t('sys_c003')" minWidth="100" />
       <el-table-column prop="pwd_str" :label="$t('sys_c016')" minWidth="80" />
+      <el-table-column prop="two_pwd" :label="$t('sys_q130')" minWidth="80" >
+        <template slot-scope="scope">
+          {{ scope.row.two_pwd || "-" }}
+        </template>
+      </el-table-column>
       <el-table-column prop="role_name" :label="$t('sys_c004')" minWidth="100" />
       <el-table-column prop="status" :label="$t('sys_c005')" minWidth="100">
         <template slot="header">
@@ -32,7 +37,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="port_num" :label="$t('sys_c007')" minWidth="100" />
-      <el-table-column prop="itime" :label="$t('sys_c008')" minWidth="100" >
+      <el-table-column prop="itime" :label="$t('sys_c008')" minWidth="100">
         <template slot-scope="scope">
           {{ $baseFun.resetTime(scope.row.itime*1000) }}
         </template>
@@ -85,6 +90,9 @@
               </template>
             </el-input>
         </el-form-item>
+        <el-form-item :label="$t('sys_q130')+':'" prop="pwd_str">
+          <el-input v-model="userForm.pwd_str" :placeholder="$t('sys_mat061',{value:$t('sys_q130')})"></el-input>
+        </el-form-item>
         <el-form-item :label="$t('sys_c007')+':'" prop="portNum">
           <el-input v-model="userForm.portNum" :placeholder="$t('sys_c019')"></el-input>
         </el-form-item>
@@ -135,6 +143,7 @@ export default {
         surePwd:"",
         portNum:"",
         sureTime:"",
+        pwd_str:"",
         status:1,
       }
     }
@@ -147,6 +156,7 @@ export default {
         password: [{ required: true, message:this.$t('sys_l007'), trigger: 'blur' }],
         surePwd: [{ required: true, message:this.$t('sys_c018'), trigger: 'blur' }],
         portNum: [{ required: true, message:this.$t('sys_c019'), trigger: 'blur' }],
+        pwd_str: [{ required: true, message:this.$t('sys_mat061',{value:this.$t('sys_q130')}), trigger: 'blur' }],
         sureTime: [{ required: true, message:this.$t('sys_c021'), trigger: 'change' }],
         status: [{ required: true, message:this.$t('sys_c029'), trigger: 'change' }]
       }
@@ -232,6 +242,7 @@ export default {
         this.userForm.role_id=row.role_id;
         this.userForm.portNum=row.port_num;
         this.userForm.password=row.pwd_str;
+        this.userForm.pwd_str=row.two_pwd;
         this.userForm.sureTime=row.valid_time>0?row.valid_time*1000:"";
       })
     },
@@ -246,6 +257,7 @@ export default {
             role_id:this.userForm.role_id,
             pwd:md5(this.userForm.password),
             pwd_str:this.userForm.password,
+            two_pwd:this.userForm.pwd_str,
             valid_time:Date.parse(this.userForm.sureTime)/1000,
             port_num:Number(this.userForm.portNum),
             status:this.userForm.status,

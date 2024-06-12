@@ -87,6 +87,34 @@ export const dobatchclosekeeptask = (params) =>{
 export const dobatchstopkeeptask = (params) =>{
   return request({url:'/keep/dobatchstopkeeptask',method:'post',data:params})
 }
+export const getbiggroupgroup = (params) =>{
+  return request({url:'/biggroup/getbiggroupgroup',method:'post',data:params})
+}
+export const addbiggrouptask = (params) =>{
+  return request({url:'/biggroup/addbiggrouptask',method:'post',data:params})
+}
+export const getbiggrouptasklist = (params) =>{
+  return request({url:'/biggroup/getbiggrouptasklist',method:'post',data:params})
+}
+export const dobatchdelbiggrouptask = (params) =>{
+  return request({url:'/biggroup/dobatchdelbiggrouptask',method:'post',data:params})
+}
+export const startbiggrouptask = (params) =>{
+  return request({url:'/biggroup/startbiggrouptask',method:'post',data:params})
+}
+export const getbiggrouppullaccountlist = (params) =>{
+  return request({url:'/biggroup/getbiggrouppullaccountlist',method:'post',data:params})
+}
+export const biggroupsendmsg = (params) =>{
+  return request({url:'/biggroup/biggroupsendmsg',method:'post',data:params})
+}
+export const doupautoad = (params) =>{
+  return request({url:'/pullgroup/doupautoad',method:'post',data:params})
+}
+export const upautoad = (params) =>{
+  return request({url:'/biggroup/upautoad',method:'post',data:params})
+}
+
 
 
 
