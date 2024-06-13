@@ -120,9 +120,9 @@
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-form-item>
-            <el-form-item>
+            <!-- <el-form-item>
                 <el-button type="warning" :disabled="checkIdArry.length==0" @click="seatHandleBtn">{{ $t('sys_g017')}}</el-button>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item>
                 <el-dropdown @command="(command)=>{handleCommand(1,command)}" trigger="click">
                     <el-button type="primary"> {{ $t('sys_g054') }}
@@ -841,7 +841,7 @@ export default {
                 },
                 {
                     icon: "setting",
-                    label: this.$t('sys_g044')
+                    label: ""
                 },
                 // {
                 //     icon: "setting",
@@ -862,7 +862,7 @@ export default {
                 // {},
                 {
                     icon: "connection",
-                    label: this.$t('sys_g106')
+                    label: ""
                 },
                 {
                     icon: "edit",

@@ -11,12 +11,12 @@
           {{ $t('sys_l107') }}
         </span>
       </div> -->
-      <div class="sys_use_time">
+      <!-- <div class="sys_use_time">
         {{ $t('sys_l019') }}：
         <span :class="{'expire_tips':expireTime}">
           {{ userInfo.valid_time > 0 ? $baseFun.resetTime(userInfo.valid_time * 1000) : 0 }}
         </span>
-      </div>
+      </div> -->
       <!-- <template v-if="device!=='mobile'"> -->
       <!-- <search id="header-search" class="right-menu-item" /> -->
       <error-log class="errLog-container right-menu-item hover-effect" />
@@ -40,9 +40,9 @@
             <router-link to="/change-password">
               <el-dropdown-item>{{ $t('sys_c098') }}</el-dropdown-item>
             </router-link>
-            <router-link to="/user-info">
+            <!-- <router-link to="/user-info">
               <el-dropdown-item>{{ $t('sys_l014') }}</el-dropdown-item>
-            </router-link>
+            </router-link> -->
           </template>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">{{ $t('sys_l015') }}</span>

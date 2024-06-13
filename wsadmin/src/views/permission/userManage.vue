@@ -36,17 +36,17 @@
           <el-tag size="small" :type="scope.row.status==1?'success':'warning'"> {{ statusOption[scope.row.status] }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="port_num" :label="$t('sys_c007')" minWidth="100" />
+      <!-- <el-table-column prop="port_num" :label="$t('sys_c007')" minWidth="100" /> -->
       <el-table-column prop="itime" :label="$t('sys_c008')" minWidth="100">
         <template slot-scope="scope">
           {{ $baseFun.resetTime(scope.row.itime*1000) }}
         </template>
       </el-table-column>
-      <el-table-column prop="valid_time" :label="$t('sys_c020')" minWidth="100" >
+      <!-- <el-table-column prop="valid_time" :label="$t('sys_c020')" minWidth="100" >
         <template slot-scope="scope">
           {{ $baseFun.resetTime(scope.row.valid_time*1000) }}
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column :label="$t('sys_c010')" minWidth="100">
         <template slot-scope="scope">
@@ -93,12 +93,12 @@
         <el-form-item :label="$t('sys_q130')+':'" prop="pwd_str">
           <el-input v-model="userForm.pwd_str" :placeholder="$t('sys_mat061',{value:$t('sys_q130')})"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('sys_c007')+':'" prop="portNum">
+        <!-- <el-form-item :label="$t('sys_c007')+':'" prop="portNum">
           <el-input v-model="userForm.portNum" :placeholder="$t('sys_c019')"></el-input>
         </el-form-item>
         <el-form-item :label="$t('sys_c020')+':'" prop="sureTime">
-          <el-date-picker v-model="userForm.sureTime" type="datetime" :placeholder="$t('sys_c021')" />
-        </el-form-item>
+          <el-date-picker v-model="userForm.sureTime" type="datetime" :       placeholder="$t('sys_c021')" />
+        </el-form-item> -->
         <el-form-item :label="$t('sys_c022')+':'" prop="status">
           <el-radio-group v-model="userForm.status">
             <el-radio :label="idx" v-for="(item,idx) in statusOption" :key="idx" v-show="item!=''">{{ item }}</el-radio>
@@ -240,10 +240,10 @@ export default {
         this.userForm.status=row.status;
         this.userForm.account=row.account;
         this.userForm.role_id=row.role_id;
-        this.userForm.portNum=row.port_num;
+        // this.userForm.portNum=row.port_num;
         this.userForm.password=row.pwd_str;
         this.userForm.pwd_str=row.two_pwd;
-        this.userForm.sureTime=row.valid_time>0?row.valid_time*1000:"";
+        // this.userForm.sureTime=row.valid_time>0?row.valid_time*1000:"";
       })
     },
     creatBtn(formName){
