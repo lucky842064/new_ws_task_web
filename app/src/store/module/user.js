@@ -1,6 +1,6 @@
 import router from '../../router/';
 import {newloginGetcurrentprovince} from '@/api/wx.js'
-import { login, getUserInfo, logout, register, viplist, heart } from '../../api/user';
+import { login,register,logout } from '@/api/login';
 import { getAppList } from '../../api/earn';
 const bannerImage = require('../../assets/images/home/banner.png');
 export default {
@@ -57,21 +57,23 @@ export default {
 			state.appList = value;
 		},
 		login: (state, data) => {
+			const {token,user_info:{uid}} = data;
 			state.token = data.token;
-			if (data.autologin) {
-				window.localStorage.setItem('prologin', data.autologin);
-			}
-			window.localStorage.setItem('token', data.token);
-			window.localStorage.setItem('uid', data.uid);
+			// if (data.autologin) {
+			// 	window.localStorage.setItem('prologin', data.autologin);
+			// }
+			window.localStorage.setItem('token',token);
+			window.localStorage.setItem('uid',uid);
 		},
 		register: (state, data) => {
-			state.token = data.token;
-			state.uid = data.uid;
-			if (data.autologin) {
-				window.localStorage.setItem('prologin', data.autologin);
-			}
-			window.localStorage.setItem('token', data.token);
-			window.localStorage.setItem('uid', data.uid);
+			const {token,user_info:{uid}} = data;
+			state.token = token;
+			state.uid = uid;
+			// if (data.autologin) {
+			// 	window.localStorage.setItem('prologin', data.autologin);
+			// }
+			window.localStorage.setItem('token', token);
+			window.localStorage.setItem('uid', uid);
 		},
 		clearUserInfo: (state, data) => {
 			localStorage.removeItem('token');
@@ -115,12 +117,10 @@ export default {
 	actions: {
 		userLogin({ commit }, params ,callback) {
 			commit('clearUserInfo');
-			// const res = await login(params);
-			// callback && callback(res);
 			return new Promise((resolve, reject) => {
 				login(params).then (res => {
 					if(res.token){
-						res.autologin = params.autologin;
+						// res.autologin = params.autologin;
 						commit('login', res);
 						resolve(res)
 					}
@@ -135,7 +135,7 @@ export default {
 			return new Promise((resolve, reject) => {
 				register(params).then(res => {
 					if(res.token){
-						res.autologin = params.autologin;
+						// res.autologin = params.autologin;
 						commit('register', res);
 						resolve();
 					}

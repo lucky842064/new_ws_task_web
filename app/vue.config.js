@@ -90,7 +90,7 @@ module.exports = {
 		// 配置服务器
 		host: '0.0.0.0',
 		port: 8080,
-		open: true,
+		open: false,
 		https: false,
 		overlay: {
 			warnings: true,

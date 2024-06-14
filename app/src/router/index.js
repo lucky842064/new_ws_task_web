@@ -6,6 +6,7 @@ import Home from "../views/Home.vue";
 import Footer from "../components/Footer";
 const initPath = window.localStorage.getItem('token') && window.localStorage.getItem("prologin")? "/home" : "/login";
 const Login = () => import('../views/sign/login');
+const Register = () => import('../views/sign/register');
 const ForgotPassword = () => import("../views/sign/ForgotPassword");
 //me
 const Mine = () => import("../views/Mine");
@@ -511,6 +512,15 @@ const routes = [{
             hasTabBar: false,
             index: 0
         },
+    },
+    {
+        path: "/register",
+        name: "register",
+        component: Register,
+        meta: {
+            showNavBar: false,
+            hasTabBar: false,
+        }
     },
     {
         path: "/forgot-password",

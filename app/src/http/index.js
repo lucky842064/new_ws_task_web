@@ -55,20 +55,6 @@ const  ProMisePost = (func, data = {}, conf = {},resolve, reject)=>{
         urls = window.envInfo.testappInfo.app_url
         url = urls[data.httpRequestIndex]
     }
-   
-    // if (process.env.NODE_ENV == 'development') {
-    //     url = "http://47.57.14.144:8088/"
-    // } else {
-    //     if (process.env.VUE_APP_FLAG == 'pro') {
-    //         // url = 'http://47.57.14.144:8088/'
-    //         // url = "https://fcwk-api-6dv3tivdrw.ytqiyiyuan.com/"
-    //     } else {
-    //         // url = 'http://47.57.14.144:8088/'
-    //         url = "https://fcwk-api-6dv3tivdrw.ytqiyiyuan.com/"      //蜂巢
-    //         // url = "https://api-r06xdyp7v54.xfxfgc.com/"      //飞猪
-    //     }
-    // }
-
     // 是否带上token
     if (config.sendToken) {
         let token = localStorage.getItem('token');
