@@ -14,7 +14,7 @@
 			<div class="uilist">
 				<div class="uilist_div">
 					<img src="../../assets/images/sign/phone.png" />
-					<input v-model="username" :placeholder="$t('login_001')" type="text" @blur="handleBlur" />
+					<input v-model="username" :placeholder="$t('login_001')"/>
 				</div>
 				<div class="uilist_div pwd">
 					<img src="../../assets/images/sign/lock.png" />
@@ -60,6 +60,7 @@ export default {
 			password: "",
 			pwd: "",
 			sur_pwd: "",
+			timestamp:"",
 			verTitle: "获取验证码",
 			user_verify: "",
 			user_code:"baicmr",
@@ -69,7 +70,8 @@ export default {
 		}
 	},
 	created() {
-		// this.getVerfyBtn();
+		this.timestamp = String(new Date().getTime());
+		this.getVerfyBtn();
 	},
 	methods: {
 		goLogin() {
@@ -78,17 +80,17 @@ export default {
 		showEye(){
 			this.regEye = !this.regEye;
 		},
-		handleBlur(){
-			if (!this.username) return;
-			this.getVerfyBtn();
-		},
+		// handleBlur(){
+		// 	if (!this.username) return;
+		// 	this.getVerfyBtn();
+		// },
 		async getVerfyBtn() {
-			if (!this.username) return this.$toast('请输入手机号');
+			// if (!this.username) return this.$toast('请输入手机号');
 			// var regMobile = new RegExp(/^1[3456789]\d{9}$/);
 			// if (!regMobile.test(this.username)) {
 			// 	return this.$toast('请输入正确的手机号');
 			// }
-			const { code } = await getcode({ uuid: this.username });
+			const { code } = await getcode({ uuid: this.timestamp });
 			// this.safe_code = code;
 			this.code = code;
 		},
@@ -105,7 +107,7 @@ export default {
 			if (this.sur_pwd !== this.pwd) {
 				return this.$toast(this.$t('login_020'));
 			}
-			if (!this.user_verify) {
+			if (!this.safe_code) {
 				return this.$toast(this.$t('buy_025'));
 			}
 			// if (this.user_code.length > 10) {
@@ -116,7 +118,7 @@ export default {
 			let params = {
 				account: this.username,
 				pwd: this.password,
-				uuid: this.username,
+				uuid: this.timestamp,
 				code: this.safe_code,
 				finvite_Code: this.user_code
 			};
