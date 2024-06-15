@@ -10,7 +10,7 @@
                 <!-- <img class="user_head" src="../assets/images/head/11.png" alt=""> -->
                 <div class="info-data">
                     <p>{{userInfo.user_key}}</p>
-                    <p>账户收益：<span>{{formatMoney(userInfo.point)||0}}</span>元</p>
+                    <p>账户收益：<span>{{userInfo.point||0}}</span>元</p>
                 </div>
             </div>
             <div class="btn">
@@ -22,11 +22,11 @@
             <div class="task-pro">
                 <div class="task-item">
                     <div class="left-pro">
-                        <p>{{ formatMoney(teamStemp.today_point || 0)}}</p>
+                        <p>{{ teamStemp.today_income || 0}}</p>
                         <p>{{ $t("home_023") }}</p>
                     </div>
                     <div class="right-pro">
-                        <p>{{ formatMoney(teamStemp.yesterday_point || 0) }}</p>
+                        <p>{{ teamStemp.yesterday_income || 0 }}</p>
                         <p>{{ $t("home_024") }}</p>
                     </div>
                     <div class="show_detail" @click="jumpDetail">账单明细</div>
@@ -116,6 +116,7 @@ import { spreadList } from "@/api/user";
 import QRCode from 'qrcodejs2'
 import html2canvas from 'html2canvas';
 import popDialog from "@/components/serveDialog";
+import { getincome } from'@/api/home'
 
 export default {
     mixins: [WebsiteSetting],
@@ -163,7 +164,7 @@ export default {
         })
     },
     created() {
-        this.$store.dispatch('User/getUserInfo');
+        // this.$store.dispatch('User/getUserInfo');
         this.initSpread();
     },
     mounted(){
@@ -178,10 +179,9 @@ export default {
             this.isDialong=false;
         },
         //推广列表
-        initSpread() {
-            spreadList({}).then(res => {
-                this.teamStemp = res;
-            });
+        async initSpread() {
+          this.teamStemp = await getincome({});
+          console.log(this.teamStemp);
         },
         localStorageSetItem(key ,value){
             if (key == null || key == undefined){
