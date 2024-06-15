@@ -340,9 +340,10 @@ export default {
             this.loginCode = val.code;
             this.qrCodeType = 1;
             this.qrCodeImg="";
-            this.errState = true;
+            this.errState = false;
             this.initQrcode();
             this.activeName='1';
+            this.$refs.qrcodeImg.textContent="";
             this.showProvince=false;
         },
         // 格式化金额
