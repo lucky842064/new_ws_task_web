@@ -13,11 +13,11 @@
             <div class="mian_continer">
                 <div class="task-pro">
                     <div class="left-pro">
-                        <p>{{ formatMoney(teamStemp.today_point || 0)}}</p>
+                        <p>{{ teamStemp.today_income || 0}}</p>
                         <p>{{ $t("home_023") }}</p>
                     </div>
                     <div class="right-pro">
-                        <p>{{ formatMoney(teamStemp.yesterday_point || 0) }}</p>
+                        <p>{{ teamStemp.yesterday_income || 0 }}</p>
                         <p>{{ $t("home_024") }}</p>
                     </div>
                 </div>
@@ -31,11 +31,11 @@
                             </template>
                             <div class="code-mian">
                                 <div class="code_area">
-                                    <div class="area_icon">
+                                    <div class="area_icon" @click="showProvince=true">
                                         <!-- <span class="text_left">当前位置：</span> -->
                                         <!-- <img class="weizhi_icon" src="../assets/images/home/weizhi.png" alt="" srcset=""> -->
-                                        <span class="area_name">当前位置：{{loginArea||'北京'}}</span>
-                                        <img class="down_icon" src="../assets/images/home/xiala_icon.png" @click="showProvince=true">
+                                        <span class="area_name">当前位置：{{loginArea||'~'}}</span>
+                                        <img class="down_icon" src="../assets/images/home/xiala_icon.png">
                                     </div>
                                     <div class="update_btn">
                                         <!-- <van-button type="primary" @click.stop :disabled="countTime>0&&countTime<60" @click="showProvince=true">修改</van-button> -->
@@ -47,8 +47,9 @@
                                     <!-- <p></p> -->
                                 </div>
                                 <div class="qr-code" v-show="errState">
-                                    <van-loading v-if="qrCodeImg==''" size="24px">加载中...</van-loading>
-                                    <img v-else :src="qrCodeImg" alt="">
+                                    <!-- <van-loading v-if="qrCodeImg==''" size="24px">加载中...</van-loading> -->
+                                    <div ref="qrcodeImg" id="qrcodeImg"></div>
+                                    <!-- <img v-else :src="qrCodeImg" alt=""> -->
                                 </div>
                                 <div class="err_code" v-show="!errState">
                                     <img src="../assets/images/home/qr_err.png" alt="" srcset="">
@@ -77,9 +78,10 @@
                         <!-- <template> -->
                         <template v-if="wechaList!=undefined&&wechaList!=null&&wechaList.length>0">
                             <div class="item_title item_mess" v-for="item in wechaList" :key="item.id">
-                                <span class="item_title">{{item.wx_no}}</span>
-                                <span class="item_title item_status" :style="'color:'+(item.wx_state==0?'#D32C2C':'#28C445')">
-                                    <a class="line_status" :class="item.wx_state==0?'down_status':''" href=""></a>{{item.wx_state==0?'离线':'在线'}}
+                                <span class="item_title">{{item.account}}</span>
+                                <span class="item_title item_status" :style="'color:'+(item.status!=2?'#D32C2C':'#28C445')">
+                                    <a class="line_status" :class="item.status!=2?'down_status':''" href=""></a>
+                                    {{statusOption[item.status]}}
                                 </span>
                                 <span class="item_title">
                                     <!-- <span class="line_up" :style="'color:'+(item.wx_state==0?'#28C445':'#D32C2C')" v-text="item.wx_state==0?'重登':''" @click="handelBtn(item)"></span> -->
@@ -114,7 +116,7 @@
             </div>
         </div>
         <van-popup v-model="showProvince" position="bottom" :style="{ height: '260px' }">
-            <van-picker title="选择省份" show-toolbar visible-item-count="4" :columns="provinceColumns" @confirm="onConfirm" @cancel="showProvince=false" />
+            <van-picker title="选择省份" show-toolbar visible-item-count="4" value-key="name" :columns="provinceColumns" @confirm="onConfirm" @cancel="showProvince=false" />
         </van-popup>
     </div>
 </template>
@@ -127,7 +129,7 @@ import Global from '../core/Global';
 import { Toast,Dialog} from 'vant';
 import PrevNext from "@/components/PrevNext";
 import { spreadList,msgOnline } from '@/api/user';
-import { newloginGetwxlist,newloginGetqrcode,newloginDeletewx } from'@/api/wx.js'
+import { getincome,getaccountlist,delaccount,getqrcode } from'@/api/home'
 export default {
 	name: 'home',
 	components: {},
@@ -145,57 +147,66 @@ export default {
             qrCodeImg:"",
             activeName:1,
             teamStemp:'',
-            loginArea:'',
+            loginArea:'印度尼西亚',
+            loginCode:62,
             qrCodeType:0,
             countTime:60,
             refreState:false,
             showProvince:false,
             wetIcon:require('../assets/images/home/weixin-icon.png'),
 			lableItem:['WS昵称','登录状态','操作'],
-            wechaList:[
-                {
-                    id:0,
-                    wx_no:"注定孤独",
-                    wx_state:0,
-                },
-                {
-                    id:0,
-                    wx_no:"北方的狼爱南…",
-                    wx_state:1,
-                },
-                {
-                    id:0,
-                    wx_no:"自动人生2022",
-                    wx_state:1,
-                }
-            ],
+            statusOption:["","离线","在线","登录中","登录失败","离线中"],
+            wechaList:[],
             list:[
                 "https://img0.baidu.com/it/u=132095580,3308868527&fm=253&fmt=auto&app=138&f=JPG?w=592&h=296",
                 "https://img0.baidu.com/it/u=1709064170,207840351&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=278",
                 "https://img.tuguaishou.com/ips_templ_preview/53/2e/fa/lg_4426904_1634807148_61712d6ccc0a7.jpg!w1024_w?auth_key=2286544142-0-0-0408fba029f3f735dad77672222c8957",
             ],
-            provinceColumns:["北京","上海","天津","安徽","福建","甘肃","广东","广西","贵州","海南","河北","河南","黑龙江","湖北","湖南","吉林","江苏","江西","辽宁","内蒙古","宁夏","青海","山东","山西","陕西","四川","西藏","新疆","云南","浙江"]
+            provinceColumns:[
+                {   code:62,
+                    name:"印度尼西亚"
+                },
+                {   code:91,
+                    name:"印度"
+                },
+                {   code:55,
+                    name:"巴西"
+                },
+                {   code:971,
+                    name:"阿拉伯联合酋长国"
+                },
+                {   code:92,
+                    name:"巴基斯坦 "
+                },
+                {   code:95,
+                    name:"缅甸 "
+                },
+                {   code:856,
+                    name:"老挝"
+                }
+            ]
 		};
 	},
 	computed: {
 		...mapState({
 			userInfo: state => state.User.userInfo,
-		}),
+		})
 	},
     created(){
-        this.$store.dispatch('User/getUserInfo');
-        setTimeout(()=>{
-            this.IpObj=JSON.parse(sessionStorage.getItem('storageIP'))
-            this.userProvince = this.IpObj.province !=undefined?this.IpObj.province:'' 
-        },500)
+        // this.$store.dispatch('User/getUserInfo');
+        // setTimeout(()=>{
+        //     this.IpObj=JSON.parse(sessionStorage.getItem('storageIP'))
+        //     this.userProvince = this.IpObj.province !=undefined?this.IpObj.province:'' 
+        // },500)
     },
     activated(){
         this.activeName="";
         this.initSpread();
-        this.initNotic();
+        // this.initNotic();
         this.initWechatList();
     },
     mounted() {
+        // this.initSpread();
 	},
 	methods: {
         initNotic(){
@@ -224,15 +235,11 @@ export default {
             this.initQrcode();
         },
         initQrcode(row,tips){
-            let params = {
-                country:this.qrCodeType==1?'中国':this.IpObj.country,
-                province:this.qrCodeType==1?this.loginArea:this.IpObj.province,
-                account:""
-            }
-            newloginGetqrcode(params).then(res => {
-                if(res.code == 1){
+            getqrcode({country_name:this.loginArea,country_code:String(this.loginCode)}).then(res => {
+                if(res.qr_code){
                     this.errState = true;
-                    this.qrCodeImg = res.qrcode;
+                    this.createQrcode(res.qr_code)
+                    // this.qrCodeImg = res.qr_code;
                     this.settime();
                     tips!=undefined?Toast(tips+'完成'):'';
                     this.initWechatList();
@@ -259,10 +266,10 @@ export default {
         initWechatList(num,idx){
             this.isLoading=idx==2?true:false;
             this.page=num!=undefined?num:this.page;
-            newloginGetwxlist({page:this.page,limit:this.limit}).then(res => {
+            getaccountlist().then(res => {
                 this.isLoading=false;
                 this.total = Math.ceil(res.total/this.limit);
-                // this.wechaList = res.list;
+                this.wechaList = res.list;
             })
         },
         createQrcode(qrCode){
@@ -306,7 +313,7 @@ export default {
             //     Toast('当前账号在线，无法删除');
             //     return;
             // }
-            let tipsText = row.wx_state==1?'删除在线微信会导致没有收益，确定要删除吗?':'你确定要删除该微信吗？'
+            let tipsText = row.status==2?'删除在线WhatsApp号会导致没有收益，确定要删除吗?':'你确定要删除该WhatsApp号吗？'
             Dialog.confirm({
                 title:"提示",
                 message:tipsText,
@@ -314,19 +321,10 @@ export default {
                 confirmButtonText:"确定",
                 beforeClose: ((action, done) => {
                     if (action === 'confirm') {
-                        newloginDeletewx({id: row.id}).then(res => {
+                        delaccount({account: row.account}).then(res => {
                             Toast('删除完成')
                             this.initWechatList();
                         })
-                        // apiAddfun(params).then(res => {
-                        //     if(res.errorCode == 0){
-                        //         this.userAllAdress();
-                        //         id==null?this.collectAdress():this.userAllAdress();
-                        //         done()
-                        //     }else{
-                        //         done(false)
-                        //     }
-                        // })
                         done();
                     }else{
                         done();
@@ -334,13 +332,12 @@ export default {
                 })
             });
         },
-        initSpread() {
-            spreadList({}).then(res => {
-                this.teamStemp = res;
-            });
+        async initSpread() {
+          this.teamStemp = await getincome({});
         },
         onConfirm(val){
-            this.loginArea = val;
+            this.loginArea = val.name;
+            this.loginCode = val.code;
             this.qrCodeType = 1;
             this.qrCodeImg="";
             this.errState = true;
