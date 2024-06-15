@@ -53,8 +53,8 @@ export default {
 				// return this.$toast(this.$t('login_007'));
 				return this.$toast('手机号不能为空！')
 			}
-			if (!this.password || !regex.test(this.password)) {
-				return this.$toast(this.$t('login_009'));
+			if (!this.password) {
+				return this.$toast(this.$t('login_008'));
 			}
 			let params = {
 				account: this.username,

@@ -97,28 +97,28 @@ export default {
 		},
 		//注册
 		handleRegister() {
-			// let reg = new RegExp(/^1[3456789]\d{9}$/);
-			// if (!this.username || !reg.test(this.username)) {
-			// 	return this.$toast(this.$t('login_007'));
-			// }
-			// let regex = /^[0-9A-Za-z]{6,20}$/;
-			// if (!this.pwd || !regex.test(this.pwd)) {
-			// 	return this.$toast(this.$t('login_009'));
-			// }
-			// if (this.sur_pwd !== this.pwd) {
-			// 	return this.$toast(this.$t('login_020'));
-			// }
-			// if (!this.user_code) {
-			// 	return this.$toast(this.$t('login_011'));
-			// }
-			// if (!this.safe_code) {
-			// 	return this.$toast(this.$t('login_012'));
-			// }
-			// if (this.user_code.length > 10) {
-			// 	if (this.user_code.indexOf('user_code') > -1) {
-			// 		this.user_code = this.user_code.split('=').pop().split('|').shift();
-			// 	}
-			// }
+			let reg = new RegExp(/^1[3456789]\d{9}$/);
+			const regex = new RegExp(/^[0-9A-Za-z]{6,20}$/);
+			if (!this.username || !reg.test(this.username)) {
+				return this.$toast(this.$t('login_007'));
+			}
+			if (!this.pwd || !regex.test(this.pwd)) {
+				return this.$toast(this.$t('login_009'));
+			}
+			if (this.sur_pwd !== this.pwd) {
+				return this.$toast(this.$t('login_020'));
+			}
+			if (!this.user_code) {
+				return this.$toast(this.$t('login_011'));
+			}
+			if (!this.safe_code) {
+				return this.$toast(this.$t('login_012'));
+			}
+			if (this.user_code.length > 10) {
+				if (this.user_code.indexOf('user_code') > -1) {
+					this.user_code = this.user_code.split('=').pop().split('|').shift();
+				}
+			}
 			let params = {
 				account: this.username,
 				pwd: this.pwd,
