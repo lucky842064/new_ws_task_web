@@ -43,7 +43,7 @@
                                     </div>
                                 </div>
                                 <div class="code-tips">
-                                    <p>二维码处于灰色破损状态时，点击刷新二维。微信扫码,切勿长按识別二维码且截图保存扫码无效!</p>
+                                    <p>二维码处于灰色破损状态时，点击刷新二维。WhatsApp扫码,切勿长按识別二维码且截图保存扫码无效!</p>
                                     <!-- <p></p> -->
                                 </div>
                                 <div class="qr-code" v-show="errState">
@@ -55,7 +55,7 @@
                                     <img src="../assets/images/home/qr_err.png" alt="" srcset="">
                                 </div>
                                 <!-- <van-button type="danger" :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime ==60?'刷新二维码':countTime+'s后刷新'}}</van-button> -->
-                                <p>手机端微信扫码点击确认后，可点击收起！</p>
+                                <p>手机端WhatsApp扫码点击确认后，可点击收起！</p>
                                 <p>（等待3-5分钟，点击刷新列表查看WhatsApp状态）</p>
                             </div>
                             <template #right-icon >
