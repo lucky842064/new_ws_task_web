@@ -181,7 +181,6 @@ export default {
         //推广列表
         async initSpread() {
           this.teamStemp = await getincome({});
-          console.log(this.teamStemp);
         },
         localStorageSetItem(key ,value){
             if (key == null || key == undefined){
