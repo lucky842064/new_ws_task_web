@@ -137,8 +137,8 @@ export default {
 					if(res.token){
 						// res.autologin = params.autologin;
 						commit('register', res);
-						resolve();
 					}
+					resolve(res);
 				}).catch(error => {
 					reject(error)
 				})

@@ -14,7 +14,7 @@
 			<div class="uilist">
 				<div class="uilist_div">
 					<img src="../../assets/images/sign/phone.png" />
-					<input v-model="username" :placeholder="$t('login_001')"/>
+					<input v-model="username" :placeholder="$t('login_004')"/>
 				</div>
 				<div class="uilist_div pwd">
 					<img src="../../assets/images/sign/lock.png" />
@@ -54,6 +54,7 @@ export default {
 	data() {
 		return {
 			regEye:true,
+			isLoading:false,
 			is_login: 1,
 			safe_code: "",
 			username: "",
@@ -63,7 +64,7 @@ export default {
 			timestamp:"",
 			verTitle: "获取验证码",
 			user_verify: "",
-			user_code:"baicmr",
+			user_code:"",
 			countTime: 60,
 			uuid: "",
 			code:""
@@ -96,20 +97,23 @@ export default {
 		},
 		//注册
 		handleRegister() {
-			let reg = new RegExp(/^1[3456789]\d{9}$/);
-			if (!this.username || !reg.test(this.username)) {
-				return this.$toast(this.$t('login_007'));
-			}
-			let regex = /^[0-9A-Za-z]{6,20}$/;
-			if (!this.pwd || !regex.test(this.pwd)) {
-				return this.$toast(this.$t('login_009'));
-			}
-			if (this.sur_pwd !== this.pwd) {
-				return this.$toast(this.$t('login_020'));
-			}
-			if (!this.safe_code) {
-				return this.$toast(this.$t('buy_025'));
-			}
+			// let reg = new RegExp(/^1[3456789]\d{9}$/);
+			// if (!this.username || !reg.test(this.username)) {
+			// 	return this.$toast(this.$t('login_007'));
+			// }
+			// let regex = /^[0-9A-Za-z]{6,20}$/;
+			// if (!this.pwd || !regex.test(this.pwd)) {
+			// 	return this.$toast(this.$t('login_009'));
+			// }
+			// if (this.sur_pwd !== this.pwd) {
+			// 	return this.$toast(this.$t('login_020'));
+			// }
+			// if (!this.user_code) {
+			// 	return this.$toast(this.$t('login_011'));
+			// }
+			// if (!this.safe_code) {
+			// 	return this.$toast(this.$t('login_012'));
+			// }
 			// if (this.user_code.length > 10) {
 			// 	if (this.user_code.indexOf('user_code') > -1) {
 			// 		this.user_code = this.user_code.split('=').pop().split('|').shift();
@@ -117,31 +121,35 @@ export default {
 			// }
 			let params = {
 				account: this.username,
-				pwd: this.password,
+				pwd: this.pwd,
 				uuid: this.timestamp,
 				code: this.safe_code,
 				finvite_Code: this.user_code
 			};
-			const Toast = this.$toast.loading({
-				duration: 3000,
-				message: this.$t('login_013'),
-				forbidClick: true,
-				loadingType: 'spinner',
-			});
-			this.$store.dispatch('User/userRegister', params).then(() => {
-				Toast.clear();
+			// let Toast = this.$toast.loading({
+			// 	duration: 2000,
+			// 	message: this.$t('login_013'),
+			// 	forbidClick: true,
+			// 	loadingType: 'spinner',
+			// });
+			this.isLoading =true;
+			this.$store.dispatch('User/userRegister', params).then(res => {
+				console.log(res);
+				this.isLoading = false;
+				if(!res.token) return;
 				this.$router.replace('/home');
-				try {
-					if (this.$Helper.isAndroid()) {
-						JSInterface.onLoginin();
-					} else if (this.$Helper.isIos()) {
-						let params = { method: 'onLoginin' };
-						window.webkit.messageHandlers.jsCallNativeMethod.postMessage(params);
-					}
-				} catch (e) { }
+				// try {
+				// 	if (this.$Helper.isAndroid()) {
+				// 		JSInterface.onLoginin();
+				// 	} else if (this.$Helper.isIos()) {
+				// 		let params = { method: 'onLoginin' };
+				// 		window.webkit.messageHandlers.jsCallNativeMethod.postMessage(params);
+				// 	}
+				// } catch (e) { }
 			}).catch(() => {
-				Toast.clear();
-				this.loading = false;
+				console.log("9999");
+				// Toast.clear();
+				this.isLoading = false;
 			})
 		}
 	}

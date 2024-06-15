@@ -9,7 +9,7 @@ export const register = (param) => {
 }
 // 退出登录
 export const logout = (param) => {
-    return Post("adminmember/loginout", param, {sendToken: false })
+    return Post("adminmember/loginout", param)
 }
 // 获取验证码
 export const getcode = (param) => {
