@@ -56,8 +56,7 @@
     </div>
 </template>
 <script>
-import { addbank,myaccount,updateinfo, getCaptcha, sendcode, loginDigital } from "@/api/user";
-import { wealthinfo, putpoint } from "../../api/pay";
+import { wealthinfo } from "../../api/pay";
 import PageHeader from "@/components/Header";
 export default {
     name: "mine",
@@ -370,9 +369,9 @@ export default {
 						rand_str: res.randstr,
                         ticket: res.ticket
 					};
-					getCaptcha(params).then(res => {
-						this.settime();
-					});
+					// getCaptcha(params).then(res => {
+					// 	this.settime();
+					// });
 				}
 		},
         getVerfyBtn(){
@@ -391,11 +390,11 @@ export default {
                 type:2,
                 mobile:this.userInfo.user_key,
             }
-            sendcode().then(res => {
-                if(res.code == undefined){
-                    this.settime();
-                }
-            });
+            // sendcode().then(res => {
+            //     if(res.code == undefined){
+            //         this.settime();
+            //     }
+            // });
         },
         settime(obj) {
             if (this.countTime == 0) {
@@ -437,12 +436,12 @@ export default {
             })
         },
         initUserInfo(){
-            myaccount().then(res => {
-                this.userPhone = res.phone || "";
-                this.wechatNum = res.wx || "";
-                this.superAccount = res.pid || "";
-                this.extensCode = res.user_code || "";
-            });
+            // myaccount().then(res => {
+            //     this.userPhone = res.phone || "";
+            //     this.wechatNum = res.wx || "";
+            //     this.superAccount = res.pid || "";
+            //     this.extensCode = res.user_code || "";
+            // });
         },
         onChange(event) {
             this.curIndex = event;
@@ -508,13 +507,13 @@ export default {
                 //     params.ali_no=this.alipayCard,
                 //     params.ali_user_name=this.alipayName
                 // }
-                addbank(params).then(() => {
-                    this.initBankInfo();
-                    this.$toast("保存完成");
-                    setTimeout(() =>{
-                        this.$router.back();
-                    },500)
-                });
+                // addbank(params).then(() => {
+                //     this.initBankInfo();
+                //     this.$toast("保存完成");
+                //     setTimeout(() =>{
+                //         this.$router.back();
+                //     },500)
+                // });
         },
         restForm(){
             this.userPhone = "";

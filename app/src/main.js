@@ -8,12 +8,8 @@ import Global from "./core/Global"
 import situantpop  from '@/components/Dialog/Dialog'
 import popDialog  from '@/components/popDialog'
 import './assets/iconfont/iconfont.css';
-import VideoPlayer from 'vue-video-player'
-import 'vue-video-player/src/custom-theme.css'
-import 'video.js/dist/video-js.css'
 window.Global = Global
 Global.setup();
-Vue.use(VideoPlayer)
 // 导入资源文件
 import {
   i18n,
@@ -29,13 +25,11 @@ import "./assets/styles/icon.css";
 import 'amfe-flexible/index.js'
 import "./utils/pcRem"
 import "./utils/setInterval"
-// import Dialog from 'path/to/@vant/weapp/dist/dialog/dialog';
 Vue.component("popDialog", popDialog)
 Vue.prototype.$popDialog = situantpop.install
 Vue.component("Scroll", scroll)
 Vue.component("drop-down", DrowDownComponent)
 Vue.prototype.moveNews = new Vue();
-// Vue.component('list-empty', ListEmpty)
 vantLocales(i18n.locale)
 import 'animate.css'
 

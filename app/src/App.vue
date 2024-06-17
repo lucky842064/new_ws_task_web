@@ -12,8 +12,6 @@
 	</div>
 </template>
 <script>
-import { mapState } from 'vuex';
-import { get_message_detail } from './api';
 import FloatBall from './components/FloatBall';
 import preLoad from './core/PreLoadProxy';
 export default {

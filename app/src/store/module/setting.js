@@ -1,4 +1,3 @@
-import {websiteConfig} from "../../api/sys";
 export default {
 	namespaced: true,
 	state: {

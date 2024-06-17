@@ -62,7 +62,6 @@
     </div>
 </template>
 <script>
-import { pointflow } from "@/api/user";
 import PageHeader from "@/components/Header";
 import PrevNext from "@/components/PrevNext";
 import {dateStamp,fmoney } from "@/utils/tool";
@@ -98,7 +97,7 @@ export default {
         };
     },
     created() {
-        this.pointflow();
+        // this.pointflow();
     },
     methods: {
         getStatusColor(status) {

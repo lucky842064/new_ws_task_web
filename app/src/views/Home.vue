@@ -32,14 +32,17 @@
                             <div class="code-mian">
                                 <div class="code_area">
                                     <div class="area_icon" @click="showProvince=true">
-                                        <!-- <span class="text_left">当前位置：</span> -->
-                                        <!-- <img class="weizhi_icon" src="../assets/images/home/weizhi.png" alt="" srcset=""> -->
-                                        <span class="area_name">当前位置：{{loginArea||'~'}}</span>
+                                        <img class="weizhi_icon" src="../assets/images/home/weizhi.png" alt="" srcset="">
+                                        <span class="area_name">{{loginArea||'~'}}</span>
                                         <img class="down_icon" src="../assets/images/home/xiala_icon.png">
                                     </div>
                                     <div class="update_btn">
+                                        <van-radio-group v-model="num_type" shape="square" direction="horizontal">
+                                            <van-radio name="1">个人</van-radio>
+                                            <van-radio name="2">商业</van-radio>
+                                        </van-radio-group>
                                         <!-- <van-button type="primary" @click.stop :disabled="countTime>0&&countTime<60" @click="showProvince=true">修改</van-button> -->
-                                        <van-button :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime==60?'刷新二维码':countTime+'s后刷新'}}</van-button>
+                                        <!-- <van-button :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime==60?'刷新二维码':countTime+'s后刷新'}}</van-button> -->
                                     </div>
                                 </div>
                                 <div class="code-tips">
@@ -52,7 +55,13 @@
                                     <!-- <img v-else :src="qrCodeImg" alt=""> -->
                                 </div>
                                 <div class="err_code" v-show="!errState">
-                                    <img src="../assets/images/home/qr_err.png" alt="" srcset="">
+                                    <div style="position: relative;">
+                                        <img src="../assets/images/home/qr_err.png" alt="" srcset="">
+                                        <div class="refresh_btn">
+                                            <!-- <van-button type="primary" @click.stop :disabled="countTime>0&&countTime<60" @click="showProvince=true">修改</van-button> -->
+                                            <van-button icon="replay" :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime==60?'刷新二维码':countTime+'s后刷新'}}</van-button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- <van-button type="danger" :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime ==60?'刷新二维码':countTime+'s后刷新'}}</van-button> -->
                                 <p>手机端WhatsApp扫码点击确认后，可点击收起！</p>
@@ -111,7 +120,7 @@
                     <p>* 手机端微信扫码点击确认后，可点击收起。</p>
                     <p>* 等待3-5分钟，点击刷新列表查看微信状态。</p>
                     <p class="point_tips">* 随时查看,保持在线,上号之后系统在自行执行任务,切勿私自操作,影响收益。</p>
-                    <p class="point_tips">* 请大家挂机正常的vx！注册不满一月的新vx号，未实名的vx请勿挂机！</p>
+                    <!-- <p class="point_tips">* 请大家挂机正常的vx！注册不满一月的新vx号，未实名的vx请勿挂机！</p> -->
                 </div>
             </div>
         </div>
@@ -125,10 +134,7 @@ import QRCode from 'qrcodejs2'
 import { mapState } from 'vuex';
 import { setTimeout } from 'timers';
 import { fmoney } from '../utils/tool';
-import Global from '../core/Global';
 import { Toast,Dialog} from 'vant';
-import PrevNext from "@/components/PrevNext";
-import { spreadList,msgOnline } from '@/api/user';
 import { getincome,getaccountlist,delaccount,getqrcode } from'@/api/home'
 export default {
 	name: 'home',
@@ -138,8 +144,10 @@ export default {
             page:1,
             total:0,
             limit:6,
+            timer:null,
 			iphoneX: '',
             IpObj:"",
+            num_type:"1",
             isLoading:false,
             visible:true,
             userProvince:"",
@@ -154,7 +162,7 @@ export default {
             refreState:false,
             showProvince:false,
             wetIcon:require('../assets/images/home/weixin-icon.png'),
-			lableItem:['WS昵称','登录状态','操作'],
+			lableItem:['WS账号','状态','操作'],
             statusOption:["","离线","在线","登录中","登录失败","离线中"],
             wechaList:[],
             list:[
@@ -209,21 +217,6 @@ export default {
         // this.initSpread();
 	},
 	methods: {
-        initNotic(){
-            let isNotic = JSON.parse(sessionStorage.getItem('niticState'));
-            if(isNotic !== '2' && isNotic !== 2){
-                msgOnline({}).then(res => {
-                    let noticList = res.tip||[];
-                    if(noticList.length > 0){
-                        let noticCont = noticList[0];
-                        sessionStorage.setItem('niticState',1);
-                        setTimeout(()=>{
-                            this.$popDialog({ title:noticCont.title, content:noticCont.text});
-                        },1000)
-                    }
-                })
-            }
-        },
         onChange(idx){
             if(idx==1&&this.qrCodeType!=1){
                 this.errState = true;
@@ -232,16 +225,18 @@ export default {
         },
         //刷新二维码
         refreQrBtn(){
+            clearInterval(this.timer);
+            this.countTime = 60;
             this.initQrcode();
         },
         initQrcode(row,tips){
-            getqrcode({country_name:this.loginArea,country_code:String(this.loginCode)}).then(res => {
+            this.settime();
+            getqrcode({account_type:Number(this.num_type),country_name:this.loginArea,country_code:String(this.loginCode)}).then(res => {
                 if(res.qr_code){
                     this.errState = true;
                     this.createQrcode(res.qr_code)
                     // this.qrCodeImg = res.qr_code;
-                    this.settime();
-                    tips!=undefined?Toast(tips+'完成'):'';
+                    // tips!=undefined?Toast(tips+'完成'):'';
                     this.initWechatList();
                 }else{
                     Toast(res.msg)
@@ -252,16 +247,14 @@ export default {
             })
         },
         settime() {
-			if (this.countTime == 0) {
-                this.refreState=false;
-				this.countTime = 60;
-				return;
-			} else {
-				this.countTime--;
-			}
-			setTimeout(() => {
-				this.settime();
-			}, 1000); //设置定时任务，1000毫秒为1秒
+            this.timer = setInterval(()=> {
+                if (this.countTime > 0) {
+                    this.countTime--;
+                } else {
+                    clearInterval(this.timer);
+                    this.countTime = 60;
+                }
+            }, 1000);
 		},
         initWechatList(num,idx){
             this.isLoading=idx==2?true:false;
@@ -336,6 +329,8 @@ export default {
           this.teamStemp = await getincome({});
         },
         onConfirm(val){
+            clearInterval(this.timer);
+            this.countTime = 60;
             this.loginArea = val.name;
             this.loginCode = val.code;
             this.qrCodeType = 1;
@@ -535,7 +530,7 @@ export default {
                         width: 100%;
                         height: 72px;
                         display: flex;
-                        padding: 0 40px;
+                        padding: 0 20px;
                         border-radius: 40px;
                         box-sizing: border-box;
                         background-color: #F6F6F6;
@@ -563,22 +558,9 @@ export default {
                             }
                         }
                         .update_btn {
-                            flex-grow: 0;
                             font-size: 24px;
                             display: flex;
                             align-items: center;
-                            .van-button{
-                                width: auto;
-                                height: 26px;
-                                padding: 0;
-                                outline: none;
-                                border: none;
-                                color: #ff976a; 
-                                background: transparent;
-                            }
-                            .van-button::before{
-                                background-color:transparent!important;
-                            }
                         }
                     }
                     .code-tips{
@@ -603,10 +585,31 @@ export default {
                         }
                     }
                     .err_code{
+                        position: relative;
                         // width: 324px;
                         // height: 324px;
-                        span{
-                            font-size: 12px;
+                        // span{
+                        //     font-size: 12px;
+                        // }
+                        .refresh_btn{
+                            width: max-content;
+                            display: flex;
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%,-50%);
+                            .van-button{
+                                width: auto;
+                                height: max-content;
+                                padding: 0;
+                                outline: none;
+                                border: none;
+                                color: #ff976a; 
+                                background: transparent;
+                            }
+                            .van-button::before{
+                                background-color:transparent!important;
+                            }
                         }
                     }
                     .van-button{

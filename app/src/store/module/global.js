@@ -1,6 +1,4 @@
 import router from "../../router";
-import {get_applying_list, get_task_list} from "../../api";
-import {task_collection, mytask} from "../../api/task";
 export default {
 	namespaced: true,
 	state: {

@@ -24,7 +24,6 @@
 	</div>
 </template>
 <script>
-import { getcode } from '@/api/login';
 import WebsiteSetting from '../../mixin/websiteSetting.js';
 export default {
 	mixins: [WebsiteSetting],

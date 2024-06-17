@@ -1,13 +1,14 @@
 import router from '../../router/';
-import {newloginGetcurrentprovince} from '@/api/wx.js'
+import { getincome } from'@/api/home'
 import { login,register,logout } from '@/api/login';
-import { getAppList } from '../../api/earn';
 const bannerImage = require('../../assets/images/home/banner.png');
 export default {
 	namespaced: true,
 	state: {
+		allIncome:"",
 		httpManager: {},
-		token: window.localStorage.getItem('token') || null, //用户token
+		inviteCode:window.localStorage.getItem('inviteCode')||null,
+		token: window.localStorage.getItem('token') || null,
 		config: {
 			ex_rate: 3,
 			first_point: 0,
@@ -56,24 +57,14 @@ export default {
 		updateAppList(state, value) {
 			state.appList = value;
 		},
-		login: (state, data) => {
-			const {token,user_info:{uid}} = data;
-			state.token = data.token;
-			// if (data.autologin) {
-			// 	window.localStorage.setItem('prologin', data.autologin);
-			// }
-			window.localStorage.setItem('token',token);
-			window.localStorage.setItem('uid',uid);
-		},
-		register: (state, data) => {
-			const {token,user_info:{uid}} = data;
-			state.token = token;
+		store_info: (state, data) => {
+			const {token,user_info:{uid,invite_code}} = data;
 			state.uid = uid;
-			// if (data.autologin) {
-			// 	window.localStorage.setItem('prologin', data.autologin);
-			// }
-			window.localStorage.setItem('token', token);
-			window.localStorage.setItem('uid', uid);
+			state.token = token;
+			state.inviteCode = invite_code;
+			window.localStorage.setItem('uid',uid);
+			window.localStorage.setItem('token',token);
+			window.localStorage.setItem('inviteCode',invite_code);
 		},
 		clearUserInfo: (state, data) => {
 			localStorage.removeItem('token');
@@ -99,20 +90,15 @@ export default {
 		updateConfig(state, data) {
 			state.config = data;
 		},
-		// openInterval(state, data) {
-		// 	if (!state.interval) {
-		// 		heart({});
-		// 		state.interval = setInterval(() => {
-		// 			heart({});
-		// 		}, 60000)
-		// 	}
-		// },
 		closeInterval(state) {
 			if (state.interval) {
 				clearInterval(state.interval);
 				state.interval = null;
 			}
 		},
+		store_income(state, data) {
+			state.allIncome = data;
+		}
 	},
 	actions: {
 		userLogin({ commit }, params ,callback) {
@@ -120,8 +106,7 @@ export default {
 			return new Promise((resolve, reject) => {
 				login(params).then (res => {
 					if(res.token){
-						// res.autologin = params.autologin;
-						commit('login', res);
+						commit('store_info', res);
 						resolve(res)
 					}
 					resolve(res)
@@ -135,8 +120,7 @@ export default {
 			return new Promise((resolve, reject) => {
 				register(params).then(res => {
 					if(res.token){
-						// res.autologin = params.autologin;
-						commit('register', res);
+						commit('store_info', res);
 					}
 					resolve(res);
 				}).catch(error => {
@@ -144,20 +128,21 @@ export default {
 				})
 			})
 		},
-		storageUserInfo({ commit, state, dispatch }, params) {
-			commit('login', params);
-			dispatch('getUserInfo');
+		userIncome({ commit }) {
+			return new Promise((resolve, reject) => {
+				getincome().then(res => {
+					commit('store_income', res);
+					resolve();
+				}).catch(error => {
+					reject(error)
+				})
+			})
 		},
 		getUserInfo({ commit, state }, value = false) {
 			if (value != state.footerGet[0]) {
 				state.footerGet[0] = value;
 				if (!value) return;
 			}
-			newloginGetcurrentprovince().then(res => {
-				sessionStorage.setItem('storageIP', JSON.stringify(res));
-				resolve();
-			}).catch(err => {
-			});
 			getUserInfo({}).then(data => {
 				sessionStorage.setItem('storageInfo', JSON.stringify(data));
 				sessionStorage.setItem('newsStatus', JSON.parse(sessionStorage.getItem('storageInfo')).read_msg);
@@ -193,20 +178,6 @@ export default {
 		logoutUser({ state }) {
 			return new Promise((resolve, reject) => {
 				logout().then(result => {
-					// localStorage.removeItem('token');
-					// localStorage.removeItem('myip');
-					// localStorage.removeItem('uid');
-					// localStorage.removeItem('mycityname');
-					// sessionStorage.removeItem('storageIP');
-					// localStorage.removeItem('lastDepositTime');
-					// localStorage.removeItem('lastDepositTime');
-					// sessionStorage.removeItem('userType');
-					// sessionStorage.removeItem('advert');
-					// sessionStorage.removeItem('noticeCont');
-					// sessionStorage.removeItem('bannerCont');
-					// sessionStorage.removeItem('serviceCont');
-					// sessionStorage.removeItem('niticState');
-					window.clearInterval(clearTime);
 					sessionStorage.clear();
 					state.userInfo = {};
 					state.token = null;
@@ -218,45 +189,9 @@ export default {
 				});
 			});
 		},
-		getAppList({ commit, state }, value = false) {
-			if (value != state.footerGet[1]) {
-				state.footerGet[1] = value;
-				if (!value) return;
-			}
-			getAppList({}).then(res => {
-				let list = res.list || [];
-				list.forEach(item => {
-					item.text = item.app_name;
-					item.value = item.app_id;
-					if (item.game) {
-						item.game.forEach(temp => {
-							temp.text = temp.game_name;
-							temp.value = temp.game_id;
-							if (temp.room) {
-								temp.room.forEach(ele => {
-									ele.text = ele.room_name;
-									ele.value = ele.room_id;
-								});
-							}
-						});
-					}
-				});
-				commit('updateAppList', list);
-			});
-		},
-		viplist({ commit, state }, value = false) {
-			if (value != state.footerGet[2]) {
-				state.footerGet[2] = value;
-				if (!value) return;
-			}
-			viplist({}).then(data => {
-				// console.log(data);
-				commit('updateConfig', data);
-			});
-		},
 		logoutClearAndJump({ commit }) {
 			commit('clearUserInfo');
-		},
+		}
 	},
 	modules: {},
 };

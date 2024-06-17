@@ -41,7 +41,6 @@
 }
 </style>
 <script>
-import { mycontact,addcontact } from "@/api/user";
 export default {
     props: {
         title: {

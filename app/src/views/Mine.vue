@@ -10,7 +10,7 @@
                 <!-- <img class="user_head" src="../assets/images/head/11.png" alt=""> -->
                 <div class="info-data">
                     <p>{{userInfo.user_key}}</p>
-                    <p>账户收益：<span>{{userInfo.point||0}}</span>元</p>
+                    <p>账户收益：<span>{{today_incomet||0}}</span>元</p>
                 </div>
             </div>
             <div class="btn">
@@ -22,11 +22,11 @@
             <div class="task-pro">
                 <div class="task-item">
                     <div class="left-pro">
-                        <p>{{ teamStemp.today_income || 0}}</p>
+                        <p>{{ allIncome.today_income || 0}}</p>
                         <p>{{ $t("home_023") }}</p>
                     </div>
                     <div class="right-pro">
-                        <p>{{ teamStemp.yesterday_income || 0 }}</p>
+                        <p>{{ allIncome.yesterday_income || 0 }}</p>
                         <p>{{ $t("home_024") }}</p>
                     </div>
                     <div class="show_detail" @click="jumpDetail">账单明细</div>
@@ -46,11 +46,11 @@
                 <div class="task-item">
                     <div class="left-pro">
                         <p>今日完成任务量(单)</p>
-                        <p>{{ teamStemp.team_complete || 0}}</p>
+                        <p>{{ today_task.today_num || 0}}</p>
                     </div>
                     <div class="right-pro">
                          <p>昨日完成任务量(单)</p>
-                        <p>{{ teamStemp.yes_complete || 0 }}</p>
+                        <p>{{ today_task.yesterday_num || 0 }}</p>
                     </div>
                     <div class="show_detail" @click="$router.push('/finshTask')">查看详情></div>
                 </div>
@@ -66,24 +66,24 @@
                         已邀请 <span>{{teamStemp.team_num||0}}</span> 人，今日邀请 <span>{{teamStemp.day_add_member||0}}</span> 人 <span class="jump_detail">下线管理>></span>
                     </div> -->
                     <div class="task-logo">
-                        已邀请 <span>{{teamStemp.team_num||0}}</span> 人，今日邀请 <span>{{teamStemp.day_add_member||0}}</span> 人
+                        已邀请 <span>{{today_invit.invite_num||0}}</span> 人，今日邀请 <span>{{today_invit.today_invite_num||0}}</span> 人
                     </div>
                 </div>
             </div>
             <div class="share_box share_first share_top">
                 <div class="share_link">
-                    <p>邀请码：{{userInfo.user_code||'...'}}</p>
+                    <p>邀请码：{{invite_code||'...'}}</p>
                 </div>
                 <div class="share_btn">
-                    <van-button v-clipboard:copy="userInfo.user_code" v-clipboard:success="copySuccess">复制邀请码</van-button>
+                    <van-button v-clipboard:copy="invite_code" v-clipboard:success="copySuccess">复制邀请码</van-button>
                 </div>
             </div>
             <div class="share_box share_first">
                 <div class="share_link">
-                    <p>链接：{{userInfo.share_url+"?r="+userInfo.user_code||'...'}}</p>
+                    <p>链接：{{invit_link+invite_code||'...'}}</p>
                 </div>
                 <div class="share_btn">
-                    <van-button v-clipboard:copy="userInfo.share_url+'?r='+userInfo.user_code" v-clipboard:success="copySuccess">复制链接</van-button>
+                    <van-button v-clipboard:copy="userInfo.share_url+'?r='+invite_code" v-clipboard:success="copySuccess">复制链接</van-button>
                 </div>
             </div>
             <div class="share_box share_last">
@@ -109,78 +109,70 @@
 <script>
 import { mapState } from "vuex";
 import jumpUrl from "@/utils/helper"
-import WebsiteSetting from "../mixin/websiteSetting";
-// import NoticeBar from "./home/noticeBar";
 import { fmoney,timeStamp,formatTime1 } from "../utils/tool";
-import { spreadList } from "@/api/user";
 import QRCode from 'qrcodejs2'
 import html2canvas from 'html2canvas';
 import popDialog from "@/components/serveDialog";
-import { getincome } from'@/api/home'
+import { getaccountincome,gettasknum,getinvitenum ,getinvitelink} from '@/api/bill';
 
 export default {
-    mixins: [WebsiteSetting],
     name: "mine",
-    components: {
-        popDialog
-        // NoticeBar,
-        // qrcode
-    },
+    components: {popDialog},
     data() {
         return {
             wk_name:'',
             iframeSrc:'',
             teamStemp:"",
-            vitivetext:"88888888888",
-            vipStatus: {
-                status: true
-            },
-            isDialong: false,
-            isAndroid: false,
-            isIOS: false,
-            active: 0,
-            serveModel:false,
-            myip:localStorage.getItem('myip'),
-            mycityname:localStorage.getItem('mycityname'),
-            level: 0,
-            level_name: "",
-            noticeCont: [],
-            daily_num: 0,
-            version:"",
-            lang: "",
-            msg: 0,
-            newStatus:0,
-            appTown: true,
-            appAccount: {},
-            extenData: {},
-            posterContent: '', // 文案内容
-            posterImgName: '宣传海报', // 最终生成的海报图片名称
-            posterImg: require('../assets/images/home/bill-bg.png'),
+            today_task:"",
+            today_invit:"",
+            invit_link:"",
+            today_incomet:0
         };
     },
     computed: {
         ...mapState({
-            userInfo: state => state.User.userInfo
+            userInfo: state => state.User.userInfo,
+            allIncome: state => state.User.allIncome,
+            invite_code: state => state.User.inviteCode
         })
     },
     created() {
-        // this.$store.dispatch('User/getUserInfo');
-        this.initSpread();
+        this.syncInitApi();
+        this.$store.dispatch('User/userIncome');
     },
-    mounted(){
-        // this.$nextTick(()=>{
-        //    setTimeout(()=>{
-        //         this.createQrcode();
-        //    },1000)
-        // })
-    },
+    mounted(){},
     methods: {
+        syncInitApi(){
+            let fun1 = new Promise((resolve,reject)=>{
+                getaccountincome().then(res =>{
+                    resolve(res)
+                })
+            });
+            let fun2 = new Promise((resolve,reject)=>{
+                gettasknum().then(res =>{
+                    resolve(res)
+                })
+            });
+            let fun3 = new Promise((resolve,reject)=>{
+                getinvitenum().then(res =>{
+                    resolve(res)
+                })
+            });
+            let fun4 = new Promise((resolve,reject)=>{
+                getinvitelink().then(res =>{
+                    resolve(res)
+                })
+            });
+            Promise.all([fun1,fun2,fun3,fun4]).then( res => {
+                const [{income},data2,data3,{invite_link}] = res;
+                this.today_incomet = income;
+                this.today_task = data2;
+                this.today_invit = data3;
+                this.invit_link = invite_link;
+            })
+        },
         closeDialong(){
             this.isDialong=false;
-        },
-        //推广列表
-        async initSpread() {
-          this.teamStemp = await getincome({});
         },
         localStorageSetItem(key ,value){
             if (key == null || key == undefined){

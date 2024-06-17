@@ -82,7 +82,6 @@
 </template>
 <script>
 import PageHeader from "@/components/Header";
-import {teamlist,resetagentrate } from "@/api/earn";
 import {fmoney,currentDate } from "@/utils/tool";
 import PrevNext from "@/components/PrevNext";
 export default {
@@ -141,7 +140,7 @@ export default {
         // }
     },
     created() {
-        this.pointflow();
+        // this.pointflow();
     },
     methods: {
         pointflow(num) {

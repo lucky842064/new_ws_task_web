@@ -14,7 +14,7 @@
 			<div class="uilist">
 				<div class="uilist_div">
 					<img src="../../assets/images/sign/phone.png" />
-					<input v-model="username" :placeholder="$t('login_004')"/>
+					<input v-model="username" :placeholder="$t('login_004')" oninput="value=value.replace(/[^\w_]/g,'')" />
 				</div>
 				<div class="uilist_div pwd">
 					<img src="../../assets/images/sign/lock.png" />
@@ -97,10 +97,13 @@ export default {
 		},
 		//注册
 		handleRegister() {
-			let reg = new RegExp(/^1[3456789]\d{9}$/);
+			const zh_reg = new RegExp(/^[^\u4e00-\u9fa5]+$/);
+			const reg = new RegExp(/^1[3456789]\d{9}$/);
 			const regex = new RegExp(/^[0-9A-Za-z]{6,20}$/);
-			if (!this.username || !reg.test(this.username)) {
-				return this.$toast(this.$t('login_007'));
+			if (!this.username) {
+				return this.$toast(this.$t('login_004'));
+			} else if(!zh_reg.test(this.username)){
+				return this.$toast(this.$t('login_030'));
 			}
 			if (!this.pwd || !regex.test(this.pwd)) {
 				return this.$toast(this.$t('login_009'));

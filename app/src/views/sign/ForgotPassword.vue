@@ -128,8 +128,6 @@
     </div>
 </template>
 <script>
-import { forgetPassword,getCaptcha,getVersion } from "../../api/user";
-// import { loginDigital } from '../../api/user';
 import WebsiteSetting from "../../mixin/websiteSetting.js";
 import { countrycode, allCode } from "../../common/countrycode.js";
 import {encryption, decryption} from '@/utils/tool.js'
@@ -268,12 +266,12 @@ export default {
                 mobile:this.forgot_data.mobile,
                 lang:"cn",
             };
-            forgetPassword(param).then(() => {
-                this.$toast.success(this.$t("login_018"));
-                const timer = setTimeout(() => {
-                    this.$router.push("/login");
-                }, 200);
-            });
+            // forgetPassword(param).then(() => {
+            //     this.$toast.success(this.$t("login_018"));
+            //     const timer = setTimeout(() => {
+            //         this.$router.push("/login");
+            //     }, 200);
+            // });
         },
         onClickLeft() {
             this.$router.go(-1);
@@ -293,13 +291,13 @@ export default {
                 mobile: encryption(this.forgot_data.mobile),
                 lang:"cn",
             }
-            getCaptcha(params).then(res => {
-                if(res.code == undefined){
-                    this.settime();
-                }
-            }).catch(e => {
-				this.countTime = 60;
-			});
+            // getCaptcha(params).then(res => {
+            //     if(res.code == undefined){
+            //         this.settime();
+            //     }
+            // }).catch(e => {
+			// 	this.countTime = 60;
+			// });
         },
         settime(obj) {
             if (this.countTime == 0) {
@@ -311,15 +309,15 @@ export default {
             }
             setTimeout(() =>{this.settime() },1000);//设置定时任务，1000毫秒为1秒
         },
-        getVersion() {
-            getVersion({}).then(res => {
-                if (res.code == 0) {
-                    this.kefu = res.data.data.app_config.kefu+'&appid=30301&appname=蚂蚁外快'+'&ip='+res.data.data.ip+'&prov='+res.data.data.ip_local;
-                    localStorage.setItem('myip', res.data.data.ip)
-                    localStorage.setItem('mycityname', res.data.data.ip_local)
-                }
-            });
-        },
+        // getVersion() {
+        //     getVersion({}).then(res => {
+        //         if (res.code == 0) {
+        //             this.kefu = res.data.data.app_config.kefu+'&appid=30301&appname=蚂蚁外快'+'&ip='+res.data.data.ip+'&prov='+res.data.data.ip_local;
+        //             localStorage.setItem('myip', res.data.data.ip)
+        //             localStorage.setItem('mycityname', res.data.data.ip_local)
+        //         }
+        //     });
+        // },
         callbackName(res) {
 				// 返回结果
 				if (res.ret === 0) {
@@ -342,11 +340,11 @@ export default {
 						rand_str: res.randstr,
                         ticket: res.ticket
 					};
-					getCaptcha(params).then(res => {
-						this.settime();
-					}).catch(e => {
-						this.countTime = 60;
-					})
+					// getCaptcha(params).then(res => {
+					// 	this.settime();
+					// }).catch(e => {
+					// 	this.countTime = 60;
+					// })
 				}
 		}
     },

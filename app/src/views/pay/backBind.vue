@@ -92,9 +92,6 @@
 </template>
 
 <script>
-import { myaccount, addbank, upbank } from "../../api/user";
-// import TimeCount from "../../components/TimeCout";
-// import { area_list } from "../../utils/area";
 import PageHeader from "../../components/Header";
 export default {
     name: "backbind",
@@ -141,9 +138,9 @@ export default {
     },
     methods: {
         myaccount() {
-            myaccount().then(res => {
-                this.userInfo = res;
-            });
+            // myaccount().then(res => {
+            //     this.userInfo = res;
+            // });
         },
         show_banks() {
             this.popupShow = true;
@@ -174,10 +171,10 @@ export default {
                     uid: localStorage.getItem("uid") || "",
                     bank_zhi: this.userInfo.bank_zhi || ""
                 };
-                upbank(param).then(() => {
-                    this.$toast(this.$t("other_006"));
-                    this.$router.back();
-                });
+                // upbank(param).then(() => {
+                //     this.$toast(this.$t("other_006"));
+                //     this.$router.back();
+                // });
             } else {
                 let param = {
                     bank_no: this.userInfo.bank_no,
@@ -185,10 +182,10 @@ export default {
                     bank_name: this.userInfo.bank_name,
                     bank_zhi: this.userInfo.bank_zhi || ""
                 };
-                addbank(param).then(() => {
-                    this.$toast(this.$t("other_006"));
-                    this.$router.back();
-                });
+                // addbank(param).then(() => {
+                //     this.$toast(this.$t("other_006"));
+                //     this.$router.back();
+                // });
             }
         }
         // confirm_select(item) {

@@ -25,7 +25,6 @@
 </template>
 <script>
 import PageHeader from "../../components/Header";
-import { updateinfo } from "../../api/user";
 export default {
     components: { PageHeader },
     data() {

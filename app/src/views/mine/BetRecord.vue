@@ -33,14 +33,6 @@
                     <div class="buy-number" v-for="(item,index) in list" :key="index">
                         <span class="head_title">{{item.time}}</span>
                         <span class="head_title">{{item.desc}}
-                            <!-- <p v-if="item.point_type == 1">提现扣款</p>
-                            <p v-else-if="item.point_type == 2">人工调整</p>
-                            <p v-else-if="item.point_type == 3">提现返还</p>
-                            <p v-else-if="item.point_type == 4">注册赠送</p>
-                            <p v-if="item.point_type == 21">加粉赏金</p>
-                            <p v-else-if="item.point_type == 22">加粉赏金</p>
-                            <p v-else-if="item.point_type == 31">加粉返佣</p>
-                            <p v-else>-</p> -->
                         </span>
                         <span class="record_cash">{{item.point}}</span>
                     </div>
@@ -61,26 +53,14 @@
                 </div>
             </van-overlay>
             <PrevNext style="width:100%;float:left;margin:10px 0 10px 0;" :len="list.length" :page="page" :limit="limit" :total="total" @to-prev="onPrev" @to-next="onNext"></PrevNext>
-            <!-- <van-pagination v-model="currentPage" :total-items="125" :show-page-size="3" force-ellipses style="width:100%;float:left;"  /> -->
         </div>
-        <!-- <van-popup v-model="showDatePicker" position="bottom">
-            <van-datetime-picker
-                v-model="currentDate"
-                :confirm-button-text="$t('other_005')"
-                :cancel-button-text="$t('other_004')"
-                @confirm="onchangDate1()"
-                @cancel="closeDatePicker()"
-                :title="$t('mine_047')"
-                type="date"
-            />
-        </van-popup> -->
     </div>
 </template>
 <script>
 import PageHeader from "@/components/Header";
-import {profit_list } from "@/api/user";
-import {dateStamp,fmoney } from "@/utils/tool";
+import { fmoney } from "@/utils/tool";
 import PrevNext from "@/components/PrevNext";
+import { getaccountincome } from '@/api/bill';
 export default {
     components: { PageHeader,PrevNext },
     data() {
@@ -114,25 +94,20 @@ export default {
             list: []
         };
     },
-    computed: {
-        // appList() {
-        //     return this.$store.state.User.appList;
-        // }
-    },
     created() {
-        this.pointflow();
+        this.billDetail();
     },
     methods: {
         onPrev() {
             this.page--;
-            this.pointflow();
+            this.billDetail();
         },
         onNext() {
             this.page++;
-            this.pointflow();
+            this.billDetail();
         },
-        pointflow() {
-            profit_list({
+        billDetail() {
+            getaccountincome({
                 page: this.page,
                 limit: this.limit,
                 stime: this.sTime == "" ? 0 : this.sTime == null ? 0 : dateStamp(this.sTime),
