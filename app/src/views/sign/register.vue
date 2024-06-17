@@ -10,7 +10,8 @@
 					<span>{{ $t('mine_040') }}</span>
 				</div> -->
 			</div>
-			<div class="head_title">{{ $t('login_029') }}</div>
+			<img class="login_img" src="../../assets/images/logo.png" alt="" srcset="">
+			<!-- <div class="head_title">{{ $t('login_029') }}</div> -->
 			<div class="uilist">
 				<div class="uilist_div">
 					<img src="../../assets/images/sign/zhanghao.png" />
@@ -164,10 +165,9 @@ export default {
 	height: 100%;
 	padding: 0 48px;
 	box-sizing: border-box;
-	box-sizing: border-box;
 	position: relative;
-	min-height: 100vh;
-
+	overflow: hidden;
+	overflow-y: auto;
 	input {
 		background: transparent !important;
 		border: transparent;
@@ -183,31 +183,32 @@ export default {
 		width: 100%;
 		position: relative;
 		flex-direction: column;
-
+		.login_img{
+			width: 90px;
+			height: 120px;
+			margin: 0 auto;
+			margin-top: 8%;
+			margin-bottom: 10%;
+		}
 		.nav_top {
 			width: 100%;
 			height: 88px;
 			display: flex;
 			align-items: center;
-
 			.back_icon {
 				flex: 1;
-
 				img {
 					width: 18px;
 				}
 			}
-
 			.serve_area {
 				display: flex;
 				align-items: center;
-
 				img {
 					width: 32px;
 					height: 40px;
 					margin-right: 8px;
 				}
-
 				span {
 					color: #F52C2C;
 					font-size: 28px;
