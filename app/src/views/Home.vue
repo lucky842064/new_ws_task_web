@@ -249,7 +249,7 @@ export default {
         },
         settime() {
             this.timer = setInterval(()=> {
-                if (this.countTime > 0) {
+                if (this.countTime > 1) {
                     this.countTime--;
                 } else {
                     clearInterval(this.timer);
