@@ -6,7 +6,7 @@
             </div>
             <div class="title">{{title}}</div>
             <div class="ke-fu-icon" v-if="hide" :class="showIcon && 'show'" @click="$Helper.toOutLink(userInfo.kefu+'&appid=30301&appname='+wk_name+'&userid='+userInfo.user_id+'&username='+userInfo.user_key+'&point='+userInfo.point+'&ip='+myip+'&prov='+mycityname)">
-                <img src="../assets/images/buy/kefu.png" alt="ke-fu" />
+                <!-- <img src="../assets/images/buy/kefu.png" alt="ke-fu" /> -->
             </div>
         </div>
     </div>

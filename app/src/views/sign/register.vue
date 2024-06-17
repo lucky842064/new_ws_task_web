@@ -5,15 +5,15 @@
 				<div class="back_icon">
 					<img src="../../assets/images/sign/left.png" @click="$router.go(-1)" />
 				</div>
-				<div class="serve_area" @click="isDialong = true">
+				<!-- <div class="serve_area" @click="isDialong = true">
 					<img src="../../assets/images/ms_serve.png" alt="" srcset="">
 					<span>{{ $t('mine_040') }}</span>
-				</div>
+				</div> -->
 			</div>
 			<div class="head_title">{{ $t('login_029') }}</div>
 			<div class="uilist">
 				<div class="uilist_div">
-					<img src="../../assets/images/sign/phone.png" />
+					<img src="../../assets/images/sign/zhanghao.png" />
 					<input v-model="username" :placeholder="$t('login_004')" oninput="value=value.replace(/[^\w_]/g,'')" />
 				</div>
 				<div class="uilist_div pwd">

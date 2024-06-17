@@ -514,7 +514,7 @@ export default {
                    width: 100%; 
                    height: 584px;
                    position: relative;
-                   background: url('../assets/images/home/down_bg.png') no-repeat;
+                //    background: url('../assets/images/home/down_bg.png') no-repeat;
                    background-size: cover;
                     .van-button{
                         width: 165px;

@@ -20,7 +20,7 @@
                         {{desposiItem.day}}
                         <span>{{$t("buy_003").replace("days","D")}}</span>
                     </div>-->
-                    <img src="../../assets/images/buy/buy_day_count.png" alt />
+                    <!-- <img src="../../assets/images/buy/buy_day_count.png" alt /> -->
                 </div>
                 <div>
                     <div>
@@ -155,8 +155,8 @@ export default {
     data() {
         return {
             checkImage: [
-                require("../../assets/images/buy/check_no.png"),
-                require("../../assets/images/buy/check.png")
+                // require("../../assets/images/buy/check_no.png"),
+                // require("../../assets/images/buy/check.png")
             ],
             checked: 0,
             show: false,
@@ -730,7 +730,7 @@ export default {
                         right: 20px;
                         width: 38px;
                         height: 40px;
-                        background-image: url("../../assets/images/vip/check.png");
+                        // background-image: url("../../assets/images/vip/check.png");
                         background-size: 100% 100%;
                     }
                 }
@@ -738,30 +738,30 @@ export default {
         }
     }
 }
-.bank {
-    background-image: url("../../assets/images/vip/bank-transfer.png");
-    height: 50px;
-    width: 50px;
-    background-size: 100% 100%;
-}
-.wechat {
-    background-image: url("../../assets/images/vip/WeChat.png");
-    height: 50px;
-    width: 50px;
-    background-size: 100% 100%;
-}
-.cloud {
-    background-image: url("../../assets/images/vip/cloud.png");
-    height: 50px;
-    width: 50px;
-    background-size: 100% 100%;
-}
-.alipay {
-    background-image: url("../../assets/images/vip/alipay.png");
-    height: 50px;
-    width: 50px;
-    background-size: 100% 100%;
-}
+// .bank {
+//     background-image: url("../../assets/images/vip/bank-transfer.png");
+//     height: 50px;
+//     width: 50px;
+//     background-size: 100% 100%;
+// }
+// .wechat {
+//     background-image: url("../../assets/images/vip/WeChat.png");
+//     height: 50px;
+//     width: 50px;
+//     background-size: 100% 100%;
+// }
+// .cloud {
+//     background-image: url("../../assets/images/vip/cloud.png");
+//     height: 50px;
+//     width: 50px;
+//     background-size: 100% 100%;
+// }
+// .alipay {
+//     background-image: url("../../assets/images/vip/alipay.png");
+//     height: 50px;
+//     width: 50px;
+//     background-size: 100% 100%;
+// }
 .van-picker__toolbar {
     .van-picker__confirm {
         color: $color-theme;

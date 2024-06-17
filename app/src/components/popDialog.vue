@@ -8,8 +8,8 @@
 					<template v-if="headEdit == 1">
 						<div class="edit_text" :isEdit="showEdit" @click="editbtn(imgType)">
 							<span class="title_name" :class="imgType == 1 ? 'edit_class' : ''">{{ editName }}</span>
-							<img v-if="imgType == 0" class="edit_img" src="@/assets/images/buy/fedit_icon.png" alt="" />
-							<img v-else class="edit_img" src="@/assets/images/buy/edit_icon.png" alt="" />
+							<!-- <img v-if="imgType == 0" class="edit_img" src="@/assets/images/buy/fedit_icon.png" alt="" /> -->
+							<!-- <img v-else class="edit_img" src="@/assets/images/buy/edit_icon.png" alt="" /> -->
 						</div>
 						<div class="dec_icon" @click="hideModel">
 							<i role="button" tabindex="0" class="van-icon van-icon-cross van-popup__close-icon"></i>

@@ -161,7 +161,6 @@ export default {
             countTime:60,
             refreState:false,
             showProvince:false,
-            wetIcon:require('../assets/images/home/weixin-icon.png'),
 			lableItem:['WS账号','状态','操作'],
             statusOption:["","离线","在线","登录中","登录失败","离线中"],
             wechaList:[],

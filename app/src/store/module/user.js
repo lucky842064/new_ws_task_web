@@ -1,7 +1,6 @@
 import router from '../../router/';
 import { getincome } from'@/api/home'
 import { login,register,logout } from '@/api/login';
-const bannerImage = require('../../assets/images/home/banner.png');
 export default {
 	namespaced: true,
 	state: {
@@ -137,43 +136,6 @@ export default {
 					reject(error)
 				})
 			})
-		},
-		getUserInfo({ commit, state }, value = false) {
-			if (value != state.footerGet[0]) {
-				state.footerGet[0] = value;
-				if (!value) return;
-			}
-			getUserInfo({}).then(data => {
-				sessionStorage.setItem('storageInfo', JSON.stringify(data));
-				sessionStorage.setItem('newsStatus', JSON.parse(sessionStorage.getItem('storageInfo')).read_msg);
-				data.income_rand_infos = data.income_rand_infos || [];
-				data.promote_rand_infos = data.promote_rand_infos || [];
-				if (!data.lunbo || data.lunbo.length == 0) {
-					data.lunbo = [
-						{
-							url: bannerImage,
-							open_url: '',
-						},
-						{
-							url: bannerImage,
-							open_url: '',
-						},
-						{
-							url: bannerImage,
-							open_url: '',
-						},
-					];
-				} else {
-					data.lunbo.sort((a, b) => {
-						if (a.sort == b.sort) {
-							return a.itime > b.itime ? 1 : -1;
-						} else {
-							return a.sort > b.sort ? 1 : -1;
-						}
-					});
-				}
-				commit('userInfo', data);
-			});
 		},
 		logoutUser({ state }) {
 			return new Promise((resolve, reject) => {
