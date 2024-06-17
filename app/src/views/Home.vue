@@ -210,7 +210,6 @@ export default {
     activated(){
         this.activeName="";
         this.initSpread();
-        // this.initNotic();
         this.initWechatList();
     },
     mounted() {
