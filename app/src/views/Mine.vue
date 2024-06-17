@@ -78,7 +78,7 @@
                     <van-button v-clipboard:copy="invite_code" v-clipboard:success="copySuccess">复制邀请码</van-button>
                 </div>
             </div>
-            <div class="share_box share_first">
+            <div class="share_box share_last">
                 <div class="share_link">
                     <p>链接：{{invit_link+invite_code||'...'}}</p>
                 </div>
@@ -86,11 +86,11 @@
                     <van-button v-clipboard:copy="userInfo.share_url+'?r='+invite_code" v-clipboard:success="copySuccess">复制链接</van-button>
                 </div>
             </div>
-            <div class="share_box share_last">
+            <!-- <div class="share_box share_last">
                 <div class="share_link">
                     <p>下载兼职APP</p>
                 </div>
-            </div>
+            </div> -->
             <!-- <div class="poster-area">
                 <div class="poster_img" ref="posterHtml">
                     <van-button type="danger" @click="downApp">下载i兼职APP</van-button>
