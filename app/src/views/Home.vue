@@ -31,18 +31,26 @@
                             </template>
                             <div class="code-mian">
                                 <div class="code_area">
-                                    <div class="area_icon" @click="showProvince=true">
-                                        <img class="weizhi_icon" src="../assets/images/home/weizhi.png" alt="" srcset="">
-                                        <span class="area_name">{{loginArea||'~'}}</span>
-                                        <img class="down_icon" src="../assets/images/home/xiala_icon.png">
+                                    <div>
+                                        <div class="area_icon" @click="showProvince=true">
+                                            <img class="weizhi_icon" src="../assets/images/home/weizhi.png" alt="" srcset="">
+                                            <span class="area_name">{{loginArea||'~'}}</span>
+                                            <img class="down_icon" src="../assets/images/home/xiala_icon.png">
+                                        </div>
+                                        <van-radio-group icon-size="17px" v-model="num_type" shape="square" direction="horizontal">
+                                            <van-radio name="1">个人</van-radio>
+                                            <van-radio name="2">商业</van-radio>
+                                        </van-radio-group>
                                     </div>
-                                    <div class="update_btn">
+                                    <!-- <div>
                                         <van-radio-group v-model="num_type" shape="square" direction="horizontal">
                                             <van-radio name="1">个人</van-radio>
                                             <van-radio name="2">商业</van-radio>
                                         </van-radio-group>
+                                    </div> -->
+                                    <div class="update_btn">
                                         <!-- <van-button type="primary" @click.stop :disabled="countTime>0&&countTime<60" @click="showProvince=true">修改</van-button> -->
-                                        <!-- <van-button :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime==60?'刷新二维码':countTime+'s后刷新'}}</van-button> -->
+                                        <van-button :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime==60?'刷新二维码':countTime+'s后刷新'}}</van-button>
                                     </div>
                                 </div>
                                 <div class="code-tips">
@@ -50,18 +58,11 @@
                                     <!-- <p></p> -->
                                 </div>
                                 <div class="qr-code" v-show="errState">
-                                    <!-- <van-loading v-if="qrCodeImg==''" size="24px">加载中...</van-loading> -->
                                     <div ref="qrcodeImg" id="qrcodeImg"></div>
-                                    <!-- <img v-else :src="qrCodeImg" alt=""> -->
                                 </div>
                                 <div class="err_code" v-show="!errState">
-                                    <div style="position: relative;">
-                                        <img src="../assets/images/home/qr_err.png" alt="" srcset="">
-                                        <div class="refresh_btn">
-                                            <!-- <van-button type="primary" @click.stop :disabled="countTime>0&&countTime<60" @click="showProvince=true">修改</van-button> -->
-                                            <van-button icon="replay" :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime==60?'刷新二维码':countTime+'s后刷新'}}</van-button>
-                                        </div>
-                                    </div>
+                                    <van-loading v-if="isRqLoding" size="24px">加载中...</van-loading>
+                                    <img v-else src="../assets/images/home/qr_err.png" alt="" srcset="">
                                 </div>
                                 <!-- <van-button type="danger" :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime ==60?'刷新二维码':countTime+'s后刷新'}}</van-button> -->
                                 <p>手机端WhatsApp扫码点击确认后，可点击收起！</p>
@@ -161,6 +162,7 @@ export default {
             countTime:60,
             refreState:false,
             showProvince:false,
+            isRqLoding:false,
 			lableItem:['WS账号','状态','操作'],
             statusOption:["","离线","在线","登录中","登录失败","离线中"],
             wechaList:[],
@@ -229,6 +231,7 @@ export default {
         },
         initQrcode(row,tips){
             this.settime();
+            this.isRqLoding = true;
             getqrcode({account_type:Number(this.num_type),country_name:this.loginArea,country_code:String(this.loginCode)}).then(res => {
                 if(res.qr_code){
                     this.errState = true;
@@ -251,6 +254,8 @@ export default {
                 } else {
                     clearInterval(this.timer);
                     this.countTime = 60;
+                    this.errState = false;
+                    this.$refs.qrcodeImg.textContent="";
                 }
             }, 1000);
 		},
@@ -272,6 +277,7 @@ export default {
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.L
             })
+            this.isRqLoding = false;
         },
         handelBtn(row){
             let tipsText = row.wx_state===0?'上线':'下线'
@@ -526,23 +532,25 @@ export default {
                     border-bottom: none;
                     .code_area{
                         width: 100%;
-                        height: 72px;
+                        height: 116px;
                         display: flex;
-                        padding: 0 20px;
-                        border-radius: 40px;
+                        padding: 10px 20px;
+                        border-radius: 8px;
                         box-sizing: border-box;
+                        justify-content:space-between;
                         background-color: #F6F6F6;
                         .area_icon{
-                            flex-grow: 1;
+                            // flex-grow: 1;
                             display: flex;
+                            margin-bottom: 10px;
                             align-items: center;
                             .weizhi_icon{
-                                width:34px;
-                                height: 32px;
+                                width:36px;
+                                height: 34px;
                             }
                             .down_icon{
                                 width:28px;
-                                margin-left: 8px;
+                                margin-left: 12px;
                             }
                             .text_left{
                                 color: #939393;
@@ -559,6 +567,18 @@ export default {
                             font-size: 24px;
                             display: flex;
                             align-items: center;
+                            .van-button{
+                                width: auto;
+                                height: max-content;
+                                padding: 0;
+                                outline: none;
+                                border: none;
+                                color: #ff976a; 
+                                background: transparent;
+                            }
+                            .van-button::before{
+                                background-color:transparent!important;
+                            }
                         }
                     }
                     .code-tips{
