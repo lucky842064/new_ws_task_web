@@ -188,7 +188,7 @@
                                             <i slot="reference" class="el-icon-edit" @click.stop="editGroup(item, 2)" />
                                         </el-popover>
                                         <el-popconfirm :title="$t('sys_c128')" @confirm="delGroup(item, idx)" :confirm-button-text="$t('sys_c024')" :cancel-button-text="$t('sys_c023')" icon="el-icon-info">
-                                            <i slot="reference" class="el-icon-delete" @click.stop></i>
+                                            <i slot="reference" class="el-icon-delete" @click.stop v-if="item.is_default!=1"></i>
                                         </el-popconfirm>
                                     </div>
                                 </div>
