@@ -17,7 +17,7 @@
                         <van-icon class="down_img" name="arrow-down" style="transition: all 200ms linear" :style="{ transform: `rotate(${showState ? 180 : 0}deg)`}" />
                     </div>
                     <div class="tab_nav cash_nav" @click="pulldownState">
-                        总收益：<span style="color:#F52C2C;">{{formatMoney(total_point)}}元</span> 
+                        总收益：<span style="color:#F52C2C;">{{total_point||0}}元</span> 
                     </div>
                 </div>
             </div>
