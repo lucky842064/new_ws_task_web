@@ -148,8 +148,8 @@ const routes = [{
         }
     },
     {
-        path: "/forgot-password",
-        name: "ForgotPassword",
+        path: "/forget_pwd",
+        name: "forget_pwd",
         component: ForgotPassword,
         meta: {
             title: '',

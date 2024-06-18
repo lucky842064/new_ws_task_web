@@ -7,6 +7,10 @@ export const login = (param) => {
 export const register = (param) => {
     return Post("adminmember/register", param, {sendToken: false })
 }
+// 修改密码
+export const changepwd = (param) => {
+    return Post("adminmember/changepwd", param, {sendToken: false })
+}
 // 退出登录
 export const logout = (param) => {
     return Post("adminmember/loginout", param)

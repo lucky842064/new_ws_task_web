@@ -43,7 +43,7 @@ export default {
 			this.$router.push("/register")
 		},
 		forgetFunc(){
-
+			this.$router.push("/forget_pwd")
 		},
 		//登录
 		handleLogin() {

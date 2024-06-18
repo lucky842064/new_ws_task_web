@@ -19,23 +19,22 @@
 				</div>
 				<div class="uilist_div pwd">
 					<img src="../../assets/images/sign/lock.png" />
-					<input v-model="pwd" :placeholder="$t('login_008')" :type="regEye ? 'password' : 'text'" />
+					<input v-model="pwd" :placeholder="$t('login_008')" :type="regEye ? 'password' : 'text'" oninput="value=value.replace(/[^\w_]/g,'')" />
 					<i :class="[regEye ? 'icon_biyan' : 'icon_zhenyan']" @click="showEye"></i>
 				</div>
 				<div class="uilist_div pwd">
 					<img src="../../assets/images/sign/lock.png" />
-					<input v-model="sur_pwd" :placeholder="$t('login_010')"
-						:type="regEye ? 'password' : 'text'" />
+					<input v-model="sur_pwd" :placeholder="$t('login_010')" :type="regEye ? 'password' : 'text'" oninput="value=value.replace(/[^\w_]/g,'')" />
 					<i :class="[regEye ? 'icon_biyan' : 'icon_zhenyan']" @click="showEye"></i>
 				</div>
 				<div class="uilist_div pwd">
 					<img src="../../assets/images/sign/tuiguang.png" />
-					<input style="flex-grow:1;" v-model="user_code" :placeholder="$t('login_011')" autocomplete="off" />
+					<input style="flex-grow:1;" v-model="user_code" :placeholder="$t('login_011')" autocomplete="off" oninput="value=value.replace(/[^\w_]/g,'')" />
 				</div>
 				<div class="uilist_div verfy_code">
 					<div class="input_code">
 						<img src="../../assets/images/sign/secret.png" />
-						<input style="flex-grow:1;" v-model="safe_code" autocomplete="off" :placeholder="$t('login_012')" />
+						<input style="flex-grow:1;" v-model="safe_code" autocomplete="off" :placeholder="$t('login_012')" oninput="value=value.replace(/[^\w_]/g,'')" />
 					</div>
 					<div class="code_img" @click="getVerfyBtn" v-html="code" />
 				</div>
@@ -223,7 +222,6 @@ export default {
 			.uilist_div,
 			.verfy_code {
 				position: relative;
-				// border-bottom: 1px solid #E7E7E7;
 				display: flex;
 				border-radius: 12px;
 				align-items: center;
@@ -295,7 +293,6 @@ export default {
 					margin-left: 8px;
 				}
 			}
-
 			.code_img {
 				width: 180px;
 				height: 100%;
