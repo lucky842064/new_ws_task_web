@@ -162,6 +162,22 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/userManage',
+    component: Layout,
+    name: 'userManage',
+    meta: { title:i18n.t('sys_m061'),icon: 'el-icon-s-custom' },
+    children: [
+      {
+        path: '/user_list',
+        component: () => import('@/views/userManage/user_list'),
+        name: 'user_list',
+        meta: {
+          title:i18n.t('sys_m062'),
+        }
+      }
+    ]
+  },
+  {
     path: '/staff',
     component: Layout,
     name: 'staff',

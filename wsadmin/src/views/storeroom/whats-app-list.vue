@@ -254,6 +254,11 @@
                         </template>
                         <template slot-scope="scope"> {{ accountType[scope.row.account_type] }}</template>
                     </u-table-column>
+                    <u-table-column prop="fuser_name" :label="$t('sys_q134')" minWidth="100">
+                        <template slot-scope="scope">
+                            <span>{{ scope.row.fuser_name?scope.row.fuser_name:"-" }}</span>
+                        </template>
+                    </u-table-column>
                     <u-table-column prop="first_login_time" :label="$t('sys_g014')+'/'+$t('sys_g015')" width="180">
                         <template slot-scope="scope">
                             {{ scope.row.first_login_time > 0 ? $baseFun.resetTime(scope.row.first_login_time * 1000) : "-" }}/</br>
@@ -1098,6 +1103,7 @@ export default {
             this.initNumberList();
         },
         onlineHandle(row){
+            this.setIpType=100;
             this.setIpName = row.item;
             this.popconfirm();
         },
