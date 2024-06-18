@@ -203,7 +203,7 @@
                     <i slot="reference" class="el-icon-info"></i>
                     <div v-html="$t('sys_mat007',{value:checkIdArry.length})"></div>
                 </div>
-                <u-table @sort-change="sorthandle" :data="accountDataList" row-key="id" use-virtual border height="580" v-loading="loading"
+                <u-table @sort-change="sorthandle" :data="accountDataList" row-key="id" use-virtual border height="700" v-loading="loading"
                     element-loading-spinner="el-icon-loading" style="width: 100%;" ref="serveTable" showBodyOverflow="title" :total="model1.total" 
                     :page-sizes="pageOption" :page-size="model1.limit" :current-page="model1.page" :pagination-show="true"
                     @selection-change="handleSelectionChange" @row-click="rowSelectChange" @handlePageSize="switchPage">

@@ -31,14 +31,19 @@
                     </u-table-column>
                     <u-table-column prop="account" :label="$t('sys_g027')" minWidth="130" />
                     <u-table-column prop="invite_code" :label="$t('sys_q133')" minWidth="130" />
-                    <u-table-column prop="nick_name" :label="$t('sys_q134')" minWidth="100">
+                    <u-table-column prop="fuser_name" :label="$t('sys_q134')" minWidth="100">
                         <template slot-scope="scope">
-                            {{ scope.row.nick_name?scope.row.nick_name:"-" }}
+                            {{ scope.row.fuser_name?scope.row.fuser_name:"-" }}
                         </template>
                     </u-table-column>
-                    <u-table-column prop="nick_name" :label="$t('sys_q135')" minWidth="100">
+                    <u-table-column prop="tuser_name" :label="$t('sys_q135')" minWidth="100">
                         <template slot-scope="scope">
-                            {{ scope.row.nick_name?scope.row.nick_name:"-" }}
+                            {{ scope.row.tuser_name?scope.row.tuser_name:"-" }}
+                        </template>
+                    </u-table-column>
+                    <u-table-column prop="level" :label="$t('sys_q136')" minWidth="100">
+                        <template slot-scope="scope">
+                            {{ scope.row.level?scope.row.level:"-" }}
                         </template>
                     </u-table-column>
                     <u-table-column prop="first_login_time" :label="$t('sys_q137')" width="180">
