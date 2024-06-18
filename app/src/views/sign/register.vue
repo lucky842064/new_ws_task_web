@@ -71,6 +71,10 @@ export default {
 		}
 	},
 	created() {
+		let url = window.location.search;
+		if (url.indexOf("=") > -1) {
+			this.user_code = url.split("=").pop();
+		}
 		this.timestamp = String(new Date().getTime());
 		this.getVerfyBtn();
 	},

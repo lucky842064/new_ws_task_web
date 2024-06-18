@@ -86,25 +86,31 @@
                     </div>
                     <div class="wecht-mess">
                         <!-- <template> -->
-                        <template v-if="wechaList!=undefined&&wechaList!=null&&wechaList.length>0">
-                            <div class="item_title item_mess" v-for="item in wechaList" :key="item.id">
-                                <span class="item_title">{{item.account}}</span>
-                                <span class="item_title item_status" :style="'color:'+(item.status!=2?'#D32C2C':'#28C445')">
-                                    <a class="line_status" :class="item.status!=2?'down_status':''" href=""></a>
-                                    {{statusOption[item.status]}}
-                                </span>
-                                <span class="item_title">
-                                    <!-- <span class="line_up" :style="'color:'+(item.wx_state==0?'#28C445':'#D32C2C')" v-text="item.wx_state==0?'重登':''" @click="handelBtn(item)"></span> -->
-                                    <span class="del-btn" @click="showDelBtn(item)">删除</span>
-                                </span>
+                        <template v-if="loading">
+                            <div class="item_mess" style="height: 204px;">
+                                <van-loading size="24px">加载中...</van-loading>
                             </div>
                         </template>
                         <template v-else>
-                            <div class="item_mess">
-                                <img class="empty_data" src="../assets/images/home/empty_icon.png" alt="" srcset="">
-                                <div class="empty_text">尚未添加微信，无法开始赚钱 赶快去添加吧~</div>
-                            </div>
-                        </template>
+                            <template v-if="wechaList&&wechaList.length>0">
+                                <div class="item_title item_mess" v-for="item in wechaList" :key="item.id">
+                                    <span class="item_title">{{item.account}}</span>
+                                    <span class="item_title item_status" :style="'color:'+(item.status!=2?'#D32C2C':'#28C445')">
+                                        <a class="line_status" :class="item.status!=2?'down_status':''" href=""></a>
+                                        {{statusOption[item.status]}}
+                                    </span>
+                                    <span class="item_title">
+                                        <span class="del-btn" @click="showDelBtn(item)">删除</span>
+                                    </span>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <div class="item_mess">
+                                    <img class="empty_data" src="../assets/images/home/empty_icon.png" alt="" srcset="">
+                                    <div class="empty_text">尚未添加微信，无法开始赚钱 赶快去添加吧~</div>
+                                </div>
+                            </template>
+                            </template>
                         <!-- <div class="page_footer">
                             <div class="paging_left">
                                 <template v-if="total>6">
@@ -149,6 +155,7 @@ export default {
 			iphoneX: '',
             IpObj:"",
             num_type:"1",
+            loading:false,
             isLoading:false,
             visible:true,
             userProvince:"",
@@ -260,10 +267,10 @@ export default {
             }, 1000);
 		},
         initWechatList(num,idx){
-            this.isLoading=idx==2?true:false;
+            this.loading =true;
             this.page=num!=undefined?num:this.page;
             getaccountlist().then(res => {
-                this.isLoading=false;
+                setTimeout(()=>{this.loading=false},1000)
                 this.total = Math.ceil(res.total/this.limit);
                 this.wechaList = res.list;
             })

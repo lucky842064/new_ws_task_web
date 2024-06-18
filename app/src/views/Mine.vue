@@ -80,10 +80,10 @@
             </div>
             <div class="share_box share_last">
                 <div class="share_link">
-                    <p>链接：{{invit_link+invite_code||'...'}}</p>
+                    <p>链接：{{invit_link||'...'}}</p>
                 </div>
                 <div class="share_btn">
-                    <van-button v-clipboard:copy="userInfo.share_url+'?r='+invite_code" v-clipboard:success="copySuccess">复制链接</van-button>
+                    <van-button v-clipboard:copy="invit_link+'?r='+invite_code+'#/register'" v-clipboard:success="copySuccess">复制链接</van-button>
                 </div>
             </div>
             <!-- <div class="share_box share_last">
