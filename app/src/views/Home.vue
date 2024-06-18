@@ -37,24 +37,24 @@
                                             <span class="area_name">{{loginArea||'~'}}</span>
                                             <img class="down_icon" src="../assets/images/home/xiala_icon.png">
                                         </div>
-                                        <van-radio-group icon-size="17px" v-model="num_type" shape="square" direction="horizontal">
+                                        <!-- <van-radio-group icon-size="17px" v-model="num_type" shape="square" direction="horizontal">
                                             <van-radio name="1">个人</van-radio>
                                             <van-radio name="2">商业</van-radio>
-                                        </van-radio-group>
+                                        </van-radio-group> -->
                                     </div>
-                                    <!-- <div>
+                                    <div>
                                         <van-radio-group v-model="num_type" shape="square" direction="horizontal">
                                             <van-radio name="1">个人</van-radio>
                                             <van-radio name="2">商业</van-radio>
                                         </van-radio-group>
-                                    </div> -->
-                                    <div class="update_btn">
-                                        <!-- <van-button type="primary" @click.stop :disabled="countTime>0&&countTime<60" @click="showProvince=true">修改</van-button> -->
-                                        <van-button :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime==60?'刷新二维码':countTime+'s后刷新'}}</van-button>
                                     </div>
+                                    <!-- <div class="update_btn">
+                                        <van-button type="primary" @click.stop :disabled="countTime>0&&countTime<60" @click="showProvince=true">修改</van-button>
+                                        <van-button :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime==60?'刷新二维码':countTime+'s后刷新'}}</van-button>
+                                    </div> -->
                                 </div>
                                 <div class="code-tips">
-                                    <p>二维码处于灰色破损状态时，点击刷新二维。WhatsApp扫码,切勿长按识別二维码且截图保存扫码无效!</p>
+                                    <p>二维码处于灰色破损状态时，点击刷新二维。WhatsApp扫码,切勿长按识別二维码且截图保存扫码无效! {{ countTime}}s</p>
                                     <!-- <p></p> -->
                                 </div>
                                 <div class="qr-code" v-show="errState">
@@ -63,8 +63,8 @@
                                 <div class="err_code" v-show="!errState">
                                     <van-loading v-if="isRqLoding" size="24px">加载中...</van-loading>
                                     <img v-else src="../assets/images/home/qr_err.png" alt="" srcset="">
+                                    <van-button v-show="!isRqLoding" icon="replay" :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime==60?'刷新二维码':countTime+'s后刷新'}}</van-button>
                                 </div>
-                                <!-- <van-button type="danger" :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime ==60?'刷新二维码':countTime+'s后刷新'}}</van-button> -->
                                 <p>手机端WhatsApp扫码点击确认后，可点击收起！</p>
                                 <p>（等待3-5分钟，点击刷新列表查看WhatsApp状态）</p>
                             </div>
@@ -532,10 +532,11 @@ export default {
                     border-bottom: none;
                     .code_area{
                         width: 100%;
-                        height: 116px;
+                        height: 74px;
                         display: flex;
-                        padding: 10px 20px;
+                        padding: 0 20px;
                         border-radius: 8px;
+                        align-items: center;
                         box-sizing: border-box;
                         justify-content:space-between;
                         background-color: #F6F6F6;
@@ -604,11 +605,23 @@ export default {
                     }
                     .err_code{
                         position: relative;
-                        // width: 324px;
-                        // height: 324px;
-                        // span{
-                        //     font-size: 12px;
-                        // }
+                        .van-button{
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            margin: 0;
+                            transform: translate(-50%,-50%);
+                            width: auto;
+                            height: max-content;
+                            padding: 0;
+                            outline: none;
+                            border: none;
+                            color: #ff976a; 
+                            background: transparent;
+                        }
+                        .van-button::before{
+                            background-color:transparent!important;
+                        }
                         .refresh_btn{
                             width: max-content;
                             display: flex;
@@ -616,18 +629,6 @@ export default {
                             top: 50%;
                             left: 50%;
                             transform: translate(-50%,-50%);
-                            .van-button{
-                                width: auto;
-                                height: max-content;
-                                padding: 0;
-                                outline: none;
-                                border: none;
-                                color: #ff976a; 
-                                background: transparent;
-                            }
-                            .van-button::before{
-                                background-color:transparent!important;
-                            }
                         }
                     }
                     .van-button{
