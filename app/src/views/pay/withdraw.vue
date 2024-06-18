@@ -81,7 +81,7 @@ export default {
 			curIndex:"0",
 			WithdMoney:0,
 			title: '温馨提示',
-			personList:["提现到银行卡","USDT账户确认"],
+			personList:["提现到银行卡","提现到USDT账户"],
 			radio: '',
 			putValue: null,
 			collectText: '收款账号',
