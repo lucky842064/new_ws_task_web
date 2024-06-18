@@ -71,6 +71,7 @@ export default {
             limit: 100,
             total: 0,
             account: "",
+            loading:false,
             checkIdArry:[],
             checkAccount:[],
             accountDataList:[],
