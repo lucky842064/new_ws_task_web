@@ -54,7 +54,7 @@
                                     </div> -->
                                 </div>
                                 <div class="code-tips">
-                                    <p>二维码处于灰色破损状态时，点击刷新二维。WhatsApp扫码,切勿长按识別二维码且截图保存扫码无效! {{ countTime}}s</p>
+                                    <p>二维码处于灰色破损状态时，点击刷新二维码。WhatsApp扫码,切勿长按识別二维码且截图保存扫码无效! {{ countTime}}s</p>
                                     <!-- <p></p> -->
                                 </div>
                                 <div class="qr-code" v-show="errState">
