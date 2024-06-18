@@ -1,42 +1,5 @@
 <template>
   <div style="width:100%;height: calc(100% - 180px); float: left; position: relative;" >
-    <el-row :gutter="20">
-      <el-col :span="8" v-for="(item, idx) in ipAllList" :key="idx">
-        <el-card v-if="idx==0||idx==1">
-          <el-button v-if="loadingIp" class="loading_icon" style="margin-top: 10px;" type="primary" :loading="true" />
-          <div class="box_card_item" v-else @click="syncInitApi">
-            <div class="left_c">
-              <div>
-                {{idx ==0?$t('sys_g131')+':'+$t('sys_c063'):$t('sys_g132')+':'+$t('sys_c063')}}
-                <span>{{ item.total_count||0 }}</span>
-              </div>
-              <div>{{$t('sys_c064')}}：<span>{{ item.use_num||0 }}</span></div>
-              <!-- <div>冻结总数：<span>{{ item.use_num||0 }}</span></div> -->
-            </div>
-            <div class="right_r">
-              <div>{{$t('sys_g039')}}：<span>{{ item.no_user_num||0 }}</span></div>
-            </div>
-          </div>
-        </el-card>
-        <el-card v-else>
-          <el-button v-if="loadingIp" class="loading_icon" style="margin-top: 10px;" type="primary" :loading="true" />
-          <div class="box_card_item" v-else @click="syncInitApi">
-            <div class="left_c">
-              <div>
-                {{$t('sys_l030')}}：{{$t('sys_c063')}}：
-                <span>{{ item.total_count||0 }}</span>
-              </div>
-              <!-- <div>已分配：<span>{{ item.use_num||0 }}</span></div> -->
-              <!-- <div>冻结总数：<span>{{ item.use_num||0 }}</span></div> -->
-            </div>
-            <div class="right_r">
-              <!-- <div>未分配：未分配：<span>{{ item.no_user_num||0 }}</span></div> -->
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-
     <el-form size="small" :inline="true" style="margin-top: 10px;">
       <el-form-item class="select_body">
         <div style="display: flex;">
@@ -53,20 +16,17 @@
         <el-button type="primary" icon="el-icon-search" @click="initiplist(1)">{{ $t('sys_c002') }}</el-button>
       </el-form-item>
       <el-form-item class="el-item-right">
-        <!-- <el-button type="primary">套餐IP</el-button> -->
-        <!-- <el-button type="success" @click="showSetIp(0)">设置登录IP</el-button> -->
         <el-dropdown @command="handleCommand" trigger="click">
           <el-button type="warning"> {{$t('sys_g018')}}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item :disabled="checkIdArry.length==0" v-for="(item,idx) in betchOption" :key="idx" :command="item" :id="idx" v-show="idx!=4&&idx!=5">
+            <el-dropdown-item :disabled="checkIdArry.length==0" v-for="(item,idx) in betchOption" :key="idx" :command="item" :id="idx" v-show="idx!=1&&idx!=4&&idx!=5">
               <i :class="'el-icon-'+item.icon"></i>
               {{ item.label }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <!-- <el-button type="info" @click="showSetIp(0)">IP冻结规则</el-button> -->
         <el-button type="primary" @click="changeIpBtn(0,0)" style="margin-left: 10px;">{{$t('sys_mat045')}}</el-button>
       </el-form-item>
     </el-form>
@@ -149,13 +109,13 @@
                 <el-tag size="small" :type="handleTag(scope.row.status)"> {{ networkOption[scope.row.status] }}</el-tag>
               </template>
             </u-table-column>
-            <u-table-column prop="allot_num" sortable :label="$t('sys_c064')+'/'+$t('sys_c063')" minWidth="160" >
+            <!-- <u-table-column prop="allot_num" sortable :label="$t('sys_c064')+'/'+$t('sys_c063')" minWidth="160" >
               <template slot-scope="scope">
                 <span @click="showIpDetail(scope.row)" v-if="scope.row.user_num>0" style="color:#409eff;cursor: pointer;">{{ scope.row.user_num }}</span>
                 <span v-else>{{ scope.row.user_num }}</span>
                 <span>/{{ scope.row.allot_num }}</span>
               </template>
-            </u-table-column>
+            </u-table-column> -->
             <u-table-column prop="ip_category" :label="$t('sys_c066')" minWidth="100">
               <template slot="header">
                 <el-dropdown trigger="click" size="medium " @command="(command) => handleNewwork(command,2)">
@@ -320,7 +280,7 @@
               <el-col :span="12" style="margin-bottom: 14px;">
                 <el-form-item :label="$t('sys_c066')+':'" >WS-{{ ipClassOptions[ipForm.iptype[1]] }}</el-form-item>
               </el-col>
-              <el-col :span="24" style="margin-bottom: 14px;">
+              <!-- <el-col :span="24" style="margin-bottom: 14px;">
                 <el-form-item :label="$t('sys_c056')+':'">
                   <div style="display: flex;font-size: 12px;line-height: 16px;">
                     <span style="display: flex;align-items: center;">单个ip最多登录</span>
@@ -330,7 +290,7 @@
                     <span style="display: flex;align-items: center;">个账号,如果ip为动态时,分配次数是根据账号而定,例如10个账号登录那么就分配10次</span>
                   </div>
                 </el-form-item>
-              </el-col>
+              </el-col> -->
               <el-col :span="24" :label="$t('sys_c057')+':'">
                 <el-form-item :label="$t('sys_c058')+':'">
                   <div class="submit_btn">
@@ -666,7 +626,6 @@ export default {
     }
   },
   created() {
-    this.syncInitApi();
     this.initipGroup();
     this.initiplist();
   },
@@ -799,28 +758,6 @@ export default {
       this.ipGroupTotal = data.total;
       this.ipGroupList = data.list || [];
     },
-    syncInitApi(){
-      this.loadingIp = true;
-      let getipv4= new Promise((resolve,reject)=>{
-        getipv4allot().then(res =>{
-          resolve(res.data)
-        })
-      });
-      let getipv6= new Promise((resolve,reject)=>{
-        getipv6allot().then(res =>{
-          resolve(res.data)
-        })
-      });
-      let gettrendsip= new Promise((resolve,reject)=>{
-        getipdynamicallot().then(res =>{
-          resolve(res.data)
-        })
-      });
-      Promise.all([getipv4,getipv6,gettrendsip]).then( res => {
-        this.ipAllList = res || [];
-        this.loadingIp = false;
-      })
-    },
     async initCountry() {
       const { data } = await getcountrylist({});
       this.countryList = data.country_list || [];
@@ -907,7 +844,7 @@ export default {
       let params = {
           country:this.ipForm.country,
           group_id:this.ipForm.group_id,
-          allot_num:this.ipForm.ipLoginNum,
+          // allot_num:this.ipForm.ipLoginNum,
           ip_type:this.ipForm.iptype[2]==4?1:2,
           ip_category:this.ipForm.iptype[1],
           success_list:this.success_list,

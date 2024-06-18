@@ -1,27 +1,9 @@
 <template>
     <div style="width:100%;height: 100%; float: left; position: relative;">
-        <!-- 端口管理 -->
-        <el-row :gutter="20">
-            <el-col :span="6" v-for="(item, idx) in allPortList" :key="idx" v-show="item != ''">
-                <el-card>
-                    <div class="refsh_icon" @click="getPortNum">
-                        <i class="el-icon-refresh" size="16"></i>
-                    </div>
-                    <el-button v-if="loadingPort" class="loading_icon" type="primary" :loading="true"></el-button>
-                    <div class="box_card_item" v-else>
-                        <span class="port_title">{{ item.name }}</span>
-                        <span>{{ item.num }}</span>
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
         <!-- 筛选条件 -->
         <el-form size="small" :inline="true" style="margin-top: 10px;">
             <el-form-item>
                 <el-input clearable :placeholder="$t('sys_g006')" v-model="model1.account" />
-            </el-form-item>
-            <el-form-item>
-                <el-input clearable :placeholder="$t('sys_g007')" v-model="model1.staff_no" />
             </el-form-item>
             <el-form-item class="select_body">
                 <el-select class="select_ele" v-model="model1.select_sort" :placeholder="$t('sys_c052')" @change="initNumberList(1)">
@@ -123,7 +105,7 @@
             <!-- <el-form-item>
                 <el-button type="warning" :disabled="checkIdArry.length==0" @click="seatHandleBtn">{{ $t('sys_g017')}}</el-button>
             </el-form-item> -->
-            <el-form-item>
+            <!-- <el-form-item>
                 <el-dropdown @command="(command)=>{handleCommand(1,command)}" trigger="click">
                     <el-button type="primary"> {{ $t('sys_g054') }}
                         <i class="el-icon-arrow-down el-icon--right"></i>
@@ -135,7 +117,7 @@
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item>
                 <el-dropdown @command="(command)=>{handleCommand(2,command)}" trigger="click">
                     <el-button type="primary"> {{ $t('sys_g018') }}
@@ -254,54 +236,9 @@
                             <el-tag size="small" :type="handleTag(scope.row.status)"> {{ accountOptions[scope.row.status] }}</el-tag>
                         </template>
                     </u-table-column>
-                    <u-table-column prop="use_status" :label="$t('sys_g023')" minWidth="100">
-                        <template slot="header">
-                            <el-dropdown trigger="click" size="medium " @command="(command) => handleNewwork(command,2)">
-                            <span style="color:#909399" :class="[model1.use_status?'dropdown_title':'']"> {{ $t('sys_g023') }}
-                                <i class="el-icon-arrow-down el-icon--right" />
-                            </span>
-                            <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item :class="{'dropdown_selected':idx==model1.use_status}" v-for="(item,idx) in isUseOptions" :key="idx" :command="idx">{{ item==''?$t('sys_l053'):item }}</el-dropdown-item>
-                            </el-dropdown-menu>
-                            </el-dropdown>
-                        </template>
-                        <template slot-scope="scope">
-                            <el-tag size="small" :type="scope.row.use_status==1?'success':'danger'"> {{ isUseOptions[scope.row.use_status] }}</el-tag>
-                        </template>
-                    </u-table-column>
-                    <u-table-column prop="staff_no" :label="$t('sys_mat063')" minWidth="100">
-                        <template slot="header">
-                            <el-dropdown trigger="click" size="medium " @command="(command) => handleNewwork(command,4)">
-                                <span style="color:#909399" :class="[model1.staff_status?'dropdown_title':'']"> {{ $t('sys_mat063') }}
-                                    <i class="el-icon-arrow-down el-icon--right" />
-                                </span>
-                                <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item :class="{'dropdown_selected':idx==model1.staff_status}" v-for="(item,idx) in setOptions" :key="idx" :command="idx">{{ item==''?$t('sys_l053'):item }}</el-dropdown-item>
-                                </el-dropdown-menu>
-                            </el-dropdown>
-                        </template>
-                        <template slot-scope="scope">
-                            <span class="jump_link" @click.stop="jumpServeicBtn(scope.row,1)">{{ scope.row.staff_no?scope.row.staff_no:"-" }}</span>
-                        </template>
-                    </u-table-column>
                     <u-table-column prop="reason" show-overflow-tooltip :label="$t('sys_g025')" minWidth="100">
                         <template slot-scope="scope">
                             <span>{{ scope.row.reason?scope.row.reason:"-" }}</span>
-                        </template>
-                    </u-table-column>
-                    <u-table-column prop="work_id" :label="$t('sys_l057')" minWidth="200">
-                        <template slot="header">
-                            <el-dropdown trigger="click" size="medium " @command="(command) => handleNewwork(command,5)">
-                                <span style="color:#909399" :class="[model1.work_status?'dropdown_title':'']"> {{ $t('sys_g074') }}
-                                    <i class="el-icon-arrow-down el-icon--right" />
-                                </span>
-                                <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item :class="{'dropdown_selected':idx==model1.work_status}" v-for="(item,idx) in setOptions" :key="idx" :command="idx">{{ item==''?$t('sys_l053'):item }}</el-dropdown-item>
-                                </el-dropdown-menu>
-                            </el-dropdown>
-                        </template>
-                        <template slot-scope="scope">
-                            <span class="jump_link" @click.stop="jumpServeicBtn(scope.row,2)">{{ scope.row.work_id||"-" }}</span>
                         </template>
                     </u-table-column>
                     <u-table-column prop="account_type" :label="$t('sys_l057')" minWidth="100">
@@ -804,10 +741,6 @@ export default {
                     value:"account"
                 },
                 {
-                    label:this.$t('sys_g012'),
-                    value:"staff_no"
-                },
-                {
                     label:this.$t('sys_g013'),
                     value:"offline_time"
                 },
@@ -823,7 +756,7 @@ export default {
             // return ["",this.$t('sys_g011'),this.$t('sys_g012'),this.$t('sys_g013'), this.$t('sys_g014'), this.$t('sys_g015')]
         },
         onlineOption() {
-            return [this.$t('sys_g028'),this.$t('sys_g029'),this.$t('sys_g030')]
+            return [this.$t('sys_g028'),this.$t('sys_g030')]
         },
         betchOption() {
             return [
@@ -837,7 +770,7 @@ export default {
                 },
                 {
                     icon: "refresh",
-                    label: this.$t('sys_g043')
+                    label: ""
                 },
                 {
                     icon: "setting",
@@ -857,7 +790,7 @@ export default {
                 },
                 {
                     icon: "edit",
-                    label: this.$t('sys_g104')
+                    label: ""
                 },
                 // {},
                 {
@@ -902,8 +835,6 @@ export default {
         }
     },
     created() {
-        this.getPortNum();
-        //   this.syncInitApi();
         this.initNumberGroup();
         this.initNumberList();
     },
@@ -1091,17 +1022,6 @@ export default {
             this.numGroupTotal = data.total;
             this.numberGroupList = data.list || [];
         },
-        getPortNum() {
-            this.loadingPort = true;
-            getwaport({}).then(res => {
-                setTimeout(()=>{this.loadingPort = false;},500)
-                const port = res.data || "";
-                this.allPortList[0].num = port.port_num;
-                this.allPortList[1].num = port.least_num;
-                this.allPortList[2].num = port.account_num;
-                this.allPortList[3].num = port.online_num;
-            })
-        },
         editGroup(row, idx) {
             this.type = idx;
             this.group_name = '';
@@ -1178,30 +1098,8 @@ export default {
             this.initNumberList();
         },
         onlineHandle(row){
-            this.ipForm.ip_id="";
-            for (let k = 0; k < this.onlineOption.length; k++) {
-                if (k == row.idx) {
-                    this.setIpName = this.onlineOption[k];
-                    if (k == 1) {
-                        this.setIpType = 99; 
-                    }else{
-                        this.setIpType = 100; 
-                    }
-                }
-            }
-            if (this.setIpType == 100) {
-                this.popconfirm();
-                return;
-            }
-            this.setIpModel = true;
-            this.$nextTick(()=>{
-                this.$refs.ipForm.resetFields();
-                const _cascader = this.$refs.myCascader;
-                _cascader.$refs.panel.activePath = [];
-                _cascader.$refs.panel.checkedValue  = [];
-                _cascader.$refs.panel.syncActivePath()
-            })
-            this.countryList = [];
+            this.setIpName = row.item;
+            this.popconfirm();
         },
         seatHandleBtn(){
             this.is_staff = "";
