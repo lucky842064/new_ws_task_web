@@ -12,7 +12,7 @@
 							<span>{{ $t('buy_008') }}</span>
 						</div>
 						<div class="amount van-ellipsis">
-							{{ formatMoney(userInfo.point) || 0 }}
+							{{ userInfo.point || 50000 }}
 						</div>
 						<div class="btn-withdraw">
 							<van-button type="danger" @click="submitFn">{{ $t('mine_015') }}</van-button>
@@ -21,51 +21,21 @@
 				</div>
 				<div class="share_box">
 					<div class="share_link">
-						<span class="account_name" v-text="curIndex==0?'支付宝账号：':curIndex==1?'银行账号：':'USDT地址：'"></span>
-						<span class="account_text" style="color:#999999;" v-text="curIndex==0?userInfo.ali_no||'请添加支付宝账号':curIndex==1?userInfo.bank_no||'请添加银行账号':userInfo.usdt_trc||'请添加USDT地址'"></span>
-						<!-- <span style="color:#999999;" v-text="curIndex==0?userInfo.bank_no||'请添加银行账号':curIndex==1?userInfo.ali_no||'请添加支付宝账号':userInfo.usdt_trc||'请添加USDT地址'"></span> -->
+						<span class="account_name" v-text="curIndex==0?'银行账号：':'USDT地址：'"></span>
+						<span class="account_text" v-text="curIndex==0?userInfo.bank_no||'请添加银行账号':userInfo.usdt_trc||'请添加USDT地址'"></span>
 					</div>
 					<div class="share_btn" @click="bindCardBtn">
-						<van-button type="danger" @click="bindCardBtn">{{curIndex==0&&userInfo.ali_no!=''?'修改':curIndex==1&&userInfo.bank_no!=''?'修改':curIndex==2&&userInfo.usdt_trc!=''?'修改':'添加'}}</van-button>
+						<van-button type="danger" @click="bindCardBtn">{{curIndex==0&&userInfo.bank_no!=''?'修改':curIndex==2&&userInfo.usdt_trc!=''?'修改':'添加'}}</van-button>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- <div class="emport_area"></div> -->
 		<div class="tip">
-			<div class="bank_account pay_type" v-if="userInfo.put_type != ''">
-				<van-radio-group v-model="radio">
-					<van-cell-group>
-						<van-cell v-show="item != 1" v-for="item in userInfo.put_type" :key="item" :title="item==4?'银行卡':item==5?'支付宝':item==6?'TNG Wallet':item==7?'泰国银行卡':item==8?'USDT':item==9?'马来银行卡':''" clickable data-name="1" :border="false" @click="changeType(item)">
-							<van-radio slot="right-icon" :name="item" />
-						</van-cell>
-					</van-cell-group>
-				</van-radio-group>
-			</div>
-			<!-- <div class="bank_account">
-				<van-cell-group>
-					<van-field v-if="radio == '4'" :border="false" :readonly="true" v-model="userInfo.bank_no" label="银行卡" placeholder="银行卡" />
-					<van-field v-else-if="radio == '5'" :border="false" :readonly="true" v-model="userInfo.ali_no" label="支付宝" placeholder="支付宝号" />
-					<van-field v-else-if="radio == '6'" :border="false" :readonly="true" v-model="userInfo.tng_wallet_no" label="TNGWallet" placeholder="TNG Wallet" />
-					<van-field v-else-if="radio == '7'" :border="false" :readonly="true" v-model="userInfo.th_bank_no" label="泰国银行卡" placeholder="泰国银行卡" />
-					<van-field v-else-if="radio == '8'" :border="false" :readonly="true" v-model="userInfo.usdt_trc" 
-						label="USDT" placeholder="USDT" />
-					<van-field v-else-if="radio == '9'" :border="false" :readonly="true" v-model="userInfo.my_bank_no" 
-						label="马来银行卡" placeholder="马来银行卡" />
-				</van-cell-group>
-				<van-button class="revise_account" icon="arrow" type="primary" @click="goSet">{{ !withdraw_active ? '填写' : '修改' }}</van-button>
-			</div> -->
-			<div class="userinfo-point">账户余额：{{ formatMoney(userInfo.point || 0) }} 元</div>
 			<div class="cash_adverice">
 				<div class="title-tip">{{ $t('mine_016') }}</div>
 				<div>
-					<van-tag type="warning" />
-					{{ getTipMessage() }}
+					<van-tag type="warning" /> 最低体现金额100元
 				</div>
-				<!-- <div>
-					<van-tag type="warning" />
-					最低提现金额为{{userInfo.min_point_ali || ''}}元`
-				</div> -->
 				<template v-if="curIndex == 0 && userInfo.fee_ali != 0">
 					<div v-if="userInfo.fee_type_ali == 0">
 						<van-tag type="warning" />
@@ -94,80 +64,24 @@
 					<van-tag type="warning" />
 					本平台是第三方合作安全出款，收到款项后请勿转回。
 				</div>
-				<!-- <div v-if="userInfo.put_desc != ''" class="trends_content">
-					<van-tag type="warning" />
-					{{ userInfo.put_desc }}
-				</div> -->
 			</div>
 		</div>
-		<popDialog ref="showAuditModel" :title="title" titleContent="" :isCancel="true" :isConfirm="true" @confirm_btn="confirm_btn">
-			<template v-slot:content>
-				<template v-if="curIndex == 0">
-					<div class="custom_dialog__message" v-if="userInfo.point / 10000 > userInfo.min_point_ali">
-						<div class="custom_money">
-							<span class="symbol_icon">￥</span>
-							<input v-model="WithdMoney" placeholder="请输入金额" type="tel" pattern="[0-9]*" @blur="testingMoney" />
-						</div>
-						你本次申请提现{{userInfo.point/10000}}元, 每次提现收取
-						<span v-if="userInfo.fee_type_ali == 0">{{ userInfo.fee_ali }}元</span>
-						<span v-else-if="userInfo.fee_type_ali == 1">{{ userInfo.fee_ali }}%</span>
-						的手续费
-					</div>
-					<div class="custom_dialog__message" v-else>
-						你当前余额不够，最低提现{{ userInfo.usdt_min }}
-					</div>
-				</template>
-				<template v-if="curIndex == 1">
-					<div class="custom_dialog__message" v-if="userInfo.point / 10000 > userInfo.max_point_ali">
-						<div class="custom_money">
-							<span class="symbol_icon">￥</span>
-							<input v-model="WithdMoney" placeholder="请输入金额" type="tel" pattern="[0-9]*" @blur="testingMoney" />
-						</div>
-						你本次最多可提现{{ userInfo.max_point_ali }}元, 每次提现收取
-						<span v-if="userInfo.fee_type_ali == 0">{{ userInfo.fee_ali }}元</span>
-						<span v-else-if="userInfo.fee_type_ali == 1">{{ userInfo.fee_ali }}%</span>
-						的手续费
-					</div>
-					<div class="custom_dialog__message" v-else>
-						<div class="custom_money">
-							<span class="symbol_icon">￥</span>
-							<input v-model="WithdMoney" placeholder="请输入金额" type="tel" pattern="[0-9]*" @blur="testingMoney" />
-						</div>
-						你本次申请提现{{ formatMoney(getPutPoint()) }}, 每次提现收取
-						<span v-if="userInfo.fee_type_ali == 0">{{ userInfo.fee_ali }}元</span>
-						<span v-else-if="userInfo.fee_type_ali == 1">{{ userInfo.fee_ali }}%</span>
-						的手续费
-					</div>
-				</template>
-				<template v-if="curIndex == 2">
-					<div class="custom_dialog__message">
-						<div class="custom_money">
-							<span class="symbol_icon">￥</span>
-							<input v-model="WithdMoney" placeholder="请输入金额" type="tel" pattern="[0-9]*" @blur="testingMoney" />
-						</div>
-						你本次可提现{{ userInfo.point/10000}}元
-					</div>
-				</template>
-			</template>
-		</popDialog>
 	</div>
 </template>
 <script>
-import { mapState } from "vuex";
 import popDialog from '@/components/popDialog';
-import { boforeWeek, fmoney } from '@/utils/tool';
+import { fmoney } from '@/utils/tool';
 import { wealthinfo, putpoint } from '@/api/pay';
 import PageHeader from '@/components/Header';
 import { setTimeout } from 'timers';
 export default {
-	components: { PageHeader, popDialog },
+	components: { PageHeader },
 	data() {
 		return {
 			curIndex:"0",
 			WithdMoney:0,
 			title: '温馨提示',
-			personList:["提现到支付宝","提现到银行卡","USDT账户确认"],
-			dialogContent: '你本次提现5000元',
+			personList:["提现到银行卡","USDT账户确认"],
 			radio: '',
 			putValue: null,
 			collectText: '收款账号',
@@ -188,15 +102,10 @@ export default {
 			minCash: '',
 		};
 	},
-	computed: {
-        // ...mapState({
-        //     userInfo: state => state.User.userInfo
-        // })
-    },
 	created() {
 		// this.$store.dispatch('User/getUserInfo');
 		// this.loading = true;
-		this.getWealInfo();
+		// this.getWealInfo();
 	},
 	mounted() {
 		if (this.$route.params && this.$route.params.back) {
@@ -207,72 +116,7 @@ export default {
 		getWealInfo() {
 			wealthinfo().then(res => {
 				this.userInfo = res;
-				// console.log(this.userInfo);
-				// console.log(this.userInfo);
-				// if(this.userInfo.put_type !=""){
-				// 	this.userInfo.put_type = this.userInfo.put_type.split(",")
-				// }
-				// let backWeek = res.day_list;
-				// this.putValue = res.point;
-				// if (res.day_list != undefined) {
-				// 	for (let i = 0; i < backWeek.length; i++) {
-				// 		if (backWeek[i] == '1') {
-				// 			this.weekArry += '周一' + '、';
-				// 		} else if (backWeek[i] == '2') {
-				// 			this.weekArry += '周二' + '、';
-				// 		} else if (backWeek[i] == '3') {
-				// 			this.weekArry += '周三' + '、';
-				// 		} else if (backWeek[i] == '4') {
-				// 			this.weekArry += '周四' + '、';
-				// 		} else if (backWeek[i] == '5') {
-				// 			this.weekArry += '周五' + '、';
-				// 		} else if (backWeek[i] == '6') {
-				// 			this.weekArry += '周六' + '、';
-				// 		} else if (backWeek[i] == '7') {
-				// 			this.weekArry += '周日' + '、';
-				// 		}
-				// 	}
-				// }
-				// if (this.radio == '4') {
-				// 	this.withdraw_active = this.userInfo.bank_no;
-				// } else if (this.radio == '5') {
-				// 	this.withdraw_active = this.userInfo.ali_no;
-				// } else if (this.radio == '6') {
-				// 	this.withdraw_active = this.userInfo.tng_wallet_no;
-				// } else if (this.radio == '7') {
-				// 	this.withdraw_active = this.userInfo.th_bank_no;
-				// } else if (this.radio == '8') {
-				// 	this.withdraw_active = this.userInfo.usdt_trc;
-				// } else if (this.radio == '9') {
-				// 	this.withdraw_active = this.userInfo.my_bank_no;
-				// }
-				// this.weekArry = this.weekArry.substring(0, this.weekArry.length - 1);
-				// this.insufficientBalance = res.min_point > res.point;
-				// let usebank = this.userInfo.put_type;
-				// for (let l = 0; l < usebank.length; l++) {
-				// 	if(usebank[l] == 4 && this.userInfo.bank_no !=""){
-				// 		this.radio = '4';
-				// 		return;
-				// 	}else if(usebank[l] == 5 && this.userInfo.ali_no !=""){
-				// 		this.radio = '5';
-				// 		return;
-				// 	}else if(usebank[l] == 6 && this.userInfo.tng_wallet_no !=""){
-				// 		this.radio = '6';
-				// 		return;
-				// 	}else if(usebank[l] == 7 && this.userInfo.th_bank_no !=""){
-				// 		this.radio = '7';
-				// 		return;
-				// 	}else if(usebank[l] == 8 && this.userInfo.usdt_trc !=""){
-				// 		this.radio = '8';
-				// 		return;
-				// 	} else if(usebank[l] == 9 && this.userInfo.my_bank_no !=""){
-				// 		this.radio = '9';
-				// 		return;
-				// 	}
-				// }
-				}).finally(e => {
-					this.loading = false;
-				});
+			})
 		},
 		toFocus() {
 			this.$refs.pointField.focus();
@@ -291,19 +135,6 @@ export default {
 				this.$toast('当前不可提现');
 				return;
 			}
-			// if (this.radio == '4') {
-			// 	this.withdraw_active = this.userInfo.bank_no;
-			// } else if (this.radio == '5') {
-			// 	this.withdraw_active = !!this.userInfo.ali_no;
-			// } else if (this.radio == '6') {
-			// 	this.withdraw_active = this.userInfo.tng_wallet_no;
-			// } else if (this.radio == '7') {
-			// 	this.withdraw_active = this.userInfo.th_bank_no;
-			// } else if (this.radio == '8') {
-			// 	this.withdraw_active = this.userInfo.usdt_trc;
-			// } else if (this.radio == '9') {
-			// 	this.withdraw_active = this.userInfo.my_bank_no;
-			// }
 			if( this.curIndex==0&&this.userInfo.ali_no==''){
 				this.$toast('请先绑定支付宝');
 			}else if(this.curIndex==1&&this.userInfo.bank_no==''){
@@ -312,45 +143,8 @@ export default {
 				this.$toast('请先绑定USDT地址');
 			} else {
 				let point = this.getPutPoint();
-				// if (point == 0) {
-				// 	let message = this.getTipMessage();
-				// 	return this.$dialog.alert({
-				// 		title: this.$t('other_008'),
-				// 		message,
-				// 		confirmButtonText: this.$t('other_005'),
-				// 		showCancelButton: false,
-				// 		confirmButtonColor: '#4b5bc2',
-				// 	});
-				// }
 				this.$refs.showAuditModel.showDialog();
 			}
-			// else if(){
-			// 	this.$refs.showAuditModel.showDialog();
-			// }
-			// if (this.withdraw_active) {
-			// 	if (this.insufficientBalance) {
-			// 		this.balance_tip = true;
-			// 	} else {
-			// 		let point = this.getPutPoint();
-			// 		if (point == 0) {
-			// 			let message = this.getTipMessage();
-			// 			return this.$dialog.alert({
-			// 				title: this.$t('other_008'),
-			// 				message,
-			// 				confirmButtonText: this.$t('other_005'),
-			// 				showCancelButton: false,
-			// 				confirmButtonColor: '#4b5bc2',
-			// 			});
-			// 		}
-			// 		this.$refs.showAuditModel.showDialog();
-			// 	}
-			// } else {
-			// 	let tips = this.curIndex===0&&this.userInfobank_no=='' ? '请先绑定银行卡' : this.curIndex==1&&this.userInfoali_no==''?'请先绑定银行卡': ''
-			// 	this.$toast(tips);
-			// }
-		},
-		getTipMessage() {
-			return this.userInfo.hundred&&this.curIndex ==0?`支付宝提现金额必须是 ${this.userInfo.hundred} 的整数倍,最低提现金额为${this.userInfo.min_point_ali || ''}元` : `最低提现金额为${(this.curIndex===1?this.userInfo.min_point:this.userInfo.usdt_min) || ''}元`;
 		},
 		getPutPoint() {
 			let init = (this.userInfo.point || 0) / 10000;
@@ -413,13 +207,6 @@ export default {
 				});
 			});
 		},
-		// confirmSubmitFn: debounce(function() {
-		//     const Toast = this.$toast.loading({
-		//         duration: 3000,
-		//         forbidClick: true,
-		//         loadingType: "spinner"
-		//     });
-		// }),
 		onClickLeft() {
 			this.$router.go(-1);
 		},
@@ -440,7 +227,6 @@ export default {
         },
 		// 切换首款类型
 		changeType(idx) {
-			// this.collectText = idx == 4 ? '中国收款账号' :idx == 5 ? '中国支付宝号':idx == 6 ? '马来/TngWallet':idx == 7 ? '泰国银行卡': '';
 			if (this.radio == '4') {
 				this.withdraw_active = this.userInfo.bank_no;
 			} else if (this.radio == '5') {
@@ -526,7 +312,6 @@ export default {
 	}
 	.panel {
 		width: 100%;
-		height: 485px;
 		float: left;
 		box-sizing: border-box;
 		position: relative;
@@ -536,8 +321,10 @@ export default {
 		background-size: 100% 100%;
 		background-repeat: no-repeat;
 		.draw_main{
+			display: flex;
 			width: 100%;
-			padding: 30px 24px;
+			flex-direction: column;
+			padding: 30px 24px 0 24px;
 			box-sizing: border-box;
 			.card_box {
 				width: 100%;
@@ -605,7 +392,6 @@ export default {
 		.share_box{
 			width: 100%;
 			display: flex;
-			margin-bottom: 20px;
 			padding: 38px 32px;
 			box-sizing: border-box;
 			background: #FFE9E9;
@@ -632,7 +418,8 @@ export default {
 					color: #666666;
 				}
 				.account_text{
-					width: 328px;
+					width: max-content;
+					color:#999999;
 					overflow: hidden;
 					text-overflow:ellipsis;
 					white-space: nowra
@@ -646,17 +433,14 @@ export default {
 			}
 		}
 	}
-	.emport_area {
-		width: 100%;
-		height: 80px;
-		float: left;
-	}
 	.tip {
+		width: 100%;
+		display: flex;
 		font-size: 28px;
 		color: #666666;
 		line-height: 54px;
-		padding: 20px 30px;
-		margin-top: 70px;
+		padding: 0 30px;
+		flex-direction: column;
 		.bank_account {
 			width: 100%;
 			float: left;
