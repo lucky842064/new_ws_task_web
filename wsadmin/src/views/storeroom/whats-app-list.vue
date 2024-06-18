@@ -185,7 +185,7 @@
                                                 <el-button size="mini" type="text" @click="item.visible = false">{{ $t('sys_c023') }}</el-button>
                                                 <el-button type="primary" :loading="ipLoading" :disabled="!group_name.trim()" size="mini" @click="addGroup(item, 2)">{{ $t('sys_c024') }}</el-button>
                                             </div>
-                                            <i slot="reference" class="el-icon-edit" @click.stop="editGroup(item, 2)" />
+                                            <i slot="reference" class="el-icon-edit" @click.stop="editGroup(item, 2)" v-if="item.is_default!=1" />
                                         </el-popover>
                                         <el-popconfirm :title="$t('sys_c128')" @confirm="delGroup(item, idx)" :confirm-button-text="$t('sys_c024')" :cancel-button-text="$t('sys_c023')" icon="el-icon-info">
                                             <i slot="reference" class="el-icon-delete" @click.stop v-if="item.is_default!=1"></i>
