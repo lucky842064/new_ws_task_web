@@ -149,10 +149,13 @@
                 <el-tag size="small" :type="handleTag(scope.row.status)"> {{ networkOption[scope.row.status] }}</el-tag>
               </template>
             </u-table-column>
-            <u-table-column prop="allot_num" sortable :label="$t('sys_c064')+'/'+$t('sys_c063')" minWidth="160" >
+            <u-table-column sortable :label="$t('sys_c064')+'/'+$t('sys_c063')" minWidth="160" >
+              <template slot="header">
+                  <span> {{ $t('sys_c064') }}/{{ $t('sys_c063') }}</span>
+              </template>
               <template slot-scope="scope">
-                <span @click="showIpDetail(scope.row)" v-if="scope.row.user_num>0" style="color:#409eff;cursor: pointer;">{{ scope.row.user_num }}</span>
-                <span v-else>{{ scope.row.user_num }}</span>
+                <span v-if="scope.row.user_num===0">{{ scope.row.user_num }}</span>
+                <span @click="showIpDetail(scope.row)" v-else style="color:#409eff;cursor: pointer;">{{ scope.row.user_num }}</span>
                 <span>/{{ scope.row.allot_num }}</span>
               </template>
             </u-table-column>
@@ -702,12 +705,12 @@ export default {
       this.setIpName=this.$t('sys_c033');
     },
     sorthandle({column, prop, order}){
+      this.ipDataList = [];
       if (order) {
         this.model1.sort=order=='ascending'?'user_num':'-user_num';
       }else{
         this.model1.sort="";
       }
-      
       this.initiplist();
     },
     handleTag(type){
@@ -761,7 +764,6 @@ export default {
       this.getIpDetailList(1);
     },
     showIpDetail(row){
-      console.log(row);
       this.model2.ip_id = row.id;
       this.model2.proxy_ip = row.proxy_ip;
       this.alloctModel=true;
@@ -1116,7 +1118,6 @@ export default {
         this.ipForm.country="";
         this.ipForm.ip_time="";
         const _cascader = this.$refs.myCascader;
-        console.log(_cascader);
         if (_cascader) {
           _cascader.$refs.panel.activePath = [];
           _cascader.$refs.panel.checkedValue  = [];
