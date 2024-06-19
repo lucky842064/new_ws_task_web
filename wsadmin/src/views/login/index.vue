@@ -12,10 +12,10 @@
       </div> -->
       <div class="login-form">
         <div class="login-title">
-          <img class="icon" src="../../assets/login/avatar.png" alt="logo">
+          <!-- <img class="icon" src="../../assets/login/avatar.png" alt="logo"> -->
           <!-- <h2 class="title">{{ $t('sys_l002') }}</h2> -->
           <!-- <h2 class="title">iMX</h2> -->
-          <h2 class="title">三花任务管理系统</h2>
+          <h2 class="title">任务管理系统</h2>
         </div>
         <!-- <div class="account_type">
           <span class="left_text">{{$t('sys_l057')}}</span>
