@@ -105,7 +105,7 @@
             <!-- <el-form-item>
                 <el-button type="warning" :disabled="checkIdArry.length==0" @click="seatHandleBtn">{{ $t('sys_g017')}}</el-button>
             </el-form-item> -->
-            <!-- <el-form-item>
+            <el-form-item>
                 <el-dropdown @command="(command)=>{handleCommand(1,command)}" trigger="click">
                     <el-button type="primary"> {{ $t('sys_g054') }}
                         <i class="el-icon-arrow-down el-icon--right"></i>
@@ -117,7 +117,7 @@
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
-            </el-form-item> -->
+            </el-form-item>
             <el-form-item>
                 <el-dropdown @command="(command)=>{handleCommand(2,command)}" trigger="click">
                     <el-button type="primary"> {{ $t('sys_g018') }}
@@ -234,6 +234,21 @@
                         </template>
                         <template slot-scope="scope">
                             <el-tag size="small" :type="handleTag(scope.row.status)"> {{ accountOptions[scope.row.status] }}</el-tag>
+                        </template>
+                    </u-table-column>
+                    <u-table-column prop="status" :label="$t('sys_l057')" minWidth="100">
+                        <!-- <template slot="header">
+                            <el-dropdown trigger="click" size="medium " @command="(command) => handleNewwork(command,1)">
+                            <span style="color:#909399" :class="[model1.status?'dropdown_title':'']"> {{ $t('sys_q140') }}
+                                <i class="el-icon-arrow-down el-icon--right" />
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item :class="{'dropdown_selected':idx==model1.status}" v-for="(item,idx) in accountOptions" :key="idx" :command="idx">{{ item==''?$t('sys_l053'):item }}</el-dropdown-item>
+                            </el-dropdown-menu>
+                            </el-dropdown>
+                        </template> -->
+                        <template slot-scope="scope">
+                            {{ plantOption[scope.row.platform_type] }}
                         </template>
                     </u-table-column>
                     <u-table-column prop="reason" show-overflow-tooltip :label="$t('sys_g025')" minWidth="100">
@@ -761,7 +776,10 @@ export default {
             // return ["",this.$t('sys_g011'),this.$t('sys_g012'),this.$t('sys_g013'), this.$t('sys_g014'), this.$t('sys_g015')]
         },
         onlineOption() {
-            return [this.$t('sys_g028'),this.$t('sys_g030')]
+            return [this.$t('sys_g028'),this.$t('sys_g029'),this.$t('sys_g030')]
+        },
+        plantOption() {
+            return ["-",this.$t('sys_q141'),this.$t('sys_q142')]
         },
         betchOption() {
             return [
@@ -775,7 +793,7 @@ export default {
                 },
                 {
                     icon: "refresh",
-                    label: ""
+                    label: this.$t('sys_g043')
                 },
                 {
                     icon: "setting",
@@ -1103,9 +1121,29 @@ export default {
             this.initNumberList();
         },
         onlineHandle(row){
-            this.setIpType=100;
-            this.setIpName = row.item;
-            this.popconfirm();
+            for (let k = 0; k < this.onlineOption.length; k++) {
+                if (k == row.idx) {
+                    this.setIpName = this.onlineOption[k];
+                    if (k == 1) {
+                        this.setIpType = 99; 
+                    }else{
+                        this.setIpType = 100; 
+                    }
+                }
+            }
+            if (this.setIpType == 100) {
+                this.popconfirm();
+                return;
+            }
+            this.setIpModel = true;
+            this.$nextTick(()=>{
+                this.$refs.ipForm.resetFields();
+                const _cascader = this.$refs.myCascader;
+                _cascader.$refs.panel.activePath = [];
+                _cascader.$refs.panel.checkedValue  = [];
+                _cascader.$refs.panel.syncActivePath()
+            })
+            this.countryList = [];
         },
         seatHandleBtn(){
             this.is_staff = "";

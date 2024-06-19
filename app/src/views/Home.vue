@@ -2,8 +2,8 @@
     <div class="home-content">
         <div class="home_content">
             <van-swipe class="my_swipe" :autoplay="3000" indicator-color="white">
-                <van-swipe-item v-for="(item,idx) in list" :key="idx">
-                    <img :src="item" alt="">
+                <van-swipe-item v-for="(item,idx) in bannerList" :key="idx">
+                    <img :src="item.file_url" alt="">
                 </van-swipe-item>
             </van-swipe>
             <!-- <NoticeBar :isScroll= true :list="noticeCont" :from="true" /> -->
@@ -208,6 +208,7 @@ export default {
 	computed: {
 		...mapState({
 			userInfo: state => state.User.userInfo,
+            bannerList: state => state.User.bannerList
 		})
 	},
     created(){
@@ -221,6 +222,7 @@ export default {
         this.activeName="";
         this.initSpread();
         this.initWechatList();
+        this.$store.dispatch('User/plantCarousel');
     },
     mounted() {
         // this.initSpread();

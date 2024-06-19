@@ -178,6 +178,22 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/bannerManage',
+    component: Layout,
+    name: 'bannerManage',
+    meta: { title:i18n.t('sys_q138'),icon: 'el-icon-picture-outline' },
+    children: [
+      {
+        path: '/bannerList',
+        component: () => import('@/views/bannerManage/bannerList'),
+        name: 'bannerList',
+        meta: {
+          title:i18n.t('sys_q138'),
+        }
+      }
+    ]
+  },
+  {
     path: '/staff',
     component: Layout,
     name: 'staff',

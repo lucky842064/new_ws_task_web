@@ -19,4 +19,8 @@ export const logout = (param) => {
 export const getcode = (param) => {
     return Post("adminmember/code", param, {sendToken: false})
 }
+// 轮播
+export const getcarousellist = (param) => {
+    return Post("adminmember/getcarousellist", param)
+}
 
