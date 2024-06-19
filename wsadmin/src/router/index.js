@@ -162,14 +162,14 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/userManage',
+    path: '/registerManage',
     component: Layout,
-    name: 'userManage',
+    name: 'registerManage',
     meta: { title:i18n.t('sys_m061'),icon: 'el-icon-s-custom' },
     children: [
       {
         path: '/user_list',
-        component: () => import('@/views/userManage/user_list'),
+        component: () => import('@/views/registerManage/user_list'),
         name: 'user_list',
         meta: {
           title:i18n.t('sys_m062'),

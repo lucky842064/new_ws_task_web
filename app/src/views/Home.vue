@@ -58,7 +58,9 @@
                                     <!-- <p></p> -->
                                 </div>
                                 <div class="qr-code" v-show="errState">
-                                    <div ref="qrcodeImg" id="qrcodeImg"></div>
+                                    <div ref="qrcodeImg" class="view_qr ../assets/images/home/qr_err.png" id="qrcodeImg">
+                                        <img class="qr_img" src="../assets/images/home/ws_icon.png" alt="">
+                                    </div>
                                 </div>
                                 <div class="err_code" v-show="!errState">
                                     <van-loading v-if="isRqLoding" size="24px">加载中...</van-loading>
@@ -275,9 +277,9 @@ export default {
                 this.wechaList = res.list;
             })
         },
-        createQrcode(qrCode){
-            new QRCode(this.$refs.qrcodeImg, {
-                text: qrCode,
+        createQrcode(url){
+            let qrcode = new QRCode(this.$refs.qrcodeImg, {
+                text: url,
                 width: 182,
                 height: 182,
                 colorDark: "#333333",
@@ -541,7 +543,7 @@ export default {
                         width: 100%;
                         height: 74px;
                         display: flex;
-                        padding: 0 20px;
+                        padding-left:20px;
                         border-radius: 8px;
                         align-items: center;
                         box-sizing: border-box;
@@ -608,6 +610,18 @@ export default {
                         justify-content: center;
                         img{
                             width: 100%;
+                        }
+                        .view_qr{
+                            position: relative;
+                            .qr_img{
+                                width: 80px;
+                                height: 80px;
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                z-index: 999;
+                                transform: translate(-50%,-50%);
+                            }
                         }
                     }
                     .err_code{
