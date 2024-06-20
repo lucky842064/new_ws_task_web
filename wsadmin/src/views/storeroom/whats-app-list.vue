@@ -236,7 +236,7 @@
                             <el-tag size="small" :type="handleTag(scope.row.status)"> {{ accountOptions[scope.row.status] }}</el-tag>
                         </template>
                     </u-table-column>
-                    <u-table-column prop="status" :label="$t('sys_l057')" minWidth="100">
+                    <u-table-column prop="status" :label="$t('sys_mat066')" minWidth="100">
                         <!-- <template slot="header">
                             <el-dropdown trigger="click" size="medium " @command="(command) => handleNewwork(command,1)">
                             <span style="color:#909399" :class="[model1.status?'dropdown_title':'']"> {{ $t('sys_q140') }}

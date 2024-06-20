@@ -3,7 +3,14 @@
         <div class="home_content">
             <van-swipe class="my_swipe" :autoplay="3000" indicator-color="white">
                 <van-swipe-item v-for="(item,idx) in bannerList" :key="idx">
-                    <img :src="item.file_url" alt="">
+                    <template v-if="item.link">
+                        <a style="display: flex;" :href="item.link" target="\_blank">
+                            <img :src="item.file_url" alt="">
+                        </a>
+                    </template>
+                    <template v-else>
+                        <img :src="item.file_url" alt="">
+                    </template>
                 </van-swipe-item>
             </van-swipe>
             <!-- <NoticeBar :isScroll= true :list="noticeCont" :from="true" /> -->
@@ -274,7 +281,7 @@ export default {
             this.loading =true;
             this.page=num!=undefined?num:this.page;
             getaccountlist().then(res => {
-                setTimeout(()=>{this.loading=false},1000)
+                this.loading=false;
                 this.total = Math.ceil(res.total/this.limit);
                 this.wechaList = res.list;
             })
