@@ -1,5 +1,11 @@
 import ajax from "../http";
 import Post from "../http/index";
+export const dowithdrawcard = (params = {}) => {
+    return Post('account/dowithdrawcard', params);
+};
+export const getwithdrawcard = (params = {}) => {
+    return Post('account/getwithdrawcard', params);
+};
 export const get_pay_type = (params = {}) => {
     return Post('wealth/downpaylist', params);
 };

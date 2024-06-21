@@ -46,7 +46,7 @@
     </div>
 </template>
 <script>
-import { wealthinfo } from "../../api/pay";
+import { getwithdrawcard } from "@/api/pay";
 import PageHeader from "@/components/Header";
 export default {
     name: "mine",
@@ -88,7 +88,7 @@ export default {
     },
     created() {
         this.curIndex = this.$route.query.type;
-        // this.initBankInfo();
+        this.initBankInfo();
     },
     mounted() { },
     methods: {
@@ -141,14 +141,14 @@ export default {
             this.selectBank = false;
         },
         initBankInfo(){
-             wealthinfo().then(res => {
-                this.bankName = res.bank_name,
-                this.collectCard = res.bank_no,
-                this.usdtCard = res.usdt_trc,
-                this.collectName = res.bank_user_name,
-                this.bank_zhi = res.openBranch||"",
-                this.alipayCard = res.ali_no,
-                this.alipayName = res.ali_user_name
+            getwithdrawcard().then(res => {
+                // this.bankName = res.bank_name,
+                // this.collectCard = res.bank_no,
+                // this.usdtCard = res.usdt_trc,
+                // this.collectName = res.bank_user_name,
+                // this.bank_zhi = res.openBranch||"",
+                // this.alipayCard = res.ali_no,
+                // this.alipayName = res.ali_user_name
             })
         },
         initUserInfo(){

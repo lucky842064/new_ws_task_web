@@ -236,17 +236,17 @@
                             <el-tag size="small" :type="handleTag(scope.row.status)"> {{ accountOptions[scope.row.status] }}</el-tag>
                         </template>
                     </u-table-column>
-                    <u-table-column prop="status" :label="$t('sys_mat066')" minWidth="100">
-                        <!-- <template slot="header">
-                            <el-dropdown trigger="click" size="medium " @command="(command) => handleNewwork(command,1)">
-                            <span style="color:#909399" :class="[model1.status?'dropdown_title':'']"> {{ $t('sys_q140') }}
+                    <u-table-column prop="platform_type" :label="$t('sys_mat066')" minWidth="100">
+                        <template slot="header">
+                            <el-dropdown trigger="click" size="medium " @command="(command) => handleNewwork(command,6)">
+                            <span style="color:#909399" :class="[model1.platform_type?'dropdown_title':'']"> {{ $t('sys_mat066') }}
                                 <i class="el-icon-arrow-down el-icon--right" />
                             </span>
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item :class="{'dropdown_selected':idx==model1.status}" v-for="(item,idx) in accountOptions" :key="idx" :command="idx">{{ item==''?$t('sys_l053'):item }}</el-dropdown-item>
+                                <el-dropdown-item :class="{'dropdown_selected':idx==model1.platform_type}" v-for="(item,idx) in plantOption" :key="idx" :command="idx">{{ item==''?$t('sys_l053'):item }}</el-dropdown-item>
                             </el-dropdown-menu>
                             </el-dropdown>
-                        </template> -->
+                        </template>
                         <template slot-scope="scope">
                             {{ plantOption[scope.row.platform_type] }}
                         </template>
@@ -573,6 +573,7 @@ export default {
                 account: "",
                 staff_no: "",
                 group_id: "",
+                platform_type:"",
                 work_status: "",
                 custom_popover:'960px',
                 select_sort: "account",
@@ -779,7 +780,7 @@ export default {
             return [this.$t('sys_g028'),this.$t('sys_g029'),this.$t('sys_g030')]
         },
         plantOption() {
-            return ["-",this.$t('sys_q141'),this.$t('sys_q142')]
+            return ["",this.$t('sys_q141'),this.$t('sys_q142')]
         },
         betchOption() {
             return [
@@ -906,6 +907,7 @@ export default {
             this.countryList = res.data.list||[];
         },
         handleNewwork(row, idx) {
+            console.log(row);
             if (idx == 1) {
                 this.model1.status = row;
             } else if (idx == 2) {
@@ -916,6 +918,8 @@ export default {
                 this.model1.staff_status = row;
             }else if(idx == 5){
                 this.model1.work_status = row;
+            }else if(idx == 6){
+                this.model1.platform_type = row;
             }
             this.initNumberList();
         },
@@ -1001,6 +1005,7 @@ export default {
                 staff_status:this.model1.staff_status||-1,
                 work_status:this.model1.work_status||-1,
                 account_type:this.model1.account_type||-1,
+                platform_type:this.model1.platform_type||-1,
             }
             for (let k = 0; k < this.screenSelect.length; k++) {
                 if (this.screenSelect[k].label == 1) {
