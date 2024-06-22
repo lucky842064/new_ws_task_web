@@ -7,7 +7,7 @@
                     <el-input size="small" v-model="configForm.key" clearable placeholder="请输入配置项" style="width:180px;"></el-input>
 				</el-form-item>
                 <el-form-item>
-                    <el-button size="small" type="primary" @click="getConfigList(1)">{{ $t('sys_c002') }}</el-button>
+                    <el-button size="small" type="primary" icon="el-icon-search" @click="getConfigList(1)">{{ $t('sys_c002') }}</el-button>
                     <el-button size="small" icon="el-icon-refresh-right" @click="restQueryBtn">{{ $t('sys_c049') }}</el-button>
 				</el-form-item>
                 <el-form-item style="float:right;">

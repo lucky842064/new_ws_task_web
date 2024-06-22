@@ -11,7 +11,7 @@
 					</el-date-picker>
                 </el-form-item> -->
                 <el-form-item>
-					<el-button size="small" type="primary" @click="getPayOrderList(1)">{{ $t('sys_c002') }}</el-button>
+					<el-button size="small" icon="el-icon-search" type="primary" @click="getPayOrderList(1)">{{ $t('sys_c002') }}</el-button>
                     <el-button size="small" icon="el-icon-refresh-right" @click="restQueryBtn">{{ $t('sys_c049') }}</el-button>
                     <el-button size="small" :disabled="pay_id.length==0" type="warning" @click="delCardBtn(0,1)">{{ $t('sys_rai076',{value:$t('sys_p010')}) }}</el-button>
                 </el-form-item>
