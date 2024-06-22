@@ -9,7 +9,6 @@
                 <!-- <img class="user_head" :src="$store.state.User.userHeadList[userInfo.head||0]" @click="$router.push('/myhead')" /> -->
                 <!-- <img class="user_head" src="../assets/images/head/11.png" alt=""> -->
                 <div class="info-data">
-                    <p>{{userInfo.user_key}}</p>
                     <p>账户收益：<span>{{today_incomet||0}}</span>元</p>
                 </div>
             </div>
@@ -346,13 +345,6 @@ export default {
                     align-items: center;
                     p{
                         width: 100%;
-                        font-size: 32px;
-                        color: #000000;
-                    }
-                    p:nth-child(1){
-                        font-weight: 600;
-                    }
-                    p:nth-child(2){
                         color: #999999;
                         font-size: 28px;
                         span{

@@ -3,7 +3,7 @@
 		<div class="panel">
 			<page-header title="提现" :show-icon="true"></page-header>
 			<van-tabs title-active-color="red" :active="curIndex" @change="onChange">
-                <van-tab :title="item" v-for="(item,index) in personList" :key="index"></van-tab>
+                <van-tab :title="item" v-for="(item,idx) in personList" :key="idx"></van-tab>
             </van-tabs>
 			<div class="draw_main">
 				<div class="card_box">
@@ -12,20 +12,20 @@
 							<span>{{ $t('buy_008') }}</span>
 						</div>
 						<div class="amount van-ellipsis">
-							{{ userInfo.point || 50000 }}
+							{{ WithdMoney || 0 }}
 						</div>
 						<div class="btn-withdraw">
-							<van-button type="danger" @click="submitFn">{{ $t('mine_015') }}</van-button>
+							<van-button type="danger" @click="submitBtn">{{ $t('mine_015') }}</van-button>
 						</div>
 					</div>
 				</div>
 				<div class="share_box">
 					<div class="share_link">
 						<span class="account_name" v-text="curIndex==0?'银行账号：':'USDT地址：'"></span>
-						<span class="account_text" v-text="curIndex==0?userInfo.bank_no||'请添加银行账号':userInfo.usdt_trc||'请添加USDT地址'"></span>
+						<span class="account_text" v-text="curIndex==0?card_no||'请添加银行账号':card_no||'请添加USDT地址'"></span>
 					</div>
 					<div class="share_btn" @click="bindCardBtn">
-						<van-button type="danger" @click="bindCardBtn">{{curIndex==0&&userInfo.bank_no!=''?'修改':curIndex==2&&userInfo.usdt_trc!=''?'修改':'添加'}}</van-button>
+						<van-button type="danger">{{curIndex==0&&card_no?'修改':curIndex==1&&card_no?'修改':'添加'}}</van-button>
 					</div>
 				</div>
 			</div>
@@ -66,46 +66,47 @@
 				</div>
 			</div>
 		</div>
+		<van-popup :close-on-click-overlay="false" :overlay="true" v-model="showModel">
+			<div class="dialog_content">
+				<div class="header_title">提现</div>
+				<div class="header_tips">当前可提现金额为200元</div>
+				<van-cell-group inset :border="false">
+					<van-field v-model="withdraw_num" type="number" clearable placeholder="请输入提现金额" />
+				</van-cell-group>
+				<div class="custom_dialog__footer">
+					<van-button class="custom_dialog_cancel" @click="showModel=false">{{ $t('other_004') }}</van-button>
+					<span class="model_line"></span>
+					<van-button class="custom_dialog_confirm" :loading="isLoading" loading-text="提交中..." @click="withdrawBtn">{{ $t('other_005') }}</van-button>
+				</div>
+			</div>
+		</van-popup>
 	</div>
 </template>
 <script>
-import popDialog from '@/components/popDialog';
-import { fmoney } from '@/utils/tool';
-import { wealthinfo, putpoint } from '@/api/pay';
+import { getaccountincome } from '@/api/bill';
+import { getwithdrawcard,savewithdrawapproval } from '@/api/pay';
 import PageHeader from '@/components/Header';
 import { setTimeout } from 'timers';
 export default {
 	components: { PageHeader },
 	data() {
 		return {
+			card_no:"",
+			bank_name:"",
+			payee_name:"",
 			curIndex:"0",
 			WithdMoney:0,
-			title: '温馨提示',
+			userInfo:"",
+			isLoading:false,
+			withdraw_num:null,
 			personList:["提现到银行卡","提现到USDT账户"],
-			radio: '',
-			putValue: null,
-			collectText: '收款账号',
-			showAuditModel: false,
-			withdraw_active:false,
-			insufficientBalance: false,
-			balance_tip: false,
-			loading: false,
-			userInfo: '',
-			sysInfo: {},
-			weekArry: '',
-			processing: 0,
-			taken: 0,
-			minAmount: 0,
-			canDrawNumber: '',
-			resultDrawNumber: '',
-			is_prevent: false,
-			minCash: '',
-		};
+			showModel: false,
+			is_prevent: false
+		}
 	},
 	created() {
-		// this.$store.dispatch('User/getUserInfo');
-		// this.loading = true;
-		// this.getWealInfo();
+		this.getUserIncome();
+		this.getBankInfo();
 	},
 	mounted() {
 		if (this.$route.params && this.$route.params.back) {
@@ -113,13 +114,19 @@ export default {
 		}
 	},
 	methods: {
-		getWealInfo() {
-			wealthinfo().then(res => {
-				this.userInfo = res;
-			})
+		async getUserIncome(){
+			let { income } = await getaccountincome();
+			this.WithdMoney = income||0;
 		},
-		toFocus() {
-			this.$refs.pointField.focus();
+		async getBankInfo(){
+			let { card_no,bank_name,payee_name } = await getwithdrawcard({type:Number(this.curIndex)+1});
+			this.card_no = card_no||"";
+			this.bank_name = bank_name||"";
+			this.payee_name = payee_name||"";
+		},
+		onChange(idx){
+			this.curIndex=idx;
+			this.getBankInfo();
 		},
 		testingMoney(){
 			if(!/^[1-9]\d*00$/.test(this.WithdMoney)){
@@ -130,21 +137,35 @@ export default {
 				}
 			}
 		},
-		submitFn() {
-			if (this.userInfo.put_type == "") {
-				this.$toast('当前不可提现');
-				return;
+		submitBtn() {
+			let payIdx = Number(this.curIndex+1);
+			if(payIdx==1&&!this.card_no){
+				return this.$toast('请先添加银行卡');
+			} else if(payIdx==2&&!this.card_no){
+				return this.$toast('请先添加USDT账户');
+			} else if(this.WithdMoney <= 0){
+				return this.$toast('当前不可提现');
 			}
-			if( this.curIndex==0&&this.userInfo.ali_no==''){
-				this.$toast('请先绑定支付宝');
-			}else if(this.curIndex==1&&this.userInfo.bank_no==''){
-				this.$toast('请先绑定银行卡');
-			} else if(this.curIndex==2&&this.userInfo.usdt_trc==''){
-				this.$toast('请先绑定USDT地址');
-			} else {
-				let point = this.getPutPoint();
-				this.$refs.showAuditModel.showDialog();
+			this.showModel=true;
+		},
+		async withdrawBtn(){
+			if(!this.card_no) return this.$toast('请添加收款信息！');
+			if(this.withdraw_num > this.WithdMoney || this.withdraw_num<=0){
+				return this.$toast('请输入正确的提现金额！');
 			}
+			let params = {
+				type:Number(this.curIndex)+1,
+				card_no:this.card_no,
+				bank_name:this.bank_name,
+				payee_name:this.payee_name,
+				amount:Number(this.withdraw_num)
+			}
+			this.isLoading = true;
+			let res = await savewithdrawapproval(params);
+			this.isLoading = false;
+			if(res.code) return;
+			this.$toast('操作完成');
+			setTimeout(() => {this.$router.go(-1)},500);
 		},
 		getPutPoint() {
 			let init = (this.userInfo.point || 0) / 10000;
@@ -159,125 +180,13 @@ export default {
 				return init * 10000;
 			}
 		},
-		toOutLink(e) {
-			if (e.target.className == 'toOutLink') {
-				this.$Helper.toOutLink(this.info.kefu, 1);
-			}
-		},
-		// 确认提现
-		confirm_btn() {
-			// let cashOut = this.userInfo.point / 10000 > this.userInfo.max_point ? this.userInfo.max_point : this.userInfo.point / 10000;
-			if(this.curIndex == 0){
-				if(this.userInfo.point / 10000 > this.max_point){
-					return this.$toast('提现超出最大限制')
-				}
-				if(this.userInfo.point / 10000 < this.min_point){
-					return this.$toast('提现低于最小限制')
-				}
-			}
-			if(this.curIndex == 1 ){
-				if(this.userInfo.point / 10000 > this.userInfo.max_point_ali) {
-					return this.$toast('提现超出最大限制')
-				}
-				if(this.userInfo.point / 10000 < this.userInfo.min_point_ali) {
-					return this.$toast('提现低于最小限制')
-				}
-			}
-			
-			let cashOut = this.getPutPoint();
-			// WithdMoney
-			// putpoint({ point: parseInt(cashOut / 10000), put_type:this.curIndex==0?'5':this.curIndex==1?'4':'8'}).then(res => {
-			putpoint({point:parseInt(this.WithdMoney), put_type:this.curIndex==0?'5':this.curIndex==1?'4':'8'}).then(res => {
-				if(res.code == undefined){
-					this.$refs.showAuditModel.closeModel();
-					this.$store.dispatch('User/getUserInfo', true);
-					this.$toast.success(this.$t('buy_031'));
-					this.getWealInfo();
-					setTimeout(() => {
-						this.$router.go(-1);
-					}, 500);
-				}
-			}).catch(e => {
-				this.$dialog.alert({
-					title: this.$t('other_008'),
-					message: e,
-					confirmButtonText: '确定',
-					showCancelButton: false,
-					confirmButtonColor: '#4b5bc2',
-				});
-			});
-		},
-		onClickLeft() {
-			this.$router.go(-1);
-		},
-		on_return() {
-			if (this.is_prevent) {
-				this.$router.push('/mine');
-			}
-		},
-		goSet() {
-			if(!this.radio){
-				return this.$toast( '请选择一项提现方式' )
-			}
-			this.$router.push({ path: '/personCenter', query: { type: 1, pay: this.radio } });
-		},
-		// 格式化金额
-        formatMoney(point) {
-            return fmoney(point,2);
-        },
-		// 切换首款类型
-		changeType(idx) {
-			if (this.radio == '4') {
-				this.withdraw_active = this.userInfo.bank_no;
-			} else if (this.radio == '5') {
-				this.withdraw_active = this.userInfo.ali_no;
-			} else if (this.radio == '6') {
-				this.withdraw_active = this.userInfo.tng_wallet_no;
-			} else if (this.radio == '7') {
-				this.withdraw_active = this.userInfo.th_bank_no;
-			} else if (this.radio == '8') {
-				this.withdraw_active = this.userInfo.usdt_trc;
-			} else if (this.radio == '9') {
-				this.withdraw_active = this.userInfo.my_bank_no;
-			}
-		},
-		onChange(idx){
-			this.curIndex=idx;
-		},
 		bindCardBtn(){
 			// this.$router.push("/personCenter");
-			this.$router.push({path:'/personCenter', query: { type:this.curIndex } });
+			this.$router.push({path:'/personCenter', query: { type:Number(this.curIndex)+1 } });
 		}
 	},
 };
 </script>
-<style lang='scss'>
-.bank_account .van-field__label {
-	width: 100px;
-	padding: 5px 0;
-	padding-left: 20px;
-	color: #2c3e50;
-	margin: 0 !important;
-}
-.bank_account .van-cell__value {
-	/* background-color: #f2f2f2; */
-	padding: 5px 0;
-	border-radius: 5px;
-}
-.van-cell {
-	border-bottom: none !important;
-}
-.van-radio__icon--checked .van-icon {
-	background-color: #ff5414;
-	border-color: #ff5414;
-}
-.van-cell--clickable:active {
-	background-color: transparent;
-}
-.van-tabs__wrap{
-	border-bottom:1px solid #D8D8D8 !important;
-}
-</style>
 <style lang="scss" scoped>
 .editor-icon {
 	width: 32px;
@@ -576,87 +485,61 @@ export default {
 			color: $home-risk-value;
 		}
 	}
-
-	.tip-box {
-		height: 200px;
-		padding: 40px 30px;
-		.value {
-			font-size: 30px;
-			color: #000000;
-			text-align: center;
-		}
-		.red {
-			font-size: 30px;
-			color: $color-theme;
-			font-weight: bolder;
-		}
-	}
-	::v-deep {
-		.van-dialog__confirm {
-			font-weight: bold;
-		}
-		.header{
-			color: #fff;
-		}
-	}
 }
-.van-field__control {
-	font-size: 0.38rem;
-	font-weight: 500;
-}
-.userinfo-point {
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin-top: 4px;
-	color: rgb(30, 55, 145);
-}
-// .van-cell__title, .van-field__label {
-//     width: 85px;
-//     padding: 5px 0;
-//     color: #2c3e50;
-//     margin: 0 !important;
-// }
-.custom_dialog__message {
-	-webkit-box-flex: 1;
-	-webkit-flex: 1;
-	padding-bottom: 20px;
-	flex: 1;
-	max-height: 60vh;
-	padding: 30px;
-	// padding: 26px 20px;
-	overflow-y: auto;
-	font-size: 0.28rem;
-	white-space: pre-wrap;
-	text-align: center;
-	word-wrap: break-word;
-	-webkit-overflow-scrolling: touch;
-	.custom_money{
-		width: 230px;
-		margin: 0 auto;
+.van-popup{
+	width: calc(100% - 40px);
+	border-radius: 8px;
+	overflow: hidden;
+	.dialog_content{
+		width: 100%;
 		display: flex;
-		margin-bottom: 25px;
-		align-items: center;
-		position: relative;
-		border-bottom: 1px solid #979797;
-		input{
-			width: 100%;
-			height: 64px;
-			outline: none;
-			border: none;
-			color: #000;
-			font-weight: 500;
-			text-align: center;
-			font-size: 28px;
-			padding-left: 10px;
-			background: transparent;
-		}
-		.symbol_icon{
-			color: #060606;
+		flex-direction: column;
+		.header_title, .custom_dialog__footer{
 			display: flex;
-			font-size: 38px;
-			align-items: center;
+			justify-content: center;
+		}
+		.header_title{
+			font-size: 24px;
+			padding-top: 10px;
+		}
+		.header_tips{
+			display: flex;
+			font-size: 16px;
+			margin: 10px 0;
+			padding: 10px 20px;
+			justify-content: center;
+			box-sizing: border-box;
+		}
+		.van-cell-group{
+			display: flex;
+			width: 100%;
+			margin-bottom: 30px;
+			justify-content: center;
+			box-sizing: border-box;
+			.van-cell{
+				width: 180px;
+				border-radius: 4px;
+				padding: 6px 10px;
+				background-color: #f2f3f5;
+			}
+		}
+		.custom_dialog__footer{
+			display: flex;
+			border-top: 1px solid #f2f3f5;
+			.van-button{
+				flex: 1;
+				border: none;
+				background: none;
+				font-size: 16px;
+				border-radius: 0;
+			}
+			.model_line{
+				width: 0;
+				border-left: 1px solid #f2f3f5;
+			}
+			.custom_dialog_confirm{
+				color: #1989fa;
+			}
 		}
 	}
 }

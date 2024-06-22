@@ -448,6 +448,22 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/financeManage',
+    component: Layout,
+    name: 'financeManage',
+    meta: { title:i18n.t('sys_p001'),icon: 'el-icon-tickets' },
+    children: [
+      {
+        path: '/pay_approval',
+        component: () => import('@/views/financeManage/pay_approval'),
+        name: 'pay_approval',
+        meta: {
+          title:i18n.t('sys_p002'),
+        }
+      }
+    ]
+  },
+  {
     path: '/bannerManage',
     component: Layout,
     name: 'bannerManage',
@@ -459,6 +475,22 @@ export const asyncRoutes = [
         name: 'bannerList',
         meta: {
           title:i18n.t('sys_q138'),
+        }
+      }
+    ]
+  },
+  {
+    path: '/baseConfig',
+    component: Layout,
+    name: 'baseConfig',
+    meta: { title:i18n.t('sys_s001'),icon: 'el-icon-s-data' },
+    children: [
+      {
+        path: '/taskConfig',
+        component: () => import('@/views/baseConfig/taskConfig'),
+        name: 'taskConfig',
+        meta: {
+          title:i18n.t('sys_s002'),
         }
       }
     ]

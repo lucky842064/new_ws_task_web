@@ -1,7 +1,7 @@
 <!--  -->
 <template>
 	<div class="custom_dialog">
-		<van-popup :close-on-click-overlay="false" :overlay="true" v-model="dataModel.show">
+		<van-popup :close-on-click-overlay="false" :overlay="true" v-model="dataModel">
 			<div class="dialog_content">
 				<div class="header_title">
 					{{ title }}
@@ -67,26 +67,22 @@ export default {
 			default: '编辑',
 		},
 		dataModel: {
-			type: Object,
-			default: () => {
-				return {
-					show: false,
-				};
-			},
-		},
+			type: Boolean,
+			default:false
+		}
 	},
 	methods: {
 		showDialog() {
-			this.dataModel.show = true;
+			this.dataModel = true;
 		},
 		// 关闭1
 		hideModel() {
-			this.dataModel.show = false;
+			this.dataModel = false;
 			this.$emit('cancel_btn');
 		},
 		// 关闭2
 		closeModel() {
-			this.dataModel.show = false;
+			this.dataModel = false;
 		},
 		editbtn(val) {
 			this.$emit('edit_btn', val);

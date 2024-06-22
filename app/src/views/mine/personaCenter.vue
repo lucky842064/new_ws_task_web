@@ -2,8 +2,12 @@
     <div class="person_c">
         <page-header title="绑定提现信息" :show-icon="true"></page-header>
         <div class="person_content">
-            <template v-if="curIndex==0">
-                  <div class="user_info bank_account" @click="showBank">
+            <template v-if="curIndex==1">
+                <div class="user_info">
+                    <span class="lable_text">收款卡号</span>
+                    <van-field v-model="collectCard" :maxlength="19" placeholder="请输入收款卡号" :border="false" />
+                </div>
+                <div class="user_info bank_account" @click="showBank">
                     <span class="lable_text">开户银行</span>
                     <div class="flex-between">
                         <van-field v-model="bankName" :readonly = true placeholder="请输入开户银行" :border="false" />
@@ -11,25 +15,25 @@
                     </div>
                 </div>
                 <div class="user_info">
-                    <span class="lable_text">收款卡号</span>
-                    <van-field v-model="collectCard" :maxlength="19" placeholder="请输入收款卡号" :border="false" />
+                    <span class="lable_text">收款姓名</span>
+                    <van-field v-model="collectName" placeholder="请输入收款姓名" :border="false" />
                 </div>
-                <div class="user_info">
+                <!-- <div class="user_info">
                     <span class="lable_text">收款姓名</span>
                     <van-field v-model="collectName" placeholder="请输入收款姓名" :border="false" />
                 </div>
                 <div class="user_info">
                     <span class="lable_text">开户支行</span>
                     <van-field v-model="openBranch" placeholder="请输入开户支行" :border="false" />
-                </div>
+                </div> -->
             </template>
-            <template v-else-if="curIndex==1">
+            <template v-else-if="curIndex==2">
                 <div class="user_info alipay_info">
                     <span class="lable_text">USDT地址</span>
-                    <van-field v-model="usdtCard" placeholder="请输入USDT地址" :border="false" />
+                    <van-field v-model="collectCard" placeholder="请输入USDT地址" :border="false" />
                 </div>
             </template>
-            <div class="user_info">
+            <!-- <div class="user_info">
                 <span class="lable_text">验证码</span>
                 <van-field class="cell-block" :border="false" type="text" placeholder="请输入验证码" v-model="verify_code">
                     <template #button>
@@ -37,22 +41,23 @@
                             {{countTime == 60?'发送验证码':`${countTime}秒后重新获取` }}</van-button>
                     </template>
                 </van-field>
-            </div>
+            </div> -->
             <van-action-sheet :round="false" v-model="selectBank" :actions="malayBank" @close="hideBankSelect" @select="changeSelect" cancel-text="取消" />
             <div class="button_area">
-                <van-button type="danger" @click="submitBtn">保存</van-button>
+                <van-button type="danger" @click="submitBtn" :loading="isLoading">保存</van-button>
             </div>
         </div>
     </div>
 </template>
 <script>
-import { getwithdrawcard } from "@/api/pay";
+import { getwithdrawcard,dowithdrawcard } from "@/api/pay";
 import PageHeader from "@/components/Header";
 export default {
     name: "mine",
     components: { PageHeader},
     data() {
         return {
+            bank_id:"",
             bankName:"",
             collectCard:"",
             collectName:"",
@@ -60,6 +65,7 @@ export default {
             usdtCard:"",
             verify_code:"",
             countTime:"",
+            isLoading:false,
             selectBank:false,
             bankArray:[],
             malayBank: [
@@ -92,44 +98,13 @@ export default {
     },
     mounted() { },
     methods: {
-        callbackName(res) {
-            // 返回结果
-            this.countTime =  60
-            if(!this.userInfo.user_key){
-                return this.$toast('请输入手机号!')
-            }
-            let reg = new RegExp(/^1[3456789]\d{9}$/);
-            if (!this.userInfo.user_key || !reg.test(this.userInfo.user_key)) {
-                return this.$toast('请输入正确的手机号');
-            }
-		},
-        getVerfyBtn(){
-            var regMobile =  /^1[3456789]\d{9}$/;
-            if(this.userInfo.user_key == ""){
-                return this.$toast("请输入手机号");
-            }
-            let params = {
-                // digital: Number(this.code_verify_v),
-				// uuid: this.uuid,
-                type:2,
-                mobile:this.userInfo.user_key,
-            }
-            // sendcode().then(res => {
-            //     if(res.code == undefined){
-            //         this.settime();
-            //     }
-            // });
+        async initBankInfo(){
+        const {bank_name,card_no,payee_name,id} = await getwithdrawcard({type:Number(this.curIndex)});
+            this.bank_id = id||"";
+            this.bankName = bank_name||"";
+            this.collectCard = card_no||"";
+            this.collectName = payee_name||"";
         },
-        settime(obj) {
-            if (this.countTime == 0) {
-                this.countTime = 60;
-                return;
-            } else {
-                this.countTime--;
-            }
-            setTimeout(() =>{this.settime() },1000);//设置定时任务，1000毫秒为1秒
-        },
-
         showBank(){
             this.selectBank = true;
         },
@@ -140,109 +115,39 @@ export default {
         hideBankSelect(){
             this.selectBank = false;
         },
-        initBankInfo(){
-            getwithdrawcard().then(res => {
-                // this.bankName = res.bank_name,
-                // this.collectCard = res.bank_no,
-                // this.usdtCard = res.usdt_trc,
-                // this.collectName = res.bank_user_name,
-                // this.bank_zhi = res.openBranch||"",
-                // this.alipayCard = res.ali_no,
-                // this.alipayName = res.ali_user_name
-            })
-        },
-        initUserInfo(){
-            // myaccount().then(res => {
-            //     this.userPhone = res.phone || "";
-            //     this.wechatNum = res.wx || "";
-            //     this.superAccount = res.pid || "";
-            //     this.extensCode = res.user_code || "";
-            // });
-        },
-        onChange(event) {
-            this.curIndex = event;
-            if(event == 0){
-                this.initUserInfo();
-            }else{
-                this.payType = 3;
-                this.initBankInfo();
-            }
-        },
-        submitBtn(){
-            const verify = [];
-            // const regBank = /^([1-9]{1})(\d{6}\d{14}|\d{18})$/;
-            // if(this.curIndex == "0"){
-            //     verify.push({ name: "推广码", value: this.extensCode })
-            //     verify.push({ name: "上级账号", value: this.superAccount })
-            //     verify.push({ name: "微信号", value: this.wechatNum })
-            //     verify.push({ name: "手机号", value: this.userPhone })
-            // }else{
-            //     if(this.payType == 1){
-            //         verify.push({ name: "开户支行", value: this.openBranch })
-            //         verify.push({ name: "收款姓名", value: this.collectName })
-            //         verify.push({ name: "收款帐号", value: this.collectCard })
-            //         verify.push({ name: "开户银行", value: this.bankName })  
-            //     }else if(this.payType == 2){
-            //         verify.push({ name: "收款姓名", value: this.alipayName })
-            //         verify.push({ name: "支付宝号", value: this.alipayCard })  
-            //     }else{
-            //         verify.push({ name: "开户支行", value: this.openBranch })
-            //         verify.push({ name: "收款姓名", value: this.collectName })
-            //         verify.push({ name: "收款帐号", value: this.collectCard })
-            //         verify.push({ name: "开户银行", value: this.bankName }) 
-            //         verify.push({ name: "收款姓名", value: this.alipayName })
-            //         verify.push({ name: "支付宝号", value: this.alipayCard })
-            //     }
-            // }
-            // let flag = true
-            // verify.forEach(item => {
-            //     if (!item.value) {
-            //         this.$toast(this.$t(`${item.name}不能为空`))
-            //         flag = false
-            //         return
-            //     }
-            // })
-            // if(flag){
-
-                let params ={
-                    captcha: this.verify_code,
+        async submitBtn(){
+            let params = {};
+            if(this.curIndex == 1){
+                params ={
+                    ptype:this.bank_id?2:1,
+                    type:Number(this.curIndex),
+                    card_no:this.collectCard,
                     bank_name:this.bankName,
-                    bank_no:this.collectCard,
-                    bank_user_name:this.collectName,
-                    bank_zhi:this.openBranch || "",
-                    ali_no:this.alipayCard,
-                    usdt_trc:this.usdtCard,
-                    ali_user_name:this.alipayName
+                    payee_name:this.collectName
                 }
-                // if(this.curIndex == "0"){
-                //     params.bank_name=this.bankName,
-                //     params.bank_no=this.collectCard,
-                //     params.bank_user_name=this.collectName,
-                //     params.bank_zhi=this.openBranch || ""
-                // }else{
-                //     params.ali_no=this.alipayCard,
-                //     params.ali_user_name=this.alipayName
-                // }
-                // addbank(params).then(() => {
-                //     this.initBankInfo();
-                //     this.$toast("保存完成");
-                //     setTimeout(() =>{
-                //         this.$router.back();
-                //     },500)
-                // });
-        },
-        restForm(){
-            this.userPhone = "";
-            this.wechatNum = "";
-            this.userName = "";
-            this.superAccount = "";
-            this.extensCode = "";
-            this.bankName = "";
-            this.collectCard = "";
-            this.collectName = "";
-            this.openBranch = "";
-            this.alipayName = "";
-            this.alipayCard = "";
+            }else{
+                params ={
+                    ptype:this.bank_id?2:1,
+                    type:Number(this.curIndex),
+                    card_no:this.collectCard
+                }
+            }
+            this.bank_id?params.id=this.bank_id:"";
+            if(this.curIndex==1&&!this.collectCard){
+                return this.$toast('请输入收款卡号')
+            }else if(this.curIndex==2&&!this.collectCard){
+                return this.$toast('请输入USTD账户')
+            }else if(this.curIndex==1&&!this.bankName){
+                return this.$toast('请选择开户银行')
+            }else if(this.curIndex==1&&!this.collectName){
+                return this.$toast('请输入收款人姓名')
+            }
+            this.isLoading = true;
+            const res = await dowithdrawcard(params);
+            this.isLoading = false;
+            if(res.code) return;
+            this.$toast('操作完成');
+            setTimeout(() => {this.$router.go(-1)},500);
         }
     }
 };
@@ -357,55 +262,6 @@ export default {
 }
 .valid_title{
     padding: 30px 32px 10px;font-size: 24px;
-}
-.num_validate_ct{
-	display: flex; align-items: center;
-	span{display: inline-block;width: 60px !important;height: 45px;margin: 0 !important;}
-	.img_1{
-		background: url('../../assets/images/new/1.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_2{
-		background: url('../../assets/images/new/2.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_3{
-		background: url('../../assets/images/new/3.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_4{
-		background: url('../../assets/images/new/4.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_5{
-		background: url('../../assets/images/new/5.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_6{
-		background: url('../../assets/images/new/6.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_7{
-		background: url('../../assets/images/new/7.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_8{
-		background: url('../../assets/images/new/8.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_9{
-		background: url('../../assets/images/new/9.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_0{
-		background: url('../../assets/images/new/0.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_deng{
-		background: url('../../assets/images/new/deng.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_jia{
-		background: url('../../assets/images/new/jia.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_jian{
-		background: url('../../assets/images/new/jian.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_cheng{
-		background: url('../../assets/images/new/cheng.jpg') left top no-repeat;background-size: contain;
-	}
-	.img_wen{
-		background: url('../../assets/images/new/wen.jpg') left top no-repeat;background-size: contain;
-	}
 }
 ::v-deep {
     .van-cell__value{
