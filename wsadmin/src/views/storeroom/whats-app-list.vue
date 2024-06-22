@@ -200,7 +200,12 @@
             </div>
             <div class="group_continer" style="margin-left: 20px;">
                 <div class="tab_check_warp">
-                    <i slot="reference" class="el-icon-info"></i>
+                    <span v-if="!showGroup" style="margin-right: 8px;cursor: pointer; color:#409eff;" @click="showGroup=true">
+                        <el-tooltip effect="dark" content="展开分组" placement="top">
+                            <i class="el-icon-d-arrow-right"></i>
+                        </el-tooltip>
+                    </span>
+                    <i class="el-icon-info"></i>
                     <div v-html="$t('sys_mat007',{value:checkIdArry.length})"></div>
                 </div>
                 <u-table @sort-change="sorthandle" :data="accountDataList" row-key="id" use-virtual border height="700" v-loading="loading"
@@ -1090,6 +1095,7 @@ export default {
             this.checkedNum = 0;
             this.groupIdx = idx;
             this.model1.group_id = idx == "clear" ? "" : row.id;
+            if(idx == "clear"){this.initNumberGroup()}
             this.initNumberList(1);
             this.$refs.serveTable.clearSelection();
         },

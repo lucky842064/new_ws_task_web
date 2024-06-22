@@ -3,22 +3,23 @@
 	<div class='container_coat'>
 		<div class="condition_warp select_warp">
 			<el-form inline>
-                <!-- <el-form-item>
-                    <el-input size="small" v-model="factorModel.task_name" clearable placeholder="请输入任务名称" style="width:180px;"></el-input>
-				</el-form-item> -->
+                <el-form-item>
+                    <el-input size="small" v-model="factorModel.card_no" clearable placeholder="请输入提现账号" style="width:180px;"></el-input>
+				</el-form-item>
 				<!-- <el-form-item class="change_new_time">
 					<el-date-picker size="small" v-model="factorModel.dateArry" type="daterange" value-format="yyyy-MM-dd" range-separator="~" start-placeholder="开始日期" end-placeholder="结束日期" style='width:240px'>
 					</el-date-picker>
                 </el-form-item> -->
                 <el-form-item>
-					<el-button size="small" icon="el-icon-refresh-left" type="primary" @click="getPayOrderList(1)">{{ $t('sys_l095') }}</el-button>
+					<el-button size="small" type="primary" @click="getPayOrderList(1)">{{ $t('sys_c002') }}</el-button>
+                    <el-button size="small" icon="el-icon-refresh-right" @click="restQueryBtn">{{ $t('sys_c049') }}</el-button>
                     <el-button size="small" :disabled="pay_id.length==0" type="warning" @click="delCardBtn(0,1)">{{ $t('sys_rai076',{value:$t('sys_p010')}) }}</el-button>
                 </el-form-item>
 			</el-form>
 		</div>
 		<div class="switch_bar">
 			<div class="consun_list handel_area">
-				<el-table :data="bannerList" border style="width: 100%" height="700" v-loading="loading" element-loading-spinner="el-icon-loading" :header-cell-style="{background:'#eef1f6',color:'#606266'}" @selection-change="selectAllChange">
+				<el-table :data="bannerList" border style="width: 100%" height="700" ref="serveTable" v-loading="loading" element-loading-spinner="el-icon-loading" :header-cell-style="{background:'#eef1f6',color:'#606266'}" @selection-change="selectAllChange"  @row-click="rowSelectChange">
 					<el-table-column type="selection" width="55"> </el-table-column>
 					<!-- <el-table-column prop="wx_id" label="序号" width="60" align="center">
                         <template slot-scope="scope">
@@ -69,7 +70,7 @@
                     </el-table-column>
                     <el-table-column width="120" label="操作" align="center" fixed="right">
 						<template slot-scope="scope">
-							<el-button :type="scope.row.status==2?'info':'warning'" :disabled="scope.row.status==2" size="mini" plain @click="delCardBtn(scope.row,2)">
+							<el-button :type="scope.row.status==2?'info':'warning'" :disabled="scope.row.status==2||pay_id.length>0" size="mini" plain @click="delCardBtn(scope.row,2)">
                                 {{ scope.row.status==2?$t('sys_p008'):$t('sys_p010') }}
                             </el-button>
 							<!-- <el-button type="danger" size="mini" plain @click="delCardBtn(scope.row,2)">删除</el-button> -->
@@ -120,6 +121,7 @@ export default {
 			statusList:["待启动","初始化","进行中","失败","完成","关闭"],
 			factorModel:{
                 status:0,
+                card_no:"",
                 task_name:"",
                 total:0,
                 offset:1,
@@ -171,6 +173,11 @@ export default {
         this.getPayOrderList();
 	},
 	methods: {
+        restQueryBtn(){
+            this.factorModel.card_no="";
+            this.getPayOrderList(1)
+            this.$refs.serveTable.clearSelection();
+        },
 		//获取订单列表
 		getPayOrderList(num){
             this.loading =true;
@@ -178,7 +185,8 @@ export default {
             let params = { 
                 page: this.factorModel.page,
                 limit: this.factorModel.limit,
-                status:this.factorModel.status
+                status:this.factorModel.status,
+                card_no:this.factorModel.card_no
             }
 			getwithdrawapprovallist(params).then(res =>{
                 this.loading = false;
@@ -188,6 +196,15 @@ export default {
 		},
         selectAllChange(row){
 			this.pay_id = row.map(item=>{return item.id})
+        },
+        rowSelectChange(row, column, event) {
+            let refsElTable = this.$refs.serveTable;
+            let findRow = this.pay_id.find(item => item == row.id);
+            if (findRow) {
+                refsElTable.toggleRowSelection(row, false);
+                return;
+            }
+            refsElTable.toggleRowSelection(row,true);
         },
         handleNewwork(val){
             this.factorModel.status=val;
@@ -249,7 +266,7 @@ export default {
                 beforeClose: function (action, instance,done) {
                     if(action === 'confirm') {
                         instance.confirmButtonLoading = true;
-                        dowithdrawapproval({status:2,id:val.id}).then(res =>{
+                        dowithdrawapproval({status:2,ids:type==1?that.pay_id:[val.id]}).then(res =>{
                             instance.confirmButtonLoading = false;
                             if (res.code !=0) return;
                             successTips(that)

@@ -21,8 +21,8 @@
 		</div>
 		<div class="switch_bar">
 			<div class="consun_list handel_area">
-				<el-table :data="bannerList" border style="width: 100%" v-loading="loading" element-loading-spinner="el-icon-loading" :header-cell-style="{background:'#eef1f6',color:'#606266'}" @selection-change="selectAllChange">
-					<el-table-column type="selection" width="55"> </el-table-column>
+				<el-table :data="bannerList" border style="width: 100%" v-loading="loading" ref="serveTable" element-loading-spinner="el-icon-loading" :header-cell-style="{background:'#eef1f6',color:'#606266'}" @selection-change="selectAllChange" @row-click="rowSelectChange">
+					<!-- <el-table-column type="selection" width="55"> </el-table-column> -->
 					<el-table-column prop="wx_id" label="序号" width="60" align="center">
                         <template slot-scope="scope">
 							<span>{{(factorModel.offset-1)*factorModel.limit+scope.$index+1}}</span>
@@ -260,6 +260,15 @@ export default {
             if (e.target.getAttribute('class') === 'el-image-viewer__mask') {
             this.imgModel = false;
             }
+        },
+        rowSelectChange(row, column, event) {
+            let refsElTable = this.$refs.serveTable;
+            let findRow = factorModel.regestId.find(item => item == row.id);
+            if (findRow) {
+                refsElTable.toggleRowSelection(row, false);
+                return;
+            }
+            refsElTable.toggleRowSelection(row,true);
         }
 	},
 	watch:{
