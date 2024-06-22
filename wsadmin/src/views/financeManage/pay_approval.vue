@@ -123,7 +123,7 @@ export default {
                 task_name:"",
                 total:0,
                 offset:1,
-                limit:10
+                limit:100
             },
             type:0,
             pay_id:[],
@@ -172,9 +172,15 @@ export default {
 	},
 	methods: {
 		//获取订单列表
-		getPayOrderList(){
+		getPayOrderList(num){
             this.loading =true;
-			getwithdrawapprovallist({status:this.factorModel.status}).then(res =>{
+            this.factorModel.page=num?num:this.factorModel.page;
+            let params = { 
+                page: this.factorModel.page,
+                limit: this.factorModel.limit,
+                status:this.factorModel.status
+            }
+			getwithdrawapprovallist(params).then(res =>{
                 this.loading = false;
                 this.factorModel.total=res.data.total;
 				this.bannerList = res.data.list || [];
