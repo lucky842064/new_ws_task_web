@@ -152,6 +152,8 @@ export default {
 			if(!this.card_no) return this.$toast('请添加收款信息！');
 			if(this.withdraw_num > this.WithdMoney || this.withdraw_num<=0){
 				return this.$toast('请输入正确的提现金额！');
+			}else if(this.withdraw_num % 1 != 0){
+				return this.$toast('只能一整数倍提现,请输入正确的提现金额!');
 			}
 			let params = {
 				type:Number(this.curIndex)+1,

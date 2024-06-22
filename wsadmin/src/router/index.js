@@ -210,49 +210,49 @@ export const asyncRoutes = [
       }
     ]
   },
-  {
-    path: '/counterWorkOrder',
-    component: Layout,
-    name: 'counterWorkOrder',
-    meta: { title:i18n.t('sys_m026'),icon: 'el-icon-setting' },
-    children: [
-      {
-        path: '/counter-list',
-        component: () => import('@/views/counterWorkOrder/counter-list'),
-        name: 'counter-list',
-        meta: {
-          title:i18n.t('sys_m027'),
-        }
-      },
-      {
-        hidden: true,
-        path: '/counter-account-allocation',
-        component: () => import('@/views/counterWorkOrder/counter-account-allocation'),
-        name: 'counter-account-allocation',
-        meta: {
-          title:i18n.t('sys_m028'),
-        }
-      },
-      {
-        hidden: true,
-        path: '/fanDetails',
-        component: () => import('@/views/counterWorkOrder/fanDetails'),
-        name: 'fanDetails',
-        meta: {
-          title:i18n.t('sys_m029'),
-        }
-      },
-      {
-        hidden: true,
-        path: '/ticket-details',
-        component: () => import('@/views/counterWorkOrder/ticket-details'),
-        name: 'ticket-details',
-        meta: {
-          title:i18n.t('sys_m030'),
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/counterWorkOrder',
+  //   component: Layout,
+  //   name: 'counterWorkOrder',
+  //   meta: { title:i18n.t('sys_m026'),icon: 'el-icon-setting' },
+  //   children: [
+  //     {
+  //       path: '/counter-list',
+  //       component: () => import('@/views/counterWorkOrder/counter-list'),
+  //       name: 'counter-list',
+  //       meta: {
+  //         title:i18n.t('sys_m027'),
+  //       }
+  //     },
+  //     {
+  //       hidden: true,
+  //       path: '/counter-account-allocation',
+  //       component: () => import('@/views/counterWorkOrder/counter-account-allocation'),
+  //       name: 'counter-account-allocation',
+  //       meta: {
+  //         title:i18n.t('sys_m028'),
+  //       }
+  //     },
+  //     {
+  //       hidden: true,
+  //       path: '/fanDetails',
+  //       component: () => import('@/views/counterWorkOrder/fanDetails'),
+  //       name: 'fanDetails',
+  //       meta: {
+  //         title:i18n.t('sys_m029'),
+  //       }
+  //     },
+  //     {
+  //       hidden: true,
+  //       path: '/ticket-details',
+  //       component: () => import('@/views/counterWorkOrder/ticket-details'),
+  //       name: 'ticket-details',
+  //       meta: {
+  //         title:i18n.t('sys_m030'),
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: '/task',
     component: Layout,
@@ -480,22 +480,6 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/baseConfig',
-    component: Layout,
-    name: 'baseConfig',
-    meta: { title:i18n.t('sys_s001'),icon: 'el-icon-s-data' },
-    children: [
-      {
-        path: '/taskConfig',
-        component: () => import('@/views/baseConfig/taskConfig'),
-        name: 'taskConfig',
-        meta: {
-          title:i18n.t('sys_s002'),
-        }
-      }
-    ]
-  },
-  {
     path: '/permission',
     component: Layout,
     name: 'permission',
@@ -528,6 +512,14 @@ export const asyncRoutes = [
           title: i18n.t('sys_m052')
         }
       },
+      {
+        path: '/baseConfig',
+        component: () => import('@/views/permission/baseConfig'),
+        name: 'baseConfig',
+        meta: {
+          title: i18n.t('sys_s001')
+        }
+      }
       // {
       //   path: '/logManage',
       //   component: () => import('@/views/permission/logManage'),
