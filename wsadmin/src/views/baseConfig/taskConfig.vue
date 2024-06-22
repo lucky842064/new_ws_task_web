@@ -137,7 +137,7 @@ export default {
                 beforeClose: function (action, instance,done) {
                     if(action === 'confirm') {
                         instance.confirmButtonLoading = true;
-                        dosysconfig({status:3,del_id:val.id}).then(res =>{
+                        dosysconfig({ptype:3,del_id:val.id}).then(res =>{
                             instance.confirmButtonLoading = false;
                             if (res.code !=0) return;
                             successTips(that)
