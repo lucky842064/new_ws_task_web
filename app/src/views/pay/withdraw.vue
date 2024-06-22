@@ -69,7 +69,7 @@
 		<van-popup :close-on-click-overlay="false" :overlay="true" v-model="showModel">
 			<div class="dialog_content">
 				<div class="header_title">提现</div>
-				<div class="header_tips">当前可提现金额为200元</div>
+				<div class="header_tips">当前可提现金额为{{WithdMoney}}元</div>
 				<van-cell-group inset :border="false">
 					<van-field v-model="withdraw_num" type="number" clearable placeholder="请输入提现金额" />
 				</van-cell-group>
