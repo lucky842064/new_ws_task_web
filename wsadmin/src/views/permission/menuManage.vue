@@ -121,7 +121,7 @@ export default {
       this.menuForm.router = row.path;
       this.menuForm.menu_id = row.menu_id;
       this.menuForm.menuIcon = row.icon;
-      this.menuForm.menuName = row.mate.title;
+      this.menuForm.menuName = row.meta.title;
       this.menuForm.menuSout = row.sort;
       this.menuForm.parentId = row.pid == 0 ? '' : row.pid;
     },
@@ -130,18 +130,17 @@ export default {
       this.loadingMenu = true;
       const { data } = await allmenu({});
       const menuTree = data.memu?.sort((a, b) => (a.sort - b.sort)) || [];
-      console.log(menuTree);
       for (let m = 0; m < menuTree.length; m++) {
-        menuTree[m].label = menuTree[m].mate.title;
-        newMenu.push({ name: menuTree[m].mate.title,list_name: menuTree[m].mate.title,menu_id: menuTree[m].menu_id })
+        menuTree[m].label = menuTree[m].meta.title;
+        newMenu.push({ name: menuTree[m].meta.title,list_name: menuTree[m].meta.title,menu_id: menuTree[m].menu_id })
         if (menuTree[m].children) {
           menuTree[m].children.sort((a, b) => (a.sort - b.sort))
           for (let c = 0; c < menuTree[m].children.length; c++) {
-            menuTree[m].children[c].label = menuTree[m].children[c].mate.title;
+            menuTree[m].children[c].label = menuTree[m].children[c].meta.title;
             newMenu.push({
               menu_id: menuTree[m].children[c].menu_id,
-              name: menuTree[m].children[c].mate.title,
-              list_name: `　　└╌ ${menuTree[m].children[c].mate.title}`
+              name: menuTree[m].children[c].meta.title,
+              list_name: `　　└╌ ${menuTree[m].children[c].meta.title}`
             })
           }
         }

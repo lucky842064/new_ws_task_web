@@ -11,10 +11,7 @@ import './assets/iconfont/iconfont.css';
 window.Global = Global
 Global.setup();
 // 导入资源文件
-import {
-  i18n,
-  vantLocales
-} from './assets/lang'
+import { i18n, vantLocales } from './assets/lang'
 import DrowDownComponent from "@/components/dropdown"
 import scroll from "@/components/scroll"
 Vue.prototype.$Helper = Helper;

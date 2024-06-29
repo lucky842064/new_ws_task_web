@@ -112,11 +112,11 @@
         let { data } = await allmenu({});
         let menuTree = data.memu?.sort((a,b)=>(a.sort-b.sort))||[];
         for (let m = 0; m < menuTree.length; m++) {
-          menuTree[m].label = menuTree[m].mate.title;
+          menuTree[m].label = menuTree[m].meta.title;
           if (menuTree[m].children) {
             menuTree[m].children.sort((a,b)=>(a.sort-b.sort))
             for (let c = 0; c < menuTree[m].children.length; c++) {
-              menuTree[m].children[c].label = menuTree[m].children[c].mate.title;
+              menuTree[m].children[c].label = menuTree[m].children[c].meta.title;
             }
           }
         }

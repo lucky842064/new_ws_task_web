@@ -174,6 +174,22 @@ export const asyncRoutes = [
         meta: {
           title:i18n.t('sys_m062'),
         }
+      },
+      {
+        path: '/task_details',
+        component: () => import('@/views/registerManage/task_details'),
+        name: 'task_details',
+        meta: {
+          title:i18n.t('sys_m063'),
+        }
+      },
+      {
+        path: '/running_details',
+        component: () => import('@/views/registerManage/running_details'),
+        name: 'running_details',
+        meta: {
+          title:i18n.t('sys_m064'),
+        }
       }
     ]
   },
@@ -425,17 +441,17 @@ export const asyncRoutes = [
         component: () => import('@/views/content/material'),
         name: 'material',
         meta: {
-          title: i18n.t('sys_m046'),
+          title: i18n.t('sys_m045'),
         }
       },
-      {
-        path: '/quick-reply',
-        component: () => import('@/views/content/quick-reply'),
-        name: 'quick-reply',
-        meta: {
-          title: i18n.t('sys_m047'),
-        }
-      },
+      // {
+      //   path: '/quick-reply',
+      //   component: () => import('@/views/content/quick-reply'),
+      //   name: 'quick-reply',
+      //   meta: {
+      //     title: i18n.t('sys_m047'),
+      //   }
+      // },
       {
         hidden: true,
         path: '/add',
@@ -457,6 +473,14 @@ export const asyncRoutes = [
         path: '/pay_approval',
         component: () => import('@/views/financeManage/pay_approval'),
         name: 'pay_approval',
+        meta: {
+          title:i18n.t('sys_p002'),
+        }
+      },
+      {
+        path: '/manual_correction',
+        component: () => import('@/views/financeManage/manual_correction'),
+        name: 'manual_correction',
         meta: {
           title:i18n.t('sys_p002'),
         }

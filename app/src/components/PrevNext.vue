@@ -1,7 +1,7 @@
 <template>
     <div class="buy-footer">
         <span :class="isCanPrev() ? '':'footer-disabled'" @click="isCanPrev() && toPrev()">{{$t("other_001")}}</span>
-        共 {{totalPage}} 页
+        共 {{totalPage}}/{{page}} 页
         <span :class="isCanNext() ? '':'footer-disabled'"  @click="isCanNext() && toNext()">{{$t("other_002")}}</span>
     </div>
 </template>

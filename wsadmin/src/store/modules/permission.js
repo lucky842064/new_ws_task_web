@@ -32,16 +32,16 @@ function hasPermission(roles, route) {
 //   return res
 // }
 
-export function filterAsyncRoutes(asyncRouter,routers){
-  return asyncRouter.filter(item =>{
-    if (routers.includes(item.path)||item.hidden) {
-      if (item.children && item.children.length > 0) {
-        item.children = filterAsyncRoutes(item.children,routers)
-      }
-      return true
-    }
-  })
-}
+// export function filterAsyncRoutes(asyncRouter,routers){
+//   return asyncRouter.filter(item =>{
+//     if (routers.includes(item.path)||item.hidden) {
+//       if (item.children && item.children.length > 0) {
+//         item.children = filterAsyncRoutes(item.children,routers)
+//       }
+//       return true
+//     }
+//   })
+// }
 
 export function filterAllMenu(menuList,router=[]){
   menuList.forEach(item =>{
@@ -59,16 +59,20 @@ const state = {
   routes: [],
   addRoutes: []
 }
+export function filterAsyncRoutes(routers){
+  return routers.filter(item =>{
+    item.component = 'Layout';
+    if (item.path) {
+      if (item.children && item.children.length > 0) {
+        item.children = filterAsyncRoutes(item.children,routers)
+      }
+      return true
+    }
+  })
+}
 const mutations = {
   SET_ROUTES: (state, routes) => {
-    let rolesRouter = [];
-    let userMenu = filterAllMenu(state.userMenu);
-    // &&state.roles !== "liuming"
-    if (state.roles !== "admin"&&state.roles !== "lucky888") {
-      rolesRouter = filterAsyncRoutes(asyncRoutes,userMenu);
-    }else{
-      rolesRouter = routes;
-    }
+    let rolesRouter = filterAsyncRoutes(state.userMenu);
     state.addRoutes = rolesRouter
     state.routes = [...constantRoutes,...rolesRouter]
   },

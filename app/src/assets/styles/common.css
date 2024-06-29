@@ -422,3 +422,12 @@
 	transform: translate(-50%, -50%) !important;
   /* z-index: 9999 !important; */
 }
+.empty_tips{
+  width: 100%;
+  display: flex;
+  font-size: 28px;
+  padding-top: 5%;
+  height:100dvh;
+  justify-content: center;
+  background-color: #fff;
+}
