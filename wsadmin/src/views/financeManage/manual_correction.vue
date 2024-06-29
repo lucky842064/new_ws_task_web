@@ -28,7 +28,7 @@
 							<span>{{(factorModel.offset-1)*factorModel.limit+scope.$index+1}}</span>
 						</template>
                     </el-table-column> -->
-					<el-table-column prop="id" :label="$t('sys_m080')" minWidth="100" align="center">
+					<el-table-column prop="id" :label="$t('sys_m080')" minWidth="120" align="center">
                         <template slot-scope="scope">
                             {{ scope.row.id||"-" }}
 						</template>
