@@ -103,13 +103,13 @@ export default {
                 this.total = res.total;
                 this.list = res.list || [];
                 this.total_point = res.total_point;
-                for(let i = 0;i<this.list.length;i++){
-                    if(String(this.list[i].amount).indexOf("-") == -1){
-                        this.list[i].amount = "+"+(this.list[i].amount/100)    
-                    }else{
-                       this.list[i].amount = this.list[i].amount/100
-                    }
-                }
+                // for(let i = 0;i<this.list.length;i++){
+                //     if(String(this.list[i].amount).indexOf("-") == -1){
+                //         this.list[i].amount = "+"+(this.list[i].amount/100)    
+                //     }else{
+                //        this.list[i].amount = this.list[i].amount/100
+                //     }
+                // }
             });
         },
         onPrev() {

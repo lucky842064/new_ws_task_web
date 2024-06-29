@@ -73,7 +73,7 @@
                     <el-input :placeholder="$t('sys_mat061',{value:$t('sys_c009')})" v-model="sendForm.account" style="width:100%;"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('sys_m079')" prop="amount">
-                    <el-input :placeholder="$t('sys_mat061',{value:$t('sys_m079')})" v-model="sendForm.amount" oninput ="value=value.replace(/[^\d]/g,'')" ></el-input>
+                    <el-input :placeholder="$t('sys_mat061',{value:$t('sys_m079')})" v-model="sendForm.amount" oninput ="value=value.replace(/[^\d+-]/g,'')" ></el-input>
                     <span style="color:#ff4949;">变更金额：请输入正数；减少金额：请输入负数</span>
                 </el-form-item>
                 <el-form-item :label="$t('sys_l062')" prop="remark">
