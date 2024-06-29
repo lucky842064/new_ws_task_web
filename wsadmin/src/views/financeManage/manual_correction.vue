@@ -21,7 +21,7 @@
 		</div>
 		<div class="switch_bar">
 			<div class="consun_list handel_area">
-				<el-table :data="bannerList" border style="width: 100%" height="700" ref="serveTable" v-loading="loading" element-loading-spinner="el-icon-loading" :header-cell-style="{background:'#eef1f6',color:'#606266'}" @selection-change="selectAllChange"  @row-click="rowSelectChange">
+				<el-table :data="bannerList" border style="width: 100%" height="700" ref="serveTable" v-loading="loading" element-loading-spinner="el-icon-loading" :header-cell-style="{ color: '#909399', textAlign: 'center' }" @selection-change="selectAllChange"  @row-click="rowSelectChange">
 					<!-- <el-table-column type="selection" width="55"> </el-table-column> -->
 					<!-- <el-table-column prop="wx_id" label="序号" width="60" align="center">
                         <template slot-scope="scope">

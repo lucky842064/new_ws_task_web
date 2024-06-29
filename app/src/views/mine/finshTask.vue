@@ -10,9 +10,9 @@
                     </div>
                     <div class="tab_nav search_area">
                         <van-cell-group inset>
-                            <van-field v-model="mobile" center clearable placeholder="搜索下级">
+                            <van-field v-model="mobile" center clearable placeholder="搜索账号">
                                 <template #button>
-                                    <van-button size="small" type="primary" @click="pointflow(1)">搜索</van-button>
+                                    <van-button size="small" type="primary" @click="getTaskDetail(1)">搜索</van-button>
                                 </template>
                             </van-field>
                         </van-cell-group>
@@ -146,7 +146,7 @@ export default {
             gettaskrecordlist({
                 page: this.page,
                 limit: this.limit,
-                phone_no:this.mobile,
+                account:this.mobile,
                 start_time:Date.parse(this.currDate+" 00:00:00")/1000,
                 end_time:Date.parse(this.currDate+" 23:59:59")/1000,
             }).then(res => {
