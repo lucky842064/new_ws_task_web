@@ -1,145 +1,268 @@
+<style lang="scss" scoped>
+.top_model {
+    width: 100%;
+    height: 340px;
+    display: flex;
+    padding: 0 30px;
+    margin-bottom: 280px;
+    position: relative;
+    box-sizing: border-box;
+    justify-content: space-between;
+    background: #f45250;
+
+    .user_mess,
+    .lang_mess {
+        display: flex;
+        font-size: 28px;
+        height: 180px;
+        color: #fff;
+        align-items: center;
+
+        .user_head {
+            width: 120px;
+            height: 120px;
+            flex-shrink: 0;
+            overflow: hidden;
+            border-radius: 50%;
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .user_info {
+            margin-left: 20px;
+
+            .user_name {
+                font-weight: bold;
+                font-size: 36px;
+            }
+
+            .user_code {
+                margin-top: 10px;
+
+                .copay_code {
+                    padding: 8px 26px;
+                    font-size: 24px;
+                    background-color: #fff;
+                    color: $home-order-title;
+                    background: #fff;
+                }
+            }
+        }
+    }
+
+    .lang_mess {
+        display: flex;
+
+        img {
+            height: 20px;
+            margin-left: 10px;
+        }
+    }
+
+    .cover_model {
+        width: 100%;
+        position: absolute;
+        top: 190px;
+        left: 0;
+        padding: 0 20px;
+        box-sizing: border-box;
+        .task_warp {
+            display: flex;
+            flex-direction: column;
+            padding: 30px 0 40px 0;
+            border-radius: 10px;
+            background-color: $font-color-white;
+
+            .task_num {
+                width: 100%;
+                display: flex;
+                margin-bottom: 40px;
+                align-items: center;
+                flex-direction: column;
+
+                .text_1 {
+                    font-size: 28px;
+                }
+
+                .text_2 {
+                    display: flex;
+                    font-size: 78px;
+                    font-weight: bold;
+                    align-items: center;
+                    margin-top: 30px;
+
+                    img {
+                        height: 64px;
+                        margin-right: 30px;
+                    }
+                }
+            }
+        }
+        .task-pro {
+            width: 100%;
+            display: flex;
+            margin-top: 30px;
+            flex-direction: row;
+            .left-pro,
+            .right-pro {
+                flex: 1;
+
+                p {
+                    width: 100%;
+                    display: flex;
+                    color: #999999;
+                    font-weight: bold;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+
+            .left-pro p:nth-child(1), .right-pro p:nth-child(1) {
+                color: $home-eart-rate-value;
+                font-size: 42px;
+            }
+            .right-pro p:nth-child(1){
+                color: $home-month-value;
+            }
+
+            .left-pro p:nth-child(2),
+            .right-pro p:nth-child(2) {
+                font-size: 24px;
+                margin-top: 12px;
+            }
+        }
+    }
+}
+</style>
 <template>
-    <div class="home-content">
-        <div class="ifrem_box">
-            <iframe class="ifrem_src" :src="iframeSrc"></iframe>
+    <div class="home_warp">
+        <div class="top_model">
+            <div class="user_mess">
+                <div class="user_head">
+                    <img src="../assets/images/head/12.png" alt="" srcset="">
+                </div>
+                <div class="user_info">
+                    <div class="user_name">luse</div>
+                    <div class="user_code">推荐吗：xwzqy <span class="copay_code" v-clipboard:copy="code"  v-clipboard:success="copySuccess">复制</span></div>
+                </div>
+            </div>
+            <div class="lang_mess">
+                <!-- <span>zh-CN</span>
+                <img src="../assets/images/home/down_arrow_white.png" alt="" srcset=""> -->
+            </div>
+            <div class="cover_model">
+                <div class="task_warp">
+                    <div class="task_num">
+                        <div class="text_1">账户余额</div>
+                        <div class="text_2">
+                            <img src="../assets/images/mine/Recharge.png" alt="" srcset="">
+                            <span>{{user_money||0.00}}</span>
+                        </div>
+                    </div>
+                    <div class="custom_line">
+                        <span class="botton_line" style="background-color: #ececec;"></span>
+                    </div>
+                    <div class="task-pro">
+                        <div class="left-pro">
+                            <p>{{allIncome.today_income ||0}}</p>
+                            <p>{{ $t("home_058") }}</p>
+                        </div>
+                        <div class="right-pro">
+                            <p>{{allIncome.yesterday_income ||0}}</p>
+                            <p>{{ $t("home_059") }}</p>
+                        </div>
+                        <!-- <div class="right-pro">
+                            <p>999</p>
+                            <p>{{ $t("home_060") }}</p>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="user_info">
-            <div class="mess-box">
-                <img class="user_head" :src="require(`../../src/assets/images/head/${userInfo.head||0}.png`)" alt="" @click="$router.push('/myhead')">
-                <!-- <img class="user_head" :src="$store.state.User.userHeadList[userInfo.head||0]" @click="$router.push('/myhead')" /> -->
-                <!-- <img class="user_head" src="../assets/images/head/11.png" alt=""> -->
-                <div class="info-data">
-                    <p>账户收益：<span>{{today_incomet||0}}</span>元</p>
+        <div class="task_continer">
+            <div class="task_main">
+                <div class="task_item" v-for="(item, idx) in menuOption" :key="idx">
+                    <div class="left_text">
+                        <img class="ws_icon" :src="item.icon" alt="">
+                        <span>{{ item.name }}</span>
+                    </div>
+                    <div class="right_icon">
+                        <img src="../assets/images/home/xiala_icon.png" alt="" srcset="">
+                    </div>
                 </div>
-            </div>
-            <div class="btn">
-                <van-button @click="jumpDraw">提现</van-button>
             </div>
         </div>
-        <div class="home_content">
-            <!-- <NoticeBar :isScroll= true :list="noticeCont" :from="true" /> -->
-            <div class="task-pro">
-                <div class="task-item">
-                    <div class="left-pro">
-                        <p>{{ allIncome.today_income || 0}}</p>
-                        <p>{{ $t("home_023") }}</p>
-                    </div>
-                    <div class="right-pro">
-                        <p>{{ allIncome.yesterday_income || 0 }}</p>
-                        <p>{{ $t("home_024") }}</p>
-                    </div>
-                    <div class="show_detail" @click="jumpDetail">账单明细</div>
-                </div>
-                <!-- <div class="task-item">
-                    <div class="left-pro">
-                        <p>{{ userInfo.team_complete || 0}}</p>
-                        <p>今日完成任务量(单)</p>
-                    </div>
-                    <div class="right-pro">
-                        <p>{{ userInfo.yes_complete || 0 }}</p>
-                        <p>昨日完成任务量(单)</p>
-                    </div>
-                </div> -->
-            </div>
-            <div class="task-income">
-                <div class="task-item">
-                    <div class="left-pro">
-                        <p>今日完成任务量(单)</p>
-                        <p>{{ today_task.today_num || 0}}</p>
-                    </div>
-                    <div class="right-pro">
-                         <p>昨日完成任务量(单)</p>
-                        <p>{{ today_task.yesterday_num || 0 }}</p>
-                    </div>
-                    <div class="show_detail" @click="$router.push('/finshTask')">查看详情></div>
-                </div>
-            </div>
-
-            <div class="code-area">
-                <div class="code-title">
-                    <div class="line-left"></div>
-                    <div class="wechat-icon">
-                        <span>邀请好友</span>
-                    </div>
-                    <!-- <div class="task-logo" @click="jumpInvit">
-                        已邀请 <span>{{teamStemp.team_num||0}}</span> 人，今日邀请 <span>{{teamStemp.day_add_member||0}}</span> 人 <span class="jump_detail">下线管理>></span>
-                    </div> -->
-                    <div class="task-logo">
-                        已邀请 <span>{{today_invit.invite_num||0}}</span> 人，今日邀请 <span>{{today_invit.today_invite_num||0}}</span> 人
-                    </div>
-                </div>
-            </div>
-            <div class="share_box share_first share_top">
-                <div class="share_link">
-                    <p>邀请码：{{invite_code||'...'}}</p>
-                </div>
-                <div class="share_btn">
-                    <van-button v-clipboard:copy="invite_code" v-clipboard:success="copySuccess">复制邀请码</van-button>
-                </div>
-            </div>
-            <div class="share_box share_last">
-                <div class="share_link">
-                    <p>链接：{{invit_link||'...'}}</p>
-                </div>
-                <div class="share_btn">
-                    <van-button v-clipboard:copy="invit_link+'?r='+invite_code+'#/register'" v-clipboard:success="copySuccess">复制链接</van-button>
-                </div>
-            </div>
-            <!-- <div class="share_box share_last">
-                <div class="share_link">
-                    <p>下载兼职APP</p>
-                </div>
-            </div> -->
-            <!-- <div class="poster-area">
-                <div class="poster_img" ref="posterHtml">
-                    <van-button type="danger" @click="downApp">下载i兼职APP</van-button>
-                </div>
-            </div> -->
-            <van-button class="login_out" type="danger" @click="logoutHandle">退出登录</van-button>
+        <div class="login_out">
+            <van-button type="danger" @click="logoutHandle">退出登录</van-button>
         </div>
-
-        <div class="serve" @click="isDialong=true">
-            <img src="../assets/images/ms_serve.png" alt="" srcset="">
-            <p>客服</p>
-        </div>
-        <popDialog :showModel="isDialong" @closeBtn="closeDialong"></popDialog>
     </div>
 </template>
 <script>
-import { mapState } from "vuex";
-import jumpUrl from "@/utils/helper"
-import { fmoney,timeStamp,formatTime1 } from "../utils/tool";
-import QRCode from 'qrcodejs2'
-import html2canvas from 'html2canvas';
-import popDialog from "@/components/serveDialog";
-import { getaccountincome,gettasknum,getinvitenum ,getinvitelink} from '@/api/bill';
-
+import { mapState } from 'vuex';
+import { getaccountincome,getbrokeragestatis } from '@/api/home'
 export default {
-    name: "mine",
-    components: {popDialog},
+    name: 'home',
+    components: {},
     data() {
         return {
-            wk_name:'',
-            iframeSrc:'',
-            teamStemp:"",
-            today_task:"",
-            today_invit:"",
-            invit_link:"",
-            today_incomet:0
-        };
+            code: "456666",
+            user_money:0,
+            allIncome:"",
+            taskOption: [
+                {
+                    status: 1,
+                },
+                {
+                    status: 2,
+                },
+                {
+                    status: 3,
+                }
+            ]
+        }
     },
     computed: {
         ...mapState({
             userInfo: state => state.User.userInfo,
-            allIncome: state => state.User.allIncome,
-            invite_code: state => state.User.inviteCode
-        })
+            bannerList: state => state.User.bannerList
+        }),
+        taskNameOption() {
+            return ["", "WhatsApp挂机任务", "WhatsApp拉粉任务", "WhatsApp拉群任务"]
+        },
+        taskStatusOption() {
+            return ["", "开始任务", "进行中", "已结束"]
+        },
+        menuOption() {
+            return [
+                {
+                    icon:require("../assets/images/mine/mine-put-record.png"),
+                    name:"账号提现"
+                },
+                {
+                    icon:require("../assets/images/mine/me_icon_txjl.png"),
+                    name:"收益明细"
+                },
+                {
+                    icon:require("../assets/images/mine/mine-put-record2.png"),
+                    name:"提现订单"
+                },
+                {
+                    icon:require("../assets/images/mine/mine-message-center.png"),
+                    name:"消息中心"
+                },
+                {
+                    icon:require("../assets/images/mine/mine-update-pwd.png"),
+                    name:"修改密码"
+                }
+            ]
+        }
     },
-    created() {
+    activated() {
         this.syncInitApi();
-        this.$store.dispatch('User/userIncome');
+        this.$store.dispatch('User/plantCarousel');
     },
-    mounted(){},
     methods: {
         syncInitApi(){
             let fun1 = new Promise((resolve,reject)=>{
@@ -148,43 +271,26 @@ export default {
                 })
             });
             let fun2 = new Promise((resolve,reject)=>{
-                gettasknum().then(res =>{
+                getbrokeragestatis().then(res =>{
                     resolve(res)
                 })
             });
-            let fun3 = new Promise((resolve,reject)=>{
-                getinvitenum().then(res =>{
-                    resolve(res)
-                })
-            });
-            let fun4 = new Promise((resolve,reject)=>{
-                getinvitelink().then(res =>{
-                    resolve(res)
-                })
-            });
-            Promise.all([fun1,fun2,fun3,fun4]).then( res => {
-                const [{income},data2,data3,{invite_link}] = res;
-                this.today_incomet = income;
-                this.today_task = data2;
-                this.today_invit = data3;
-                this.invit_link = invite_link;
+            Promise.all([fun1,fun2]).then( res => {
+                const [{income},data2] = res;
+                this.user_money = income;
+                this.allIncome = data2;
             })
         },
-        closeDialong(){
-            this.isDialong=false;
+        copySuccess() {
+            this.$toast(`${this.$t("home_031")}${this.$t("other_006")}`);
         },
-        localStorageSetItem(key ,value){
-            if (key == null || key == undefined){
-                return 
-            }
-            if (value == null || value == undefined){
-                return 
-            }
-            if (this.isIOS) {
-                let params = {"method":"localStorageSetItem","key":key,"value":value}
-                window.webkit.messageHandlers.jsCallNativeMethod.postMessage(params); 
-            }else if(this.isAndroid){  
-                JSInterface.localStorageSetItem(key,value)
+        handleTask(row) {
+            if (row.status == 1) {
+                this.$router.push("/scanOnline")
+            } else if (row.status == 2) {
+                this.$router.push("/pullgroupTask")
+            } else if (row.status == 3) {
+                this.$router.push("/pullPownTask")
             }
         },
         logoutHandle() {
@@ -208,420 +314,82 @@ export default {
                 }catch(e){}
                 this.$router.push("/login")
             });
-        },
-        clipboardSuccessHandler({ value, event }) {
-            this.$toast(`${this.$t("home_031")}${this.$t("other_006")}`);
-        },
-        createQrcode(){
-            let qrCode = this.userInfo.share_url+"?r="+this.userInfo.user_code;
-            new QRCode(this.$refs.qrcodeImg, {
-                text:qrCode,
-                width: 85,
-                height: 85,
-                colorDark: "#333333", //二维码颜色
-                colorLight: "#ffffff", //二维码背景色
-                correctLevel: QRCode.CorrectLevel.L//容错率，L/M/H
-            })
-        },
-        createPoster () {
-            const _this = this
-            html2canvas(_this.$refs.posterHtml, {
-                useCORS: true,
-                allowTaint: false,
-                logging: false,
-                letterRendering: true,
-                onclone (doc) {
-                    // console.log(doc);
-                    // let e = doc.querySelector('#posterHtml')
-                    // e.style.display = 'block'
-                }
-            }).then(canvas => {
-                let canvasImg = canvas.toDataURL('image/png');
-                _this.imgDown(canvasImg)
-            })
-        },
-        imgDown (img) {     
-            var alink = document.createElement("a");
-                alink.download = this.userInfo.user_code+timeStamp()
-                alink.href = img;
-                document.body.appendChild(alink);
-                alink.click();
-                alink.remove();
-        },
-        creatQrBtn(){
-            this.createPoster()
-        },
-        copySuccess(){
-            this.$toast(`${this.$t("home_031")}${this.$t("other_006")}`);
-        },
-        // 格式化金额
-        formatMoney(point) {
-            return fmoney(point,2);
-        },
-        jumpDetail(){
-            this.$router.push("/betrecord");
-        },
-        jumpInvit(){
-            this.$router.push("/invitFriend");
-        },
-        jumpDraw(){
-            this.$router.push("/withdraw");
-        },
-        downApp(){
-            if(jumpUrl.judgeClient() == 'ios'){
-                this.iframeSrc = `https://www.lucky365.me/code/${this.userInfo.user_code}?dt=${formatTime1()}`
-                setTimeout(function () {
-                    window.location.href = "https://www.lucky365.me/install.mobileprovision";
-                },4000);
-            // jumpUrl.toOutLink('https://ios.jianzhi9.com')
-            }else{
-            window.open('https://998html.oss-cn-hangzhou.aliyuncs.com/IJZ_1.0.apk', "_self")
-            }
         }
     }
 };
 </script>
 <style lang="scss" scoped>
-    .home-content {
-        height: 100%;
-        height: 100vh;
-        overflow-x: hidden;
-        overflow-y: auto;
-        background-color: #f2f2f2;
-        -webkit-overflow-scrolling: touch; 
-        padding-bottom: 120px;
-        .ifrem_box{
-            height: 0;
-            opacity: 0;
-        }
-        .serve{
-            width: 108px;
-            height: 108px;
-            position: fixed;
-            right: 0;
-            z-index: 2;
-            bottom: 185px;
-            border-radius: 50%;
-            background-color: #fff;
-            // box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-            box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
-            img{
-                display: block;
-                width: 40px;
-                height: 50px;
-                margin: 0 auto;
-                margin-top: 14px;
-            }
-            p{
-                width: 100%;
-                float: left;
-                font-weight: 600;
-                text-align: center;
-                font-size: 24px;
-                color: $home-bind-button;
-            }
-        }
-        .user_info{
-            width: 100%;
-            display: flex;
-            padding: 20px 32px;
-            box-sizing: border-box;
-            background: #fff;
-            border-bottom: 1px solid #d8d8d8;
-            .mess-box{
-                display: flex;
-                flex-grow: 2;
-                .user_head{
-                    width: 104px;
-                    height: 104px;
-                    border-radius: 50%;
-                    margin-right: 16px;
-                }
-                .info-data{
-                    display: flex;
-                    flex-wrap: wrap;
-                    padding: 14px 0;
-                    box-sizing: border-box;
-                    align-items: center;
-                    p{
-                        width: 100%;
-                        color: #999999;
-                        font-size: 28px;
-                        span{
-                            color:#F52C2C;
-                        }
-                    }
-                }
-            }
-            .btn{
-                flex-grow: 0;
-                display: flex;
-                align-items: center;
-                .van-button{
-                    color: $font-color-pale;
-                    height: 34px;
-                    width: 65px;
-                    border-radius: 34px;
-                    background-color: $color-theme;
-                }
-            }
-        }
-        .home_content{
-            width: 100%;
-            float: left;
-            padding: 24px 32px;
-            box-sizing: border-box;
-            .task-pro{
-                width: 100%;
-                border-radius: 10px;
-                background-color: $color-theme;
-                .task-item{
-                    width: 100%;
-                    display: flex;
-                    flex-wrap: wrap;
-                    flex-direction: row;
-                    .left-pro, .right-pro{
-                        padding: 20px 0;
-                        flex: 1;
-                        border-bottom: 1px solid #fff;
-                        p{
-                            width: 100%;
-                            display: flex;
-                            color: #fff;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                    }
-                    .left-pro p:nth-child(1), .right-pro p:nth-child(1){
-                        font-size: 48px;
-                    }
-                    .left-pro p:nth-child(2), .right-pro p:nth-child(2){
-                        font-size: 24px;
-                        font-weight: 400;
-                        margin-top: 12px;
-                    }
-                    .left-pro{
-                        border-right: 1px solid #fff;
-                    }
-                }
-            }
-            .task-income{
-                width: 100%;
-                display: flex;
-                margin-top: 20px;
-                border-radius: 10px;
-                background-color: #fff;
-                // background-color: $home-bind-button;
-                .task-item{
-                    width: 100%;
-                    display: flex;
-                    padding: 20px 0;
-                    .left-pro, .right-pro{
-                        width: 100%;
-                        flex-grow: 2;
-                        border-right: 1px solid #E3E3E3;
-                        // border-bottom: 1px solid #f75656;
-                        p{
-                            width: 100%;
-                            height: 33px;
-                            display: flex;
-                            color: #000;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                    }
-                    .show_detail{
-                        width: 362px;
-                        flex-grow: 1;
-                        text-decoration: none;
-                        color: $home-month-value;
-                    }
-                    .left-pro p:nth-child(1), .right-pro p:nth-child(1){
-                        font-size: 24px;
-                        font-weight: 400;
-                        margin-top: 12px;
-                        margin-bottom: 3px;
-                    }
-                    .left-pro p:nth-child(2), .right-pro p:nth-child(2){
-                        font-size: 32px;
-                        font-weight: 600;
-                    }
-                }
-            }
-            .show_detail{
-                width: 100%;
-                height: 72px;
-                text-align: center;
-                font-size: 24px;
-                font-weight: 400;
-                color: #07c160;
-                line-height: 72px;
-                text-decoration: underline;
-            }
-            .code-area{
-                width: 100%;
-                margin: 56px 0 40px 0;
-                border-radius: 20px;
-                .code-title{
-                    width: 100%;
-                    display: flex;
-                    align-items: center;
-                    .line-left{
-                        width: 6px;
-                        height: 36px;
-                        margin-right: 9px;
-                        background: #F52C2C;
-                    }
-                    .wechat-icon{
-                        color: #141414;
-                        font-size: 32px;
-                        display: flex;
-                        font-weight: 500;
-                        align-items: center;
-                        span{
-                            font-weight: 600;
-                        }
-                    }
-                    .task-logo{
-                        font-size: 24px;
-                        font-weight: 400;
-                        color: #999999;
-                        margin-top: 8px;
-                        margin-left: 11px;
-                        span{
-                            color: #F52C2C;
-                        }
-                        .jump_detail{
-                            text-align: right;
-                        }
-                    }
-                }
-            }
-            .poster-area{
-                width: 100%;
-                margin-top: 22px;
-                position: relative;
-                background: transparent;
-                .poster_img{
-                   width: 100%; 
-                   height: 584px;
-                   position: relative;
-                //    background: url('../assets/images/home/down_bg.png') no-repeat;
-                   background-size: cover;
-                    .van-button{
-                        width: 165px;
-                        height: 41px;
-                        border-radius: 22px;
-                        position: absolute;
-                        left: 50%;
-                        bottom: 32px;
-                        color: #F80000;
-                        background: transparent;
-                        transform: translateX(-50%);
-                        border-color: #F80000;
+.home_warp {
+    height: 100%;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #f2f2f2;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 120px;
 
-                    }
-                   .qr-code{
-                        width: 400px;
-                        height: 300px;
-                        // background-color: violet;
-                        display: flex;
-                        flex-wrap: wrap;
-                        justify-content: center;
-                        position: absolute;
-                        left: 50%;
-                        bottom: 130px;
-                        transform: translateX(-50%);
-                        p{
-                            width: 100%;
-                            color: #FFF346;
-                            font-size: 32px;
-                            text-align: center;
-                        }
-                        .qr_img{
-                            display: flex;
-                            width: 190px;
-                            height: 190px;
-                            overflow: hidden;
-                            box-sizing: border-box;
-                            background-color: #fff;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                    }
-                }
-                img{
-                    display: block;
-                    width: 100%;
-                    height: auto;
-                }
-            }
-            .share_box{
+    .task_continer {
+        width: 100%;
+        display: flex;
+        margin-top: 20px;
+        flex-direction: column;
+        box-sizing: border-box;
+        background-color: $font-color-white;
+        .task_main {
+            display: flex;
+            font-size: 28px;
+            padding: 0 20px;
+            border-radius: 10px;
+            box-sizing: border-box;
+            flex-direction: column;
+            .task_item {
                 width: 100%;
                 display: flex;
-                // margin-bottom: 20px;
-                padding: 20px 32px;
+                padding: 20px 20px;
+                align-items: center;
                 box-sizing: border-box;
-                background: #8283e0;
-                // border-radius: 12px;
-                .share_link, .share_btn{
-                    flex-grow: 1;
+                justify-content: space-between;
+                border-bottom: 1px solid #ececec;
+                .left_text {
                     display: flex;
                     align-items: center;
-                    justify-content: space-between;
-                    .van-button{
-                        color: #feeeee;
-                        float: right;
-                        width: 94px;
-                        height: 32px;
-                        font-size: 12px;
-                        border-radius: 36px;
-                        border: none;
-                        background-color: $color-theme;
+                    .ws_icon {
+                        height: 50px;
+                        margin-right: 10px;
                     }
                 }
-                .share_btn{
-                    flex-grow: 0;
-                }
-                .share_link{
-                    display: flex;
-                    flex-wrap: wrap;
-                    align-items: center;
-                    p{
-                        width: 100%;
-                        font-size: 24px;
-                        font-weight: 400;
-                        margin-bottom: 6px;
-                        color: #fff;
-                    }
-                    p:nth-child(2){
-                        color: #F52C2C;
+                .right_icon{
+                    img{
+                        height: 26px;
+                        transform: rotate(-90deg);
                     }
                 }
+
+                .van-button {
+                    width: 100px;
+                    height: max-content;
+                    line-height: 1;
+                    padding: 10px 0;
+                    font-size: 12px;
+                    border-radius: 35px;
+                    box-sizing: border-box;
+                }
             }
-            .share_top{
-                border-top-left-radius: 12px;
-                border-top-right-radius: 12px;
-            }
-            .share_first{
-                border-bottom: 1px solid #E3E3E3;
-            }
-            .share_last{
-                border-bottom-left-radius: 12px;
-                border-bottom-right-radius: 12px;
-            }
-            .login_out{
-                width: 100%;
-                height: 88px;
-                display: flex;
-                z-index: 1;
-                justify-content: center;
-                margin-top: 32px;
-                color: #999999;
-                border-color: #fff;
-                background-color: #fff;
-                border-radius: 12px;
+            .task_item:last-child{
+                border: none;
             }
         }
     }
+    .login_out{
+        width: 100%;
+        display: flex;
+        padding: 0 20px;
+        margin-top: 30px;
+        box-sizing: border-box;
+        .van-button{
+            width: 100%;
+            border-radius: 30px;
+        }
+    }
+}
 </style>

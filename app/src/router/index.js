@@ -10,6 +10,8 @@ const Register = () => import('../views/sign/register');
 const ForgotPassword = () => import("../views/sign/ForgotPassword");
 //me
 const Mine = () => import("../views/Mine");
+const Spread = () => import("../views/spread");
+const Service = () => import("../views/service");
 //个人中心
 const personCenter = () => import('../views/mine/personaCenter')
 const PutRecord = () => import('../views/mine/PutRecord')
@@ -24,6 +26,9 @@ const BackBind = () => import('../views/pay/backBind')
 const NoFound = () => import('../views/404');
 //我的头像
 const MyHead = () => import('../views/home/myhead');
+const scanOnline = () => import('../views/home/scan_online');
+const pullgroupTask = () => import('../views/home/ws_pullgroup');
+const pullPownTask = () => import('../views/home/ws_pullpower');
 
 Vue.use(VueRouter);
 
@@ -60,7 +65,37 @@ const routes = [{
             hasTabBar: false,
             keepAlive: true,
             index: 0.3,
+        }
+    },
+    {
+        path: "/spread",
+        name: "spread",
+        components: {
+            default: Spread,
+            tabBar: Footer
         },
+        meta: {
+            requireAuth: true,
+            showNavBar: false,
+            hasTabBar: false,
+            keepAlive: true,
+            index: 0.3,
+        }
+    },
+    {
+        path: "/service",
+        name: "service",
+        components: {
+            default: Service,
+            tabBar: Footer
+        },
+        meta: {
+            requireAuth: true,
+            showNavBar: false,
+            hasTabBar: false,
+            keepAlive: true,
+            index: 0.3,
+        }
     },
     {
         path: "/personCenter",
@@ -72,6 +107,39 @@ const routes = [{
             requireAuth: true,
             index: 1
         },
+    },
+    {
+        path: "/scanOnline",
+        name: "scanOnline",
+        component: scanOnline,
+        meta: {
+            hasTabBar: false,
+            title: "扫码上线赚钱",
+            requireAuth: true,
+            index: 1
+        }
+    },
+    {
+        path: "/pullgroupTask",
+        name: "pullgroupTask",
+        component: pullgroupTask,
+        meta: {
+            hasTabBar: false,
+            title: "WhatsApp拉群任务",
+            requireAuth: true,
+            index: 1
+        }
+    },
+    {
+        path: "/pullPownTask",
+        name: "pullPownTask",
+        component: pullPownTask,
+        meta: {
+            hasTabBar: false,
+            title: "WhatsApp邀请任务",
+            requireAuth: true,
+            index: 1
+        }
     },
     {
         path: "/deposit",

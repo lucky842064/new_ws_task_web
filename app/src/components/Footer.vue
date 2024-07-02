@@ -27,7 +27,19 @@ export default {
                     path: "home"
                 },
                 {
-                    name: this.$t("foot_002"),
+                    name: this.$t("foot_003"),
+                    active: require("../assets/images/home/mine-icon-a.png"),
+                    inactive: require("../assets/images/home/mine-icon.png"),
+                    path: "spread"
+                },
+				{
+                    name: this.$t("foot_005"),
+                    active: require("../assets/images/home/server_icon.jpg"),
+                    inactive: require("../assets/images/home/home-icon.png"),
+                    path: "service"
+                },
+                {
+                    name: this.$t("foot_004"),
                     active: require("../assets/images/home/mine-icon-a.png"),
                     inactive: require("../assets/images/home/mine-icon.png"),
                     path: "mine"

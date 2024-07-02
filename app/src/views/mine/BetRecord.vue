@@ -4,17 +4,17 @@
             <page-header style="position: fixed;top: 0;left: 0; z-index: 9;" :title="$t('title_001')" :show-icon="true" :bgcolor="false"></page-header>
             <div class="dropdown_warp">
                 <div class="promote-header">
+                    <div class="tab_nav" @click="pulldownState">
+                        <span v-if = "dateState == ''">收益类型</span> 
+                        <span v-else>{{ dateState }}</span> 
+                        <van-icon class="down_img" name="arrow-down" style="transition: all 200ms linear" :style="{ transform: `rotate(${showState ? 180 : 0}deg)`}" />
+                    </div>
                     <div class="tab_nav" @click="pulldownTime">
                         <span v-if = "timeValue === ''">收益时间</span> 
                         <span v-else-if = "timeValue == 0">今天</span> 
                         <span v-else-if= "timeValue == 1">昨天</span> 
                         <span v-else-if= "timeValue == 2">近七天</span>
                         <van-icon class="down_img" name="arrow-down" style="transition: all 200ms linear" :style="{ transform: `rotate(${showTime ? 180 : 0}deg)`}" />
-                    </div>
-                    <div class="tab_nav" @click="pulldownState">
-                        <span v-if = "dateState == ''">收益类型</span> 
-                        <span v-else>{{ dateState }}</span> 
-                        <van-icon class="down_img" name="arrow-down" style="transition: all 200ms linear" :style="{ transform: `rotate(${showState ? 180 : 0}deg)`}" />
                     </div>
                     <div class="tab_nav cash_nav" @click="pulldownState">
                         总收益：<span style="color:#F52C2C;">{{total_point||0}}元</span> 

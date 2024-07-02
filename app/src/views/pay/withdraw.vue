@@ -83,7 +83,7 @@
 	</div>
 </template>
 <script>
-import { getaccountincome } from '@/api/bill';
+import { getaccountincome} from '@/api/home';
 import { getwithdrawcard,savewithdrawapproval } from '@/api/pay';
 import PageHeader from '@/components/Header';
 import { setTimeout } from 'timers';
