@@ -1,7 +1,7 @@
 <template>
     <div class="earn">
         <div class="custom_head">
-            <page-header style="position: fixed;top: 0;left: 0; z-index: 9;" :title="$t('title_001')" :show-icon="true" :bgcolor="false"></page-header>
+            <page-header style="position: fixed;top: 0;left: 0; z-index: 9;" :title="$t('title_012')" :show-icon="true" :bgcolor="false"></page-header>
             <div class="dropdown_warp">
                 <div class="promote-header">
                     <div class="tab_nav" @click="pulldownState">
@@ -53,7 +53,7 @@
                 </ul>
             </div>
         </van-overlay>
-        <PrevNext style="width:100%;float:left;margin:10px 0 10px 0;" :len="list.length" :page="page" :limit="limit" :total="total" @to-prev="onPrev" @to-next="onNext"></PrevNext>
+        <PrevNext :len="list.length" :page="page" :limit="limit" :total="total" @to-prev="onPrev" @to-next="onNext"></PrevNext>
     </div>
 </template>
 <script>
@@ -293,7 +293,7 @@ export default {
     font-size: 0.28rem;
     box-sizing: border-box;
     position: relative;
-    height: calc(100vh - 360px);
+    height: calc(100vh - 355px);
     .buy-number{
         width: 100%;
         float: left;

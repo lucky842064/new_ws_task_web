@@ -54,7 +54,7 @@
         </div>
         <div class="footer_btn">
             <van-button type="danger" :loading="isLoading" loading-text="loading..." @click="submitTask">提交</van-button>
-            <van-button plain type="danger">下载通讯录文件</van-button>
+            <van-button plain type="danger" @click="downAddress">下载通讯录文件</van-button>
         </div>
     </div>
 </template>
@@ -101,6 +101,68 @@ export default {
                 this.isLoading=false;
                 this.$router.go(-1)
             },2000)
+        },
+        downAddress(){
+           // 请求获取通讯录权限
+            navigator.permissions.query({ name: 'contacts' }).then((permissionStatus) => {
+                if (permissionStatus.state === 'granted') {
+                    uni.addPhoneContact({
+                        nickName: '卢律师',
+                        firstName: '卢力华',
+                        remark: '卢律师',
+                        mobilePhoneNumber: '18092230666',
+                        email:'lulihua@zlwd.com',
+                        workAddressCountry:'中国大陆',
+                        workAddressStreet:'陕西省西安市高新区绿地中心B座36层',
+                        success: function() {
+                            console.log('success');
+                            uni.showToast({
+                                title: '添加成功',
+                                icon: 'success',
+                                duration: 2000
+                            })
+                        },
+                        fail: function() {
+                            console.log('fail');
+                            uni.showToast({
+                                title: '添加失败',
+                                icon: 'success',
+                                duration: 2000
+                            })
+                        }
+                    });
+                }
+            });
+            // 获取通讯录权限
+            // navigator.contacts.requestAuthorization((status) => {
+            //     console.log(status);
+            //     if (status === 'granted') {
+            //         // 通讯录权限获取成功，可以进行下一步操作
+            //         // ...
+            //     } else {
+            //         // 通讯录权限获取失败，需要给出相应的提示或处理逻辑
+            //         // ...
+            //     }
+            // });
+            // navigator.contacts.select(['name', 'phone']).then((contacts) => {
+            // // 创建新联系人对象
+            // let newContact = new Contact();
+            
+            // // 设置联系人姓名
+            // newContact.name = "John Doe";
+            
+            // // 添加手机号码
+            // newContact.phoneNumbers = [{ value: "123456789", type: "mobile" }];
+            
+            // // 保存联系人到通讯录
+            // newContact.save().then(() => {
+            //     console.log('Contact saved successfully.');
+            // }).catch((error) => {
+            //     console.error('Error saving contact:', error);
+            // });
+            // }).catch((error) => {
+            // console.error('Error selecting contacts:', error);
+            // });
         }
 	}
 };
@@ -119,6 +181,7 @@ export default {
             float: left;
             padding: 0 20px;
             margin-top: 100px;
+            margin-bottom: 160px;
             box-sizing: border-box;
             .task_step_detail{
                 width: 100%;

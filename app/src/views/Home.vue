@@ -1,164 +1,3 @@
-<style lang="scss" scoped>
-.top_model{
-    width: 100%;
-    height: 340px;
-    display: flex;
-    padding: 0 30px;
-    margin-bottom: 60px;
-    position: relative;
-    box-sizing: border-box;
-    justify-content: space-between;
-    background: #f45250;
-    .user_mess, .l_value{
-        display: flex;
-        font-size: 28px;
-        height: 180px;
-        color: #fff;
-        align-items: center;
-        .user_head{
-            width: 120px;
-            height: 120px;
-            flex-shrink: 0;
-            overflow: hidden;
-            border-radius: 50%;
-            border: 1px solid #fff;
-            img{
-                width: 100%;
-                height: 100%;
-            }
-        }
-        .user_info{
-            margin-left: 20px;
-            .user_name{
-                font-weight: bold;
-                font-size: 36px;
-            }
-            .user_code{
-                margin-top: 10px;
-                .copay_text{
-                    padding: 8px 26px;
-                    font-size: 24px;
-                    margin-left:10px;
-                    border-radius:30px;
-                    background-color: #fff;
-                    color: $home-order-title;
-                    background: #fff;
-                }
-            }
-        }
-    }
-    .lang_mess{
-        display: flex;
-        img{
-            height: 20px;
-            margin-left: 10px;
-        }
-    }
-    .l_value{
-        display: flex;
-        position: relative;
-        align-items: center;
-        span{
-            width: 100%;
-            flex-grow: 1;
-            color: #fff;
-            font-size: 32px;
-            border-radius: 8px;
-        }
-        .down_icon{
-            display: flex;
-            width: 20px;
-            width: 36px;
-            margin-left: 20px;
-        }
-        .down_list{
-            width: 160px;
-            max-height: 230px;
-            position: absolute;
-            left: 0;
-            top: 140px;
-            z-index: 1;
-            color: $font-color-black;
-            font-size: 28px;
-            padding: 16px 20px;
-            border-radius: 8px;
-            box-sizing: border-box;
-            background-color: #fff;
-            p{
-                padding: 10px 0;
-                border-bottom: 1px solid #ebedf0;
-            }
-            p:last-child{
-                border: none;
-            }
-        }
-        .down_list:before {
-            content: "";
-            display: block;
-            position: absolute;
-            width:0;
-            height: 0;
-            border: 16px solid transparent;
-            border-bottom-color: #fff;
-            left: 40px;
-            top: -32px;
-        }
-        .active_open{
-            display: block;
-            transition: all .2s;
-            animation: slide-down .2s ease-in;
-            transition: .2s ease-in;
-            transform-origin: 50% 0;
-            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-        }
-        .active_close{
-            display: none;
-            transition: all .5s;
-            animation: select-close .5s ease-in;
-            transition: .3s ease-in;
-            transform-origin: 50% 0;
-        }
-        @keyframes slide-down{
-            0%{transform: scale(1,.5)}
-            100%{transform: scale(1,1)}
-        }
-    }
-    .cover_model{
-        width: 100%;
-        position: absolute;
-        left: 0;
-        bottom: -40px;
-        padding: 0 20px;
-        box-sizing: border-box;
-        .task-pro{
-            width: 100%;
-            display: flex;
-            padding: 30px 0 40px 0;
-            border-radius: 10px;
-            flex-direction: row;
-            background-color: $font-color-white;
-            .left-pro, .right-pro{
-                flex: 1;
-                p{
-                    width: 100%;
-                    display: flex;
-                    color: #999999;
-                    font-weight: bold;
-                    justify-content: center;
-                    align-items: center;
-                }
-            }
-            .left-pro p:nth-child(1), .right-pro p:nth-child(1){
-                font-size: 46px;
-            }
-            .left-pro p:nth-child(2), .right-pro p:nth-child(2){
-                font-size: 24px;
-                margin-top: 12px;
-            }
-        }
-    }
-}
-</style>
 <template>
     <div class="home_warp" @click="isIndex=false">
         <div class="top_model">
@@ -167,8 +6,8 @@
                     <img src="../assets/images/head/12.png" alt="" srcset="">
                 </div>
                 <div class="user_info">
-                    <div class="user_name">luse</div>
-                    <div class="user_code">推荐吗：{{invite_code}} <span class="copay_text" v-clipboard:copy="invite_code" v-clipboard:success="copySuccess">复制</span></div>
+                    <div class="user_name">{{ userInfo.account }}</div>
+                    <div class="user_code">推荐吗：{{userInfo.inviteCode}} <span class="copay_text" v-clipboard:copy="userInfo.inviteCode" v-clipboard:success="copySuccess">复制</span></div>
                 </div>
             </div>
             <div class="l_value" @click="showChangeBtn" @click.stop>
@@ -208,7 +47,7 @@
             <van-swipe class="my_swipe" :autoplay="3000" indicator-color="white">
                 <van-swipe-item v-for="(item,idx) in bannerList" :key="idx">
                     <template v-if="item.link">
-                        <a style="display: flex;" :href="item.link" target="\_blank">
+                        <a style="display: flex;" :href="item.link" target="_blank">
                             <img :src="item.file_url" alt="">
                         </a>
                     </template>
@@ -263,9 +102,8 @@ export default {
 	},
 	computed: {
 		...mapState({
-			userInfo: state => state.User.userInfo,
+			userInfo: state => state.User,
             bannerList: state => state.User.bannerList,
-            invite_code: state => state.User.inviteCode
 		}),
         taskNameOption(){
             return ["","WhatsApp挂机任务","WhatsApp拉粉任务","WhatsApp拉群任务"]
@@ -297,9 +135,6 @@ export default {
                 this.teamStemp = data2;
             })
         },
-        // async initSpread() {
-        //   this.teamStemp = await getincome({});
-        // },
         copySuccess(){
             this.$toast(`${this.$t("home_031")}${this.$t("other_006")}`);
         },
@@ -333,6 +168,165 @@ export default {
         background-color: #f2f2f2;
         -webkit-overflow-scrolling: touch; 
         padding-bottom: 120px;
+        .top_model{
+            width: 100%;
+            height: 340px;
+            display: flex;
+            padding: 0 30px;
+            margin-bottom: 60px;
+            position: relative;
+            box-sizing: border-box;
+            justify-content: space-between;
+            background: #f45250;
+            .user_mess, .l_value{
+                display: flex;
+                font-size: 28px;
+                height: 180px;
+                color: #fff;
+                align-items: center;
+                .user_head{
+                    width: 120px;
+                    height: 120px;
+                    flex-shrink: 0;
+                    overflow: hidden;
+                    border-radius: 50%;
+                    border: 1px solid #fff;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .user_info{
+                    margin-left: 20px;
+                    .user_name{
+                        font-weight: bold;
+                        font-size: 36px;
+                    }
+                    .user_code{
+                        margin-top: 10px;
+                        .copay_text{
+                            padding: 8px 26px;
+                            font-size: 24px;
+                            margin-left:10px;
+                            border-radius:30px;
+                            background-color: #fff;
+                            color: $home-order-title;
+                            background: #fff;
+                        }
+                    }
+                }
+            }
+            .lang_mess{
+                display: flex;
+                img{
+                    height: 20px;
+                    margin-left: 10px;
+                }
+            }
+            .l_value{
+                display: flex;
+                position: relative;
+                align-items: center;
+                span{
+                    width: 100%;
+                    flex-grow: 1;
+                    color: #fff;
+                    font-size: 32px;
+                    border-radius: 8px;
+                }
+                .down_icon{
+                    display: flex;
+                    width: 20px;
+                    width: 36px;
+                    margin-left: 20px;
+                }
+                .down_list{
+                    width: 160px;
+                    max-height: 230px;
+                    position: absolute;
+                    left: 0;
+                    top: 140px;
+                    z-index: 1;
+                    color: $font-color-black;
+                    font-size: 28px;
+                    padding: 16px 20px;
+                    border-radius: 8px;
+                    box-sizing: border-box;
+                    background-color: #fff;
+                    p{
+                        padding: 10px 0;
+                        border-bottom: 1px solid #ebedf0;
+                    }
+                    p:last-child{
+                        border: none;
+                    }
+                }
+                .down_list:before {
+                    content: "";
+                    display: block;
+                    position: absolute;
+                    width:0;
+                    height: 0;
+                    border: 16px solid transparent;
+                    border-bottom-color: #fff;
+                    left: 40px;
+                    top: -32px;
+                }
+                .active_open{
+                    display: block;
+                    transition: all .2s;
+                    animation: slide-down .2s ease-in;
+                    transition: .2s ease-in;
+                    transform-origin: 50% 0;
+                    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+                }
+                .active_close{
+                    display: none;
+                    transition: all .5s;
+                    animation: select-close .5s ease-in;
+                    transition: .3s ease-in;
+                    transform-origin: 50% 0;
+                }
+                @keyframes slide-down{
+                    0%{transform: scale(1,.5)}
+                    100%{transform: scale(1,1)}
+                }
+            }
+            .cover_model{
+                width: 100%;
+                position: absolute;
+                left: 0;
+                bottom: -40px;
+                padding: 0 20px;
+                box-sizing: border-box;
+                .task-pro{
+                    width: 100%;
+                    display: flex;
+                    padding: 30px 0 40px 0;
+                    border-radius: 10px;
+                    flex-direction: row;
+                    background-color: $font-color-white;
+                    .left-pro, .right-pro{
+                        flex: 1;
+                        p{
+                            width: 100%;
+                            display: flex;
+                            color: #999999;
+                            font-weight: bold;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                    }
+                    .left-pro p:nth-child(1), .right-pro p:nth-child(1){
+                        font-size: 46px;
+                    }
+                    .left-pro p:nth-child(2), .right-pro p:nth-child(2){
+                        font-size: 24px;
+                        margin-top: 12px;
+                    }
+                }
+            }
+        }
         .home_content{
             width: 100%;
             display: flex;
@@ -370,7 +364,7 @@ export default {
         }
         .task_continer{
             width: 100%;
-            padding: 0 30px;
+            padding: 0 20px;
             display: flex;
             margin-top: 20px;
             flex-direction: column;
@@ -419,4 +413,14 @@ export default {
             }
         }
     }
+    .custom_set_line{
+        display: flex;
+        padding: 20px 0;
+        box-sizing: border-box;
+        span{
+            display: flex;
+            border-left: 2px solid #ececec;
+        }
+    }
+
 </style>

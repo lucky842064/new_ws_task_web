@@ -23,4 +23,8 @@ export const getcode = (param) => {
 export const getcarousellist = (param) => {
     return Post("adminmember/getcarousellist", param)
 }
+// 修改密码
+export const revisepwd = (param) => {
+    return Post("adminmember/revisepwd", param)
+}
 

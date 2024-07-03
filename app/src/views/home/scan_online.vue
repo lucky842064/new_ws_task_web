@@ -6,11 +6,11 @@
                 <div class="task-pro">
                     <div class="left-pro">
                         <p>{{ teamStemp.today_income || 0}}</p>
-                        <p>{{ $t("home_023") }}</p>
+                        <p>{{ $t("home_062") }}</p>
                     </div>
                     <div class="right-pro">
                         <p>{{ teamStemp.yesterday_income || 0 }}</p>
-                        <p>{{ $t("home_024") }}</p>
+                        <p>{{ $t("home_063") }}</p>
                     </div>
                 </div>
                 <div class="task_settl">
@@ -26,31 +26,22 @@
                             </template>
                             <div class="code-mian">
                                 <div class="code_area">
-                                    <div>
+                                    <!-- <div>
                                         <div class="area_icon" @click="showProvince=true">
                                             <img class="weizhi_icon" src="@/assets/images/home/weizhi.png" alt="" srcset="">
                                             <span class="area_name">{{loginArea||'~'}}</span>
                                             <img class="down_icon" src="@/assets/images/home/xiala_icon.png">
                                         </div>
-                                        <!-- <van-radio-group icon-size="17px" v-model="num_type" shape="square" direction="horizontal">
-                                            <van-radio name="1">个人</van-radio>
-                                            <van-radio name="2">商业</van-radio>
-                                        </van-radio-group> -->
-                                    </div>
+                                    </div> -->
                                     <div>
                                         <van-radio-group v-model="num_type" shape="square" direction="horizontal">
                                             <van-radio name="1">个人</van-radio>
                                             <van-radio name="2">商业</van-radio>
                                         </van-radio-group>
                                     </div>
-                                    <!-- <div class="update_btn">
-                                        <van-button type="primary" @click.stop :disabled="countTime>0&&countTime<60" @click="showProvince=true">修改</van-button>
-                                        <van-button :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime==60?'刷新二维码':countTime+'s后刷新'}}</van-button>
-                                    </div> -->
                                 </div>
                                 <div class="code-tips">
-                                    <p>二维码处于灰色破损状态时，点击刷新二维码。WhatsApp扫码,切勿长按识別二维码且截图保存扫码无效! {{ countTime}}s</p>
-                                    <!-- <p></p> -->
+                                    <p>二维码处于灰色破损状态时，点击刷新二维码。</p>
                                 </div>
                                 <div class="qr-code" v-show="errState">
                                     <div ref="qrcodeImg" class="view_qr @/assets/images/home/qr_err.png" id="qrcodeImg">
@@ -62,7 +53,7 @@
                                     <img v-else src="@/assets/images/home/qr_err.png" alt="" srcset="">
                                     <van-button v-show="!isRqLoding" icon="replay" :disabled="countTime>0&&countTime<60" @click="refreQrBtn">{{countTime==60?'刷新二维码':countTime+'s后刷新'}}</van-button>
                                 </div>
-                                <p>手机端WhatsApp扫码点击确认后，可点击收起！</p>
+                                <p>手机端WhatsApp扫码点击确认后关闭此窗口！</p>
                                 <p>（等待3-5分钟，点击刷新列表查看WhatsApp状态）</p>
                             </div>
                             <template #right-icon >
@@ -104,7 +95,7 @@
                             <template v-else>
                                 <div class="item_mess">
                                     <img class="empty_data" src="@/assets/images/home/empty_icon.png" alt="" srcset="">
-                                    <div class="empty_text">尚未添加微信，无法开始赚钱 赶快去添加吧~</div>
+                                    <div class="empty_text">尚未添加whatsApp，无法开始赚钱 赶快去添加吧~</div>
                                 </div>
                             </template>
                             </template>
@@ -215,7 +206,7 @@ export default {
         // },500)
     },
     activated(){
-        this.activeName="";
+        this.activeName="1";
         this.initSpread();
         this.initWechatList();
         this.$store.dispatch('User/plantCarousel');

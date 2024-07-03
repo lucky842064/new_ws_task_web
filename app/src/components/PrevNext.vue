@@ -1,7 +1,7 @@
 <template>
     <div class="buy-footer">
         <span :class="isCanPrev() ? '':'footer-disabled'" @click="isCanPrev() && toPrev()">{{$t("other_001")}}</span>
-        共 {{totalPage}}/{{page}} 页
+        共 {{page}}/{{totalPage}} 页
         <span :class="isCanNext() ? '':'footer-disabled'"  @click="isCanNext() && toNext()">{{$t("other_002")}}</span>
     </div>
 </template>
@@ -60,11 +60,12 @@ export default {
 
 <style scoped lang="scss">
 .buy-footer {
-    // padding-bottom: 80px;
-    // padding-top: 40px;
     display: flex;
+    padding: 20px 0;
     align-items: center;
     justify-content: center;
+    background-color: $font-color-white;
+    // background-color: seagreen;
     & > span {
         font-size: 20px;
         color: #fff;

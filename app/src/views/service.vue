@@ -21,15 +21,32 @@
             <div class="spread_l">
                 <span class="left_icon"></span>帮助文档
             </div>
-            <div class="info_main"></div>
+            <div class="info_main">
+                <video controls>
+                    <source :src="help_url||def_video" type="video/mp4">
+                </video>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import { gethelp } from '@/api/home';
 export default {
     data() {
-        return {}
+        return {
+            help_url:"",
+            def_video:require("../assets/video/dbfcfa67.mp4")
+        }
+    },
+    created() {
+        this.getHelpVideo();
+    },
+    methods: {
+        async getHelpVideo() {
+            const { url } = await gethelp({});
+            this.help_url = url;
+        },
     }
 }
 </script>
@@ -110,9 +127,10 @@ export default {
     }
     .spread_info{
         width: 100%;
-        overflow-y: auto;
         display: flex;
         padding: 0 20px;
+        box-sizing: border-box;
+        flex-direction: column;
         .spread_l{
             height: 60px; 
             display: flex; 
@@ -120,6 +138,7 @@ export default {
             font-size: 32px;
             font-weight: bold;
             align-items: center;
+            margin: 20px 0;
         }
         .left_icon{
             height: 100%;
@@ -127,6 +146,13 @@ export default {
             margin-right: 10px;
             background-color: $home-copay-title;
             border-radius: 38px;
+        }
+        .info_main{
+            width: 100%;
+            display: flex;
+            video {
+                width: 100%;
+            }
         }
     }
 }

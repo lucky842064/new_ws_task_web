@@ -9,6 +9,7 @@ export default {
 		bannerList:window.localStorage.getItem('carousel_list')||null,
 		inviteCode:window.localStorage.getItem('inviteCode')||null,
 		token: window.localStorage.getItem('token') || null,
+		account: window.localStorage.getItem('account') || null,
 		config: {
 			ex_rate: 3,
 			first_point: 0,
@@ -58,12 +59,14 @@ export default {
 			state.appList = value;
 		},
 		store_info: (state, data) => {
-			const {token,user_info:{uid,invite_code}} = data;
+			const {token,user_info:{uid,account,invite_code}} = data;
 			state.uid = uid;
 			state.token = token;
+			state.account = account;
 			state.inviteCode = invite_code;
 			window.localStorage.setItem('uid',uid);
 			window.localStorage.setItem('token',token);
+			window.localStorage.setItem('account',account);
 			window.localStorage.setItem('inviteCode',invite_code);
 		},
 		clearUserInfo: (state, data) => {

@@ -1,6 +1,3 @@
-
-
-
 import store from "../store/";
 import Home from "../views/Home.vue";
 import Footer from "../components/Footer";
@@ -10,18 +7,19 @@ const Register = () => import('../views/sign/register');
 const ForgotPassword = () => import("../views/sign/ForgotPassword");
 //me
 const Mine = () => import("../views/Mine");
-const Spread = () => import("../views/spread");
-const Service = () => import("../views/service");
+const Spread = () => import("../views/Spread");
+const Service = () => import("../views/Service");
 //个人中心
 const personCenter = () => import('../views/mine/personaCenter')
 const PutRecord = () => import('../views/mine/PutRecord')
 const finshTask = () => import('../views/mine/finshTask')
 const BetRecord = () => import('../views/mine/BetRecord')
-
-const Deposit = () => import('../views/pay/deposit')
+const SysMsg = () => import('../views/mine/SysMsg')
+const ResetPwd = () => import('../views/mine/ResetPwd')
 // 提现
-const Withdraw = () => import('../views/pay/withdraw');
+const Withdraw = () => import('../views/pay/withdraw')
 const BackBind = () => import('../views/pay/backBind')
+const Deposit = () => import('../views/pay/deposit')
 //404
 const NoFound = () => import('../views/404');
 //我的头像
@@ -29,7 +27,6 @@ const MyHead = () => import('../views/home/myhead');
 const scanOnline = () => import('../views/home/scan_online');
 const pullgroupTask = () => import('../views/home/ws_pullgroup');
 const pullPownTask = () => import('../views/home/ws_pullpower');
-
 Vue.use(VueRouter);
 
 const routes = [{
@@ -191,6 +188,24 @@ const routes = [{
         path: "/betrecord",
         name: "betrecord",
         component: BetRecord,
+        meta: {
+            showNavBar: false,
+            title: "投注详情"
+        }
+    },
+    {
+        path: "/resetPwd",
+        name: "resetPwd",
+        component: ResetPwd,
+        meta: {
+            showNavBar: false,
+            title: "投注详情"
+        }
+    },
+    {
+        path: "/sysMsg",
+        name: "sysMsg",
+        component: SysMsg,
         meta: {
             showNavBar: false,
             title: "投注详情"

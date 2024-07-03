@@ -36,16 +36,16 @@
                 <div class="line_item">
                     <div style="display: flex;">
                         <span class="l_label">推荐吗</span>
-                        <span>{{invite_code}}</span>
+                        <span>{{userInfo.inviteCode}}</span>
                     </div>
-                    <div class="copay_text" v-clipboard:copy="invite_code" v-clipboard:success="copySuccess">{{ $t('home_031') }}</div>
+                    <div class="copay_text" v-clipboard:copy="userInfo.inviteCode" v-clipboard:success="copySuccess">{{ $t('home_031') }}</div>
                 </div>
                 <div class="line_item">
                     <div style="display: flex;">
                         <span class="l_label">邀请链接</span>
                         <span>{{invit_link}}</span>
                     </div>
-                    <div v-clipboard:copy="invit_link+'?r='+invite_code+'#/register'" class="copay_text" v-clipboard:success="copySuccess">{{ $t('home_031') }}</div>
+                    <div class="copay_text" v-clipboard:copy="invit_link+'?r='+userInfo.inviteCode+'#/register'" v-clipboard:success="copySuccess">{{ $t('home_031') }}</div>
                 </div>
                 <div class="invit_code" ref="qrcodeImg">
                     <!-- <img src="../assets/images/home/qrCode.jpg" alt="" srcset=""> -->
@@ -58,8 +58,8 @@
 <script>
 import { mapState } from "vuex";
 import QRCode from 'qrcodejs2'
+import { getinvitelink} from '@/api/bill';
 import { getbrokeragestatis} from '@/api/home';
-import { gettasknum,getinvitenum ,getinvitelink} from '@/api/bill';
 export default {
     data() {
         return {
@@ -74,16 +74,13 @@ export default {
     },
     computed: {
         ...mapState({
-            userInfo: state => state.User.userInfo,
-            invite_code: state => state.User.inviteCode
+            userInfo: state => state.User,
         })
     },
     created() {
         this.syncInitApi();
         this.$store.dispatch('User/userIncome');
     },
-    mounted() {
-	},
     methods:{
         syncInitApi(){
             let fun1 = new Promise((resolve,reject)=>{

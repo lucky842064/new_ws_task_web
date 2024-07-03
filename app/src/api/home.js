@@ -25,3 +25,6 @@ export const gettodayincome = (param = {}) => {
 export const getbrokeragestatis = (param = {}) => {
     return Post("account/getbrokeragestatis", param);
 }
+export const gethelp = (param = {}) => {
+    return Post("account/gethelp", param);
+}

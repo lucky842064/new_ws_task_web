@@ -32,7 +32,7 @@
                 </van-overlay>
             </div>
 
-        <div class="service-body">
+        <div class="service-body" v-if="list&&list.length>0">
             <div class="record_list">
                 <div class="record_warp">
                     <span>时间</span>
@@ -42,31 +42,27 @@
             </div>
             <div class="record_content">
                 <div class="buy-number" v-for="(item,index) in list" :key="index" @click="showReject(item)">
-                    <span>{{getTime(item.itime)}}</span>
+                    <span>{{ formatTime(item.itime) }}</span>
                     <span :style="getStatusColor(item.status)">{{getStatusText(item.status)}}</span>
-                    <span class="reject_tips record_cash" v-if="item.status == 2">{{formatMoney(item.point)}} <img src="../../assets/images/mine/reject_img.png" alt=""> </span>
-                    <span class="record_cash" v-else>{{formatMoney(item.point)}}</span>
+                    <span class="record_cash" v-if="item.status!=3">{{ item.amount }}</span>
+                    <span class="reject_tips record_cash" v-else>{{ item.amount }} <img src="../../assets/images/mine/reject_img.png" alt=""> </span>
                 </div>
             </div>
         </div>
-        
-        <PrevNext
-            :len="list.length"
-            :page="page"
-            :limit="limit"
-            :total="total"
-            @to-prev="onPrev"
-            @to-next="onNext"
-        ></PrevNext>
+        <div v-else class="empty_tips">暂无数据...</div>
+        <PrevNext v-if="list&&list.length>0" :len="list.length" :page="page" :limit="limit" :total="total" @to-prev="onPrev" @to-next="onNext" />
         <popDialog ref="isDialog" :title = "title" :titleContent = "dialogContent" :isCancel = false :isConfirm = true @confirm_btn = "confirm_btn"></popDialog>
     </div>
 </template>
 <script>
+import moment from "moment";
+import { Toast } from 'vant';
 import PageHeader from "@/components/Header";
 import PrevNext from "@/components/PrevNext";
-import {dateStamp,fmoney } from "@/utils/tool";
+import {dateStamp,formatTime } from "@/utils/tool";
 import popDialog from "@/components/popDialog";
-import moment from "moment";
+import { getwithdrawapprovallist } from "@/api/pay";
+
 export default {
     components: { PageHeader, PrevNext,popDialog },
     data() {
@@ -74,8 +70,8 @@ export default {
             profitType:[
                 {text:'全部状态',value:-1},
                 {text:'申请中',value:1},
-                {text:'已到账',value:3},
-                {text:'已驳回',value:2}
+                {text:'已到账',value:2},
+                {text:'已驳回',value:3},
             ],
             title:"驳回原因",
             dialogContent:"",
@@ -97,67 +93,34 @@ export default {
         };
     },
     created() {
-        // this.pointflow();
+        this.getPointflow();
     },
     methods: {
-        getStatusColor(status) {
-            switch (status) {
-                case 1:
-                    return { color: "rgb(255, 144, 0)" };
-                case 2:
-                    return { color: "rgb(255, 0, 66)" };
-                case 3:
-                    return { color: "rgb(3, 176, 27)" };
-                case 4:
-                    return { color: "#07c160" };
-                case 5:
-                    return { color: "#ff976a" };
-                case 6:
-                    return { color: "#ff976a" };
-                default:
-                    return {};
+        getPointflow() {
+            let params = {
+                page: this.page,
+                limit: this.limit,
+                status: this.stateValue,
+                start_time: !this.sTime ? -1: dateStamp(this.sTime),
+                end_time: !this.eTime ? -1: dateStamp(this.eTime),
             }
-        },
-        getStatusText(status) {
-            switch (status) {
-                case 1:
-                    return this.$t("mine_065");
-                case 2:
-                    return this.$t("mine_067");
-                case 3:
-                    return this.$t("mine_066");
-                case 4:
-                    return "已到账";
-                case 5:
-                    return "申请中";
-                case 6:
-                    return "申请中";
-                default:
-                    return "";
-            }
+            let isLoading = Toast.loading({message: '加载中...',forbidClick: true})
+            getwithdrawapprovallist(params).then(res => {
+                isLoading.clear();
+                this.list = res.list || [];
+                this.total = res.total;
+            })
         },
         onPrev() {
             this.page--;
-            this.pointflow();
+            this.getPointflow();
         },
         onNext() {
             this.page++;
-            this.pointflow();
+            this.getPointflow();
         },
         getTime(times) {
             return moment(times * 1000).format("YYYY-MM-DD HH:mm:ss");
-        },
-        pointflow() {
-            pointflow({
-                page: this.page,
-                limit: this.limit,
-                ptype: this.stateValue,
-                stime: this.sTime == "" ? 0 : this.sTime == null ? 0 : dateStamp(this.sTime),
-                etime: this.eTime == "" ? 0 : this.eTime == null ? 0 : dateStamp(this.eTime),
-            }).then(res => {
-                this.list = res.list || [];
-                this.total = res.total;
-            });
         },
         //查看驳回原因
         showReject(val){
@@ -183,10 +146,46 @@ export default {
         changeType(idx,val){
             this.stateValue = idx;
             this.dateState = val.text;
-            this.pointflow();
+            this.getPointflow();
             setTimeout(() =>{
                 this.showState = false;
             },200)
+        },
+        getStatusColor(status) {
+            switch (status) {
+                case 1:
+                    return { color: "rgb(255, 144, 0)" };
+                case 2:
+                    return { color: "rgb(3, 176, 27)" };
+                case 3:
+                    return { color: "rgb(255, 0, 66)" };
+                case 4:
+                    return { color: "#07c160" };
+                case 5:
+                    return { color: "#ff976a" };
+                case 6:
+                    return { color: "#ff976a" };
+                default:
+                    return {};
+            }
+        },
+        getStatusText(status) {
+            switch (status) {
+                case 1:
+                    return this.$t("mine_065");
+                case 2:
+                    return this.$t("mine_066");
+                case 3:
+                    return this.$t("mine_067");
+                case 4:
+                    return "已到账";
+                case 5:
+                    return "申请中";
+                case 6:
+                    return "申请中";
+                default:
+                    return "";
+            }
         },
         // 选择收益时间
         changeTime(idx){
@@ -216,7 +215,7 @@ export default {
                 this.sTime = sevenTady +" "+ sTime;
                 this.eTime = today +" "+ eTime;
             }
-            this.pointflow();
+            this.getPointflow();
             setTimeout(() =>{
                 this.showTime = false;
             },200)
@@ -225,6 +224,9 @@ export default {
         formatMoney(point) {
             return fmoney(point,2);
         },
+        formatTime(time) {
+            return formatTime(time);
+        }
     }
 };
 </script>
@@ -249,29 +251,29 @@ export default {
 }
 .promote-header {
     width: 100%;
-    // float: left;
-    color: #7e7e7e;
-    font-size: 0.28rem;
     display: flex;
+    color: #7e7e7e;
     flex-direction: row;
-    line-height: 88px;
-    // padding: 0 30px;
+    padding: 12px 0;
+    font-size: 28px;
     background-color: #fff;
+    justify-content:space-around;
     border-bottom: 1px solid  #f2f2f2;
-    // background-color: darkblue;
-    display: flex;justify-content:space-around;padding: 12px 30px 12px;
     .tab_nav {
+        width: 40%;
+        display: flex;
+        padding: 20px 0;
         text-align: center;
+        border-radius: 44px;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        background-color: #F2F7FF;
         .down_img {
-            margin-left: 6px;
             width: 30px;
+            margin-left: 6px;
             vertical-align: middle;
         }
-        background-color: #F2F7FF;
-        border-radius: 44px;
-         height: 88px;
-        display: flex;align-items: center;justify-content: center;
-        width: 40%;
     }
     .tab_nav:nth-child(1){
         border-right: 1px solid #f2f2f2;
@@ -291,17 +293,15 @@ export default {
 .service-body{
     width: 100%;
     float: left;
-    min-height: 90vh;
     background-color: #fff;
-    font-size: 0.28rem;
+    font-size: 28px;
     box-sizing: border-box;
     .record_list{
         width: 100%;
         float: left;
-        overflow: hidden;
     }
     .record_warp{
-        border-radius: 10px;
+        padding: 10px 0;
         background-color: #e9e9e9;
     }
     .record_warp, .record_content{
@@ -325,8 +325,11 @@ export default {
     }
     .record_content{
         width: 100%;
-        float: left;
-        overflow: hidden;
+        overflow-y: auto;
+        font-size: 0.28rem;
+        box-sizing: border-box;
+        position: relative;
+        height: calc(100vh - 360px);
         .buy-number{
             width: 100%;
             float: left;
@@ -360,27 +363,11 @@ export default {
 .footer-disabled {
     background-color: rgba(179, 206, 244, 0.8) !important;
 }
-.buy-footer {
-    width: 100%;
-    float: left;
-    background-color: #fff;
-    padding-bottom: 80px;
-    padding-top: 40px;
+.buy-footer{
+    width:100%;
     display: flex;
+    font-size: 28px;
     align-items: center;
     justify-content: center;
-    & > span {
-        font-size: 20px;
-        color: #fff;
-        height: 46px;
-        line-height: 46px;
-        width: 146px;
-        text-align: center;
-        border-radius: 23px;
-        background-color: $color-theme;
-    }
-    & > span:first-of-type {
-        margin-right: 50px;
-    }
 }
 </style>

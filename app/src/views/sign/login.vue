@@ -13,7 +13,10 @@
 						<img src="../../assets/images/sign/icon_suo.png" alt />
 						<input v-model="password" :placeholder="$t('login_008')" :type="regEye ? 'password' : 'text'" oninput="value=value.replace(/[^\w_]/g,'')" />
 						<i :class="[regEye ? 'icon_biyan' : 'icon_zhenyan']" @click="eyeBol"></i>
-						<span class="forget_text" @click="forgetFunc">忘记密码</span>
+					</div>
+					<div class="forget_pwd">
+						<van-checkbox v-model="autologin" shape="square" checked-color="#F52C2C">{{$t('login_023')}}</van-checkbox>
+						<span class="forget_text" @click="forgetFunc">{{ $t('login_021') }}</span>
 					</div>
 				</div>
 				<div class="login_btn">
@@ -31,20 +34,15 @@ export default {
 	data() {
 		return {
 			regEye:true,
+			autologin:true,
 			username:"",
 			password:"",
 		}
 	},
+	created() {
+		this.userAccount();
+    },
 	methods: {
-		eyeBol() {
-			this.regEye = !this.regEye;
-		},
-		goRegister() {
-			this.$router.push("/register")
-		},
-		forgetFunc(){
-			this.$router.push("/forget_pwd")
-		},
 		//登录
 		handleLogin() {
 			const regex = /^[0-9A-Za-z]{6,20}$/;
@@ -71,6 +69,7 @@ export default {
 				Toast.clear();
 				setTimeout(()=>{this.isLoading= false},2000)
 				if(!res.token) return;
+				this.checkChange();
 				this.$router.push('/home');
 				this.isLoading= false
 			}).catch(error => {
@@ -80,6 +79,34 @@ export default {
 				}
 				Toast.clear();
 			});
+		},
+		checkChange(val) {
+			let storage = window.localStorage;
+			storage['isstorename'] = 'yes';
+			storage['loginphone'] = this.username;
+			storage['loginpwd'] = this.password;
+		},
+		userAccount() {
+			let storage = window.localStorage;
+			if (storage['isstorename'] == 'yes') {
+				this.autologin = true;
+				this.username = storage['loginphone'];
+				this.password = storage['loginpwd'];
+				this.handleLogin();
+			} else {
+				this.autologin = false;
+				this.username = storage['loginphone'];
+				this.password = storage['loginpwd'];
+			}
+		},
+		eyeBol() {
+			this.regEye = !this.regEye;
+		},
+		goRegister() {
+			this.$router.push("/register")
+		},
+		forgetFunc(){
+			this.$router.push("/forget_pwd")
 		}
 	}
 };
@@ -135,13 +162,6 @@ export default {
 						border-bottom: transparent;
 						margin-bottom: 56px;
 					}
-					.forget_text{
-						color: #323aa2;
-						font-size: 28px;
-						position: absolute;
-						right: 0;
-						bottom: -50px;
-					}
 				}
 			}
 		}
@@ -192,5 +212,15 @@ export default {
 	align-items: center;
 	justify-content: center; 
 	margin: 20% 0 10% 0;
+}
+.forget_pwd{
+	display: flex;
+	font-size: 28px;
+	margin-bottom: 20px;
+	justify-content: space-between;
+	.forget_text{
+		color: #323aa2;
+		font-size: 28px;
+	}
 }
 </style>

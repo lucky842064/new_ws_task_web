@@ -140,7 +140,7 @@
 </template>
 <script>
 import PageHeader from "../../components/Header";
-import { deposit_pay, get_pay_type } from "../../api/pay";
+// import { deposit_pay, get_pay_type } from "../../api/pay";
 export default {
     name: "deposit",
     components: { PageHeader },

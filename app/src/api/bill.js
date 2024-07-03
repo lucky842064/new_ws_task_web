@@ -9,3 +9,4 @@ export const getinvitenum = (param = {}) => {
 export const getinvitelink = (param = {}) => {
     return Post("account/getinvitelink", param);
 }
+

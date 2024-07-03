@@ -427,26 +427,7 @@
   display: flex;
   font-size: 28px;
   padding-top: 5%;
-  height:100dvh;
+  height:100vh;
   justify-content: center;
   background-color: #fff;
-}
-.custom_line{
-  width: 100%;
-  padding: 0 30px;
-  box-sizing: border-box;
-  .botton_line{
-    width: 100%;
-    display: flex;
-    border-bottom: 1px dashed #fff;
-  }
-}
-.custom_set_line{
-  display: flex;
-  padding: 20px 0;
-  box-sizing: border-box;
-  span{
-      display: flex;
-      border-left: 1px solid #ececec;
-  }
 }
